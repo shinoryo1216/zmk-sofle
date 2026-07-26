@@ -33,7 +33,7 @@
     scroll_encoder: scroll_encoder {
         compatible = "zmk,behavior-sensor-rotate";
         #sensor-binding-cells = <0>;
-        bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
+        bindings = <&kp DOWN_ARROW>, <&kp UP_ARROW>;
 
         tap-ms = <100>;
     };
@@ -56,6 +56,78 @@
 
     combos {
         compatible = "zmk,combos";
+
+        combo_lclk {
+            timeout-ms = <50>;
+            key-positions = <46 47>;
+            bindings = <&mkp LCLK>;
+        };
+        
+        combo_rclk {
+            timeout-ms = <50>;
+            key-positions = <47 48>;
+            bindings = <&mkp RCLK>;
+        };
+
+        combo_enter {
+            timeout-ms = <50>;
+            key-positions = <20 21>;
+            bindings = <&kp ENTER>;
+        };
+
+        combo_bspc {
+            timeout-ms = <50>;
+            key-positions = <33 34>;
+            bindings = <&kp BSPC>;
+        };
+
+        combo_jkl_space {
+            timeout-ms = <50>;
+            key-positions = <34 35 36>;
+            bindings = <&kp SPACE>;
+        };
+
+        combo_sdf_space {
+            timeout-ms = <50>;
+            key-positions = <28 29 30>;
+            bindings = <&kp SPACE>;
+        };
+
+        combo_rt_enter {
+            timeout-ms = <50>;
+            key-positions = <17 18>;
+            bindings = <&kp ENTER>;
+        };
+
+        combo_fg_bspc {
+            timeout-ms = <50>;
+            key-positions = <30 31>;
+            bindings = <&kp BSPC>;
+        };
+
+        combo_mo4_left {
+            timeout-ms = <50>;
+            key-positions = <56 57>;
+            bindings = <&mo 4>;
+        };
+
+        combo_mo4_right {
+            timeout-ms = <50>;
+            key-positions = <59 61>;
+            bindings = <&mo 4>;
+        };
+
+        combo_layer5_left {
+            timeout-ms = <150>;
+            key-positions = <53 54 55 56 57>;
+            bindings = <&mo 5>;
+        };
+
+        combo_layer5_right {
+            timeout-ms = <150>;
+            key-positions = <59 60 61 62 63>;
+            bindings = <&mo 5>;
+        };
 
         softoff {
             bindings = <&soft_off>;
@@ -85,11 +157,11 @@
 
         layer0 {
             bindings = <
-&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4  &kp N5       &kp UP_ARROW     &kp N6     &kp N7     &kp N8     &kp N9           &kp N0      &kp BACKSPACE
-&kp TAB     &kp Q      &kp W         &kp E         &kp R   &kp T        &kp DOWN_ARROW   &kp Y      &kp U      &kp I      &kp O            &kp P       &kp BSLH
-&kp CAPS    &kp A      &kp S         &kp D         &kp F   &kp G        &kp LEFT_ARROW   &kp H      &kp J      &kp K      &kp L            &kp SEMI    &kp APOS
-&kp LSHFT   &kp Z      &kp X         &kp C         &kp V   &kp B        &kp RIGHT_ARROW  &kp N      &kp M      &kp COMMA  &kp DOT          &kp FSLH    &kp ENTER
-&kp C_MUTE  &kp LCTRL  &kp LEFT_GUI  &kp LEFT_ALT  &mo 1   &kp SPACE    &kp ENTER        &kp SPACE  &kp ENTER  &mo 2      &kp RIGHT_SHIFT  &kp DELETE
+&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp MINUS
+&kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
+&kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
+&kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &kp COMMA     &kp DOT    &kp FSLH    &kp RSHFT
+&kp C_MUTE  &kp LGUI   &kp PSCRN     &lt 2 GRAVE   &lt 1 SPACE   &mo 3        &mkp MCLK        &lt 1 SPACE &lt 2 GRAVE   &mo 3         &kp DEL    &lt 3 ESC
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
@@ -98,10 +170,10 @@
 
         layer_1 {
             bindings = <
-&kp GRAVE   &kp F1           &kp F2          &kp F3           &kp F4           &kp F5             &mmv MOVE_UP     &kp F6           &kp F7           &kp F8      &kp F9     &kp F10           &trans
-&trans      &kp GRAVE        &mkp LCLK       &mkp MCLK        &mkp RCLK        &mkp MB4           &mmv MOVE_DOWN   &kp PG_UP        &kp END          &kp UP      &kp HOME   &kp MINUS         &kp EQUAL
-&trans      &kp TILDE        &trans          &trans           &trans           &mkp MB5           &mmv MOVE_LEFT   &kp PG_DN        &kp LEFT         &kp DOWN    &kp RIGHT  &kp LEFT_BRACKET  &kp RIGHT_BRACKET
-&trans      &rgb_ug RGB_OFF  &rgb_ug RGB_ON  &rgb_ug RGB_EFF  &rgb_ug RGB_EFR  &rgb_ug RGB_SPI    &mmv MOVE_RIGHT  &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &kp INSERT  &kp F11    &kp F12           &trans
+&trans      &trans           &trans          &trans           &trans           &trans             &mmv MOVE_UP     &trans           &trans           &trans      &trans     &trans            &trans
+&trans      &kp GRAVE        &mkp LCLK       &mkp MCLK        &mkp RCLK        &mkp MB4           &mmv MOVE_DOWN   &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
+&trans      &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &mmv MOVE_LEFT   &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
+&trans      &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &mmv MOVE_RIGHT  &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
 &kp C_MUTE  &trans           &trans          &trans           &trans           &trans             &mkp LCLK        &trans           &trans           &trans      &trans     &trans
             >;
 
@@ -111,11 +183,11 @@
 
         layer_2 {
             bindings = <
-&kp TILDE  &bt BT_SEL 0  &bt BT_SEL 1    &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &mmv MOVE_UP     &kp F6  &kp F7  &kp F8      &kp F9     &kp F10      &trans
-&trans     &bt BT_CLR    &bt BT_CLR_ALL  &trans        &trans        &trans          &mmv MOVE_DOWN   &trans  &trans  &kp F11     &kp F12    &kp UNDER    &kp PLUS
-&trans     &out OUT_USB  &out OUT_BLE    &trans        &trans        &trans          &mmv MOVE_LEFT   &trans  &trans  &trans      &trans     &kp LBRC     &kp RBRC
-&trans     &sys_reset    &trans          &bootloader   &trans        &trans          &mmv MOVE_RIGHT  &trans  &trans  &sys_reset  &soft_off  &bootloader  &trans
-&trans     &trans        &trans          &trans        &trans        &trans          &mkp LCLK        &trans  &trans  &trans      &trans     &trans
+&kp LG(FSLH)      &trans            &kp LG(PG_UP)   &kp LG(TAB)     &kp LG(PG_DN)   &trans             &mmv MOVE_UP     &trans            &kp LG(PG_UP)   &kp LG(TAB)     &kp LG(PG_DN)   &trans            &kp LG(FSLH)
+&kp LS(LG(COMMA)) &kp LS(LG(PG_UP)) &kp LG(C)       &kp LG(UP)      &kp LG(V)       &kp LS(LG(PG_DN))  &mmv MOVE_DOWN   &kp LS(LG(PG_UP)) &kp LG(V)       &kp LG(UP)      &kp LG(C)       &kp LS(LG(PG_DN)) &kp LS(LG(COMMA))
+&kp LS(LG(DOT))   &kp LG(COMMA)     &kp LG(LEFT)    &kp LG(DOWN)    &kp LG(RIGHT)   &kp LG(DOT)        &mmv MOVE_LEFT   &kp LG(COMMA)     &kp LG(LEFT)    &kp LG(DOWN)    &kp LG(RIGHT)   &kp LG(DOT)       &kp LS(LG(DOT))
+&kp LG(M)         &kp LG(R)         &kp LG(E)       &kp LG(ENTER)   &kp LG(B)       &kp LG(SPACE)      &mmv MOVE_RIGHT  &kp LG(SPACE)     &kp LG(B)       &kp LG(ENTER)   &kp LG(E)       &kp LG(R)         &kp LG(M)
+&trans            &trans            &trans          &trans          &trans          &trans             &mkp LCLK        &trans            &trans          &trans          &trans          &trans
             >;
 
             display-name = "LAYER2";
@@ -124,11 +196,11 @@
 
         layer_3 {
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &none    &none      &mkp MCLK  &none      &none      &mmv MOVE_UP     &none      &mkp LCLK       &mkp MCLK       &mkp RCLK       &none    &none
+&trans  &kp END  &kp PG_DN  &kp UP     &kp PG_UP  &kp HOME   &mmv MOVE_DOWN   &kp HOME   &kp PG_UP       &mmv MOVE_UP    &kp PG_DN       &kp END  &none
+&trans  &mkp MB4 &kp LEFT   &kp DOWN   &kp RIGHT  &mkp MB5   &mmv MOVE_LEFT   &mkp MB4   &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &mkp MB5 &none
+&trans  &none    &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
+&trans  &trans   &trans     &trans     &trans     &trans     &trans           &trans     &trans          &trans          &trans          &trans
             >;
 
             display-name = "LAYER3";
@@ -137,14 +209,27 @@
 
         layer_4 {
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &kp F1  &kp F2  &kp F3  &kp F4  &kp F5    &trans  &kp F6  &kp F7  &kp F8  &kp F9  &kp F10 &none
+&trans  &kp F11 &kp F12 &none   &none   &none     &trans  &none   &none   &none   &none   &none   &none
+&trans  &none   &none   &none   &none   &none     &trans  &none   &none   &none   &none   &none   &none
+&trans  &none   &none   &none   &none   &none     &trans  &none   &none   &none   &none   &none   &none
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
             >;
-
+ 
             display-name = "LAYER4";
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
+
+        layer_5 {
+            bindings = <
+&bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &bt BT_CLR
+&bootloader &none         &none         &none         &none         &none         &trans  &none         &none         &none         &none         &none         &bootloader
+&none       &none         &none         &none         &none         &none         &trans  &none         &none         &none         &none         &none         &none
+&none       &none         &none         &none         &none         &none         &trans  &none         &none         &none         &none         &none         &none
+&trans      &trans        &trans        &trans        &trans        &trans        &trans  &trans        &trans        &trans        &trans        &trans
+            >;
+
+            display-name = "LAYER5";
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
     };
