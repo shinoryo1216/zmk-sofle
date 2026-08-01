@@ -26,7 +26,7 @@ layers:
   - I
   - O
   - P
-  - {t: Sft+2, s: Sft+@}
+  - {t: '[', s: '{'}
   - $$mdi:apple-keyboard-control$$
   - A
   - S
@@ -39,7 +39,7 @@ layers:
   - K
   - L
   - {t: ;, s: ':'}
-  - {t: Sft+;, s: 'Sft+:'}
+  - {t: '''', s: '"'}
   - $$mdi:apple-keyboard-shift$$
   - Z
   - X
@@ -86,31 +86,31 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:arrow-down-bold$$
-  - {t: 'Sft+[', s: 'Sft+{'}
   - {t: 'Sft+]', s: 'Sft+}'}
-  - {t: '[', s: '{'}
-  - {t: ']', s: '}'}
-  - {t: '`', s: '~'}
   - {t: Sft+\, s: Sft+|}
+  - {t: ']', s: '}'}
+  - {t: \, s: '|'}
+  - {t: 'Sft+[', s: 'Sft+{'}
+  - Sft+INT3
   - $$mdi:apple-keyboard-control$$
   - {t: Sft+1, s: Sft+!}
-  - {t: Sft+', s: Sft+"}
+  - {t: Sft+2, s: Sft+@}
   - {t: Sft+3, s: Sft+#}
   - {t: Sft+4, s: Sft+$}
   - {t: Sft+5, s: Sft+%}
   - $$mdi:arrow-left-bold$$
-  - {t: Sft+7, s: Sft+&}
-  - {t: '''', s: '"'}
-  - {t: Sft+9, s: Sft+(}
-  - {t: Sft+0, s: Sft+)}
   - {t: Sft+6, s: Sft+^}
-  - {t: Sft+`, s: Sft+~}
-  - $$mdi:apple-keyboard-shift$$
+  - {t: Sft+7, s: Sft+&}
   - {t: Sft+8, s: Sft+*}
+  - {t: Sft+9, s: Sft+(}
+  - {t: '=', s: +}
   - {t: Sft+=, s: Sft++}
+  - $$mdi:apple-keyboard-shift$$
+  - {t: Sft+', s: Sft+"}
+  - {t: Sft+;, s: 'Sft+:'}
   - {t: '-', s: _}
   - {t: /, s: '?'}
-  - {t: '=', s: +}
+  - {t: Sft+-, s: Sft+_}
   - $$mdi:arrow-right-bold$$
   - Sft+INT1
   - INT3
@@ -389,13 +389,13 @@ layers:
   - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held alternate}
   - {t: '$$mdi:backspace$$', h: LAYER3, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', type: held alternate}
-  - {t: '$$mdi:keyboard-esc$$', h: LAYER3, type: held alternate}
+  - {t: '$$mdi:keyboard-esc$$', h: LAYER3}
 combos:
 - p: [34, 35, 36]
-  k: LANG5
+  k: {t: '`', s: '~'}
   l: [LAYER0]
 - p: [28, 29, 30]
-  k: LANG5
+  k: {t: '`', s: '~'}
   l: [LAYER0]
 - p: [46, 47]
   k: $$mdi:mouse-left-click-outline$$
@@ -481,5 +481,5 @@ combos:
   k: LAYER4
 - p: [53, 54, 55, 56, 57]
   k: LAYER5
-- p: [59, 60, 61, 62, 63]
+- p: [59, 60, 61, 62]
   k: LAYER5
