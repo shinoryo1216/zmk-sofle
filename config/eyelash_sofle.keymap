@@ -47,6 +47,22 @@
             ccw-binding = <&kp C_VOL_DN>;
         };
 
+        rsr_cursor_ud: rsr_cursor_ud {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp DOWN_ARROW>;
+            ccw-binding = <&kp UP_ARROW>;
+        };
+
+        rsr_cursor_lr: rsr_cursor_lr {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp RIGHT_ARROW>;
+            ccw-binding = <&kp LEFT_ARROW>;
+        };
+
         rsr_trans: rsr_trans {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
@@ -312,10 +328,10 @@
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
 &kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &mm_comma     &mm_dot    &kp LS(FSLH) &kp RSHFT
-&kp C_MUTE  &kp LALT   &lt 4 PSCRN   &lt 2 BSPC    &lt 1 SPACE   &lt 3 ENTER  &mkp MCLK        &lt 3 ENTER &lt 1 SPACE  &lt 2 BSPC    &lt 4 DEL  &lt 4 ESC
+&tog 7  &kp LALT   &lt 4 PSCRN   &lt 2 BSPC    &lt 1 SPACE   &lt 3 ENTER  &mkp MCLK        &lt 3 ENTER &lt 1 SPACE  &lt 2 BSPC    &lt 4 DEL  &lt 4 ESC
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
             display-name = "LAYER0";
         };
 
@@ -325,10 +341,10 @@
 &kp TAB     &none            &none           &none            &none            &none              &kp DOWN_ARROW   &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
 &kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LEFT_ARROW   &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
 &kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp RIGHT_ARROW  &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
-&kp C_MUTE  &kp LALT         &lt 4 PSCRN     &lt 2 BSPC       &lt 1 SPACE      &lt 3 ENTER        &mkp MCLK        &lt 3 ENTER      &lt 1 SPACE      &lt 2 BSPC  &lt 4 DEL  &lt 4 ESC
+&tog 7  &kp LALT         &lt 4 PSCRN     &lt 2 BSPC       &lt 1 SPACE      &lt 3 ENTER        &mkp MCLK        &lt 3 ENTER      &lt 1 SPACE      &lt 2 BSPC  &lt 4 DEL  &lt 4 ESC
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
             display-name = "LAYER1";
         };
 
@@ -338,11 +354,11 @@
 &kp TAB  &kp END  &kp PG_DN  &kp UP_ARROW &kp PG_UP  &kp HOME   &mmv MOVE_DOWN   &kp HOME   &kp PG_UP       &kp UP_ARROW    &kp PG_DN       &kp END  &none
 &kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &mmv MOVE_LEFT   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &kp RSHFT
-&kp C_MUTE         &kp LALT           &lt 4 PSCRN    &lt 2 BSPC     &lt 1 SPACE    &lt 3 ENTER        &mkp MCLK        &lt 3 ENTER        &lt 1 SPACE    &lt 2 BSPC     &lt 4 DEL      &lt 4 ESC
+&tog 7         &kp LALT           &lt 4 PSCRN    &lt 2 BSPC     &lt 1 SPACE    &lt 3 ENTER        &mkp MCLK        &lt 3 ENTER        &lt 1 SPACE    &lt 2 BSPC     &lt 4 DEL      &lt 4 ESC
             >;
 
             display-name = "LAYER2";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
         };
 
         layer_3 {
@@ -350,12 +366,12 @@
 &kp LG(FSLH)       &none              &none          &none          &none          &kp LG(BSLH)       &mmv MOVE_UP     &kp LG(BSLH)       &none          &none          &none          &none          &kp LG(FSLH)
 &kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &mmv MOVE_DOWN   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
 &kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &mmv MOVE_LEFT   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
-&kp LG(M)          &kp LG(R)          &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(SPACE)      &mmv MOVE_RIGHT  &kp LG(SPACE)      &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(R)      &kp LG(M)
-&kp C_MUTE &kp LALT &lt 4 PSCRN &lt 2 BSPC &lt 1 SPACE &lt 3 ENTER &mkp MCLK      &lt 3 ENTER &lt 1 SPACE    &lt 2 BSPC      &lt 4 DEL         &lt 4 ESC
+&kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &mmv MOVE_RIGHT  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
+&tog 7 &kp LALT &lt 4 PSCRN &lt 2 BSPC &lt 1 SPACE &lt 3 ENTER &mkp MCLK      &lt 3 ENTER &lt 1 SPACE    &lt 2 BSPC      &lt 4 DEL         &lt 4 ESC
             >;
 
             display-name = "LAYER3";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
         };
 
         layer_4 {
@@ -364,11 +380,11 @@
 &kp TAB  &kp END  &kp PG_DN  &mmv MOVE_UP &kp PG_UP  &kp HOME   &mmv MOVE_DOWN   &kp HOME   &kp PG_UP       &mmv MOVE_UP    &kp PG_DN       &kp END  &none
 &kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
-&kp C_MUTE &kp LALT &lt 4 PSCRN &lt 2 BSPC &lt 1 SPACE &lt 3 ENTER &mkp MCLK      &lt 3 ENTER &lt 1 SPACE    &lt 2 BSPC      &lt 4 DEL         &lt 4 ESC
+&tog 7 &kp LALT &lt 4 PSCRN &lt 2 BSPC &lt 1 SPACE &lt 3 ENTER &mkp MCLK      &lt 3 ENTER &lt 1 SPACE    &lt 2 BSPC      &lt 4 DEL         &lt 4 ESC
             >;
 
             display-name = "LAYER4";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
         };
 
         layer_5 {
@@ -377,11 +393,11 @@
 &kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
 &kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
 &kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
-&kp C_MUTE &kp LALT &lt 4 PSCRN &lt 2 BSPC &lt 1 SPACE &lt 3 ENTER &mkp MCLK &lt 3 ENTER &lt 1 SPACE &lt 2 BSPC &lt 4 DEL &lt 4 ESC
+&tog 7 &kp LALT &lt 4 PSCRN &lt 2 BSPC &lt 1 SPACE &lt 3 ENTER &mkp MCLK &lt 3 ENTER &lt 1 SPACE &lt 2 BSPC &lt 4 DEL &lt 4 ESC
             >;
  
             display-name = "LAYER5";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
         };
 
         layer_6 {
@@ -390,11 +406,24 @@
 &bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
 &none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
 &none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
-&kp C_MUTE  &kp LALT      &lt 4 PSCRN   &lt 2 BSPC    &lt 1 SPACE   &lt 3 ENTER   &mkp MCLK     &lt 3 ENTER   &lt 1 SPACE   &lt 2 BSPC    &lt 4 DEL     &lt 4 ESC
+&tog 7  &kp LALT      &lt 4 PSCRN   &lt 2 BSPC    &lt 1 SPACE   &lt 3 ENTER   &mkp MCLK     &lt 3 ENTER   &lt 1 SPACE   &lt 2 BSPC    &lt 4 DEL     &lt 4 ESC
             >;
 
             display-name = "LAYER6";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+        };
+
+        layer_7 {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            display-name = "LAYER7";
+            sensor-bindings = <&rsr_cursor_lr &rsr_trans>;
         };
     };
 };
