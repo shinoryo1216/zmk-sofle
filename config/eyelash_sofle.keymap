@@ -105,42 +105,42 @@
             timeout-ms = <50>;
             key-positions = <34 35 36>;
             bindings = <&kp ENTER>;
-            layers = <0>;
+            layers = <0 1>;
         };
 
         combo_enter_sdf {
             timeout-ms = <50>;
             key-positions = <28 29 30>;
             bindings = <&kp ENTER>;
-            layers = <0>;
+            layers = <0 1>;
         };
 
-        combo_hankaku_mcommadot {
+        combo_bspc_mcommadot {
             timeout-ms = <50>;
             key-positions = <47 48 49>;
-            bindings = <&kp GRAVE>;
-            layers = <0>;
+            bindings = <&kp BSPC>;
+            layers = <0 1>;
         };
 
-        combo_hankaku_xcv {
+        combo_bspc_xcv {
             timeout-ms = <50>;
             key-positions = <41 42 43>;
-            bindings = <&kp GRAVE>;
-            layers = <0>;
+            bindings = <&kp BSPC>;
+            layers = <0 1>;
         };
 
-        combo_bspc_uio {
+        combo_hankaku_uio {
             timeout-ms = <50>;
             key-positions = <21 22 23>;
-            bindings = <&kp BSPC>;
-            layers = <0>;
+            bindings = <&kp GRAVE>;
+            layers = <0 1>;
         };
 
-        combo_bspc_wer {
+        combo_hankaku_wer {
             timeout-ms = <50>;
             key-positions = <15 16 17>;
-            bindings = <&kp BSPC>;
-            layers = <0>;
+            bindings = <&kp GRAVE>;
+            layers = <0 1>;
         };
 
         /* ---- ウィンドウ管理コンボ（新Layer3=ウィンドウ管理レイヤー） ---- */
