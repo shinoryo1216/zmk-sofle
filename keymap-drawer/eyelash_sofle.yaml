@@ -56,13 +56,13 @@ layers:
   - $$mdi:volume-off$$
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: LAYER4}
-  - {t: '$$mdi:backspace$$', h: LAYER3}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1}
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1}
-  - {t: '$$mdi:backspace$$', h: LAYER3}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
   LAYER1:
@@ -121,13 +121,13 @@ layers:
   - $$mdi:volume-off$$
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: LAYER4}
-  - {t: '$$mdi:backspace$$', h: LAYER3}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: LAYER3}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
   LAYER2:
@@ -186,13 +186,13 @@ layers:
   - $$mdi:volume-off$$
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: LAYER4}
-  - {t: '$$mdi:backspace$$', h: LAYER3}
+  - {t: '$$mdi:backspace$$', h: LAYER2, type: held}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: LAYER3}
+  - {t: '$$mdi:backspace$$', h: LAYER2, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
   LAYER3:
@@ -251,13 +251,13 @@ layers:
   - $$mdi:volume-off$$
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: LAYER4}
-  - {t: '$$mdi:backspace$$', h: LAYER3, type: held}
+  - {t: '$$mdi:backspace$$', h: LAYER2, type: held alternate}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3, type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3, type: held alternate}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: LAYER3, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: LAYER2, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
   LAYER4:
@@ -316,13 +316,13 @@ layers:
   - $$mdi:volume-off$$
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: LAYER4, type: held}
-  - {t: '$$mdi:backspace$$', h: LAYER3, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: LAYER2, type: held alternate}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3, type: held alternate}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3, type: held alternate}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: LAYER3, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: LAYER2, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4, type: held alternate}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4, type: held alternate}
   LAYER5:
@@ -381,13 +381,13 @@ layers:
   - $$mdi:volume-off$$
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: LAYER4}
-  - {t: '$$mdi:backspace$$', h: LAYER3}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3, type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3, type: held alternate}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: LAYER3}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
   LAYER6:
@@ -446,13 +446,13 @@ layers:
   - $$mdi:volume-off$$
   - {t: '$$mdi:apple-keyboard-option$$', type: held}
   - {t: '$$mdi:printer-outline$$', h: LAYER4, type: held}
-  - {t: '$$mdi:backspace$$', h: LAYER3, type: held}
+  - {t: '$$mdi:backspace$$', h: LAYER2, type: held}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3, type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: LAYER2, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3, type: held alternate}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: LAYER3, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: LAYER2, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4, type: held alternate}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4, type: held alternate}
 combos:
