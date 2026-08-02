@@ -52,6 +52,20 @@
             #sensor-binding-cells = <0>;
             tap-ms = <0>;
         };
+
+        mm_comma: mm_comma {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp COMMA>, <&kp LS(LEFT)>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_dot: mm_dot {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp DOT>, <&kp LS(RIGHT)>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
     };
 
     combos {
@@ -101,174 +115,174 @@
             layers = <0>;
         };
 
-        combo_bspc_mcommadot {
+        combo_hankaku_mcommadot {
             timeout-ms = <50>;
             key-positions = <47 48 49>;
-            bindings = <&kp BSPC>;
+            bindings = <&kp GRAVE>;
             layers = <0>;
         };
 
-        combo_bspc_xcv {
+        combo_hankaku_xcv {
             timeout-ms = <50>;
             key-positions = <41 42 43>;
+            bindings = <&kp GRAVE>;
+            layers = <0>;
+        };
+
+        combo_bspc_uio {
+            timeout-ms = <50>;
+            key-positions = <21 22 23>;
             bindings = <&kp BSPC>;
             layers = <0>;
         };
 
-        combo_hankaku_uio {
-            timeout-ms = <50>;
-            key-positions = <21 22 23>;
-            bindings = <&kp GRAVE>;
-            layers = <0>;
-        };
-
-        combo_hankaku_wer {
+        combo_bspc_wer {
             timeout-ms = <50>;
             key-positions = <15 16 17>;
-            bindings = <&kp GRAVE>;
+            bindings = <&kp BSPC>;
             layers = <0>;
         };
 
-        /* ---- Layer2専用コンボ ---- */
+        /* ---- ウィンドウ管理コンボ（新Layer3=ウィンドウ管理レイヤー） ---- */
 
-        combo_l2_maximize_mcomma {
+        combo_l2_mb4_mcomma {
             timeout-ms = <50>;
             key-positions = <47 48>;
-            bindings = <&kp LG(W)>;
-            layers = <2>;
+            bindings = <&mkp MB4>;
+            layers = <3>;
         };
 
-        combo_l2_maximize_cv {
-            timeout-ms = <50>;
-            key-positions = <42 43>;
-            bindings = <&kp LG(W)>;
-            layers = <2>;
-        };
-
-        combo_l2_close_commadot {
-            timeout-ms = <50>;
-            key-positions = <48 49>;
-            bindings = <&kp LG(C)>;
-            layers = <2>;
-        };
-
-        combo_l2_close_xc {
+        combo_l2_mb4_cx {
             timeout-ms = <50>;
             key-positions = <41 42>;
+            bindings = <&mkp MB4>;
+            layers = <3>;
+        };
+
+        combo_l2_mb5_commadot {
+            timeout-ms = <50>;
+            key-positions = <48 49>;
+            bindings = <&mkp MB5>;
+            layers = <3>;
+        };
+
+        combo_l2_mb5_cv {
+            timeout-ms = <50>;
+            key-positions = <42 43>;
+            bindings = <&mkp MB5>;
+            layers = <3>;
+        };
+
+        combo_l2_maximize_ui {
+            timeout-ms = <50>;
+            key-positions = <21 22>;
+            bindings = <&kp LG(W)>;
+            layers = <2 3>;
+        };
+
+        combo_l2_maximize_er {
+            timeout-ms = <50>;
+            key-positions = <16 17>;
+            bindings = <&kp LG(W)>;
+            layers = <2 3>;
+        };
+
+        combo_l2_close_io {
+            timeout-ms = <50>;
+            key-positions = <22 23>;
             bindings = <&kp LG(C)>;
-            layers = <2>;
+            layers = <2 3>;
+        };
+
+        combo_l2_close_we {
+            timeout-ms = <50>;
+            key-positions = <15 16>;
+            bindings = <&kp LG(C)>;
+            layers = <2 3>;
         };
 
         combo_l2_mission_jkl {
             timeout-ms = <50>;
             key-positions = <34 35 36>;
             bindings = <&kp LG(TAB)>;
-            layers = <2>;
+            layers = <3>;
         };
 
         combo_l2_mission_sdf {
             timeout-ms = <50>;
             key-positions = <28 29 30>;
             bindings = <&kp LG(TAB)>;
-            layers = <2>;
-        };
-
-        combo_l2_mb4_ui {
-            timeout-ms = <50>;
-            key-positions = <21 22>;
-            bindings = <&mkp MB4>;
-            layers = <2>;
-        };
-
-        combo_l2_mb4_we {
-            timeout-ms = <50>;
-            key-positions = <15 16>;
-            bindings = <&mkp MB4>;
-            layers = <2>;
-        };
-
-        combo_l2_mb5_io {
-            timeout-ms = <50>;
-            key-positions = <22 23>;
-            bindings = <&mkp MB5>;
-            layers = <2>;
-        };
-
-        combo_l2_mb5_er {
-            timeout-ms = <50>;
-            key-positions = <16 17>;
-            bindings = <&mkp MB5>;
-            layers = <2>;
-        };
-
-        /* ---- Layer3専用コンボ ---- */
-
-        combo_l3_lclk_ui {
-            timeout-ms = <50>;
-            key-positions = <21 22>;
-            bindings = <&mkp LCLK>;
             layers = <3>;
         };
 
-        combo_l3_lclk_er {
+        /* ---- Layer4専用コンボ（マウスレイヤー） ---- */
+
+        combo_l4_lclk_ui {
+            timeout-ms = <50>;
+            key-positions = <21 22>;
+            bindings = <&mkp LCLK>;
+            layers = <4>;
+        };
+
+        combo_l4_lclk_er {
             timeout-ms = <50>;
             key-positions = <16 17>;
             bindings = <&mkp LCLK>;
-            layers = <3>;
+            layers = <4>;
         };
 
-        combo_l3_mclk_uio {
+        combo_l4_mclk_uio {
             timeout-ms = <50>;
             key-positions = <21 22 23>;
             bindings = <&mkp MCLK>;
-            layers = <3>;
+            layers = <4>;
         };
 
-        combo_l3_mclk_wer {
+        combo_l4_mclk_wer {
             timeout-ms = <50>;
             key-positions = <15 16 17>;
             bindings = <&mkp MCLK>;
-            layers = <3>;
+            layers = <4>;
         };
 
-        combo_l3_rclk_io {
+        combo_l4_rclk_io {
             timeout-ms = <50>;
             key-positions = <22 23>;
             bindings = <&mkp RCLK>;
-            layers = <3>;
+            layers = <4>;
         };
 
-        combo_l3_rclk_we {
+        combo_l4_rclk_we {
             timeout-ms = <50>;
             key-positions = <15 16>;
             bindings = <&mkp RCLK>;
-            layers = <3>;
+            layers = <4>;
         };
 
         /* ---- レイヤー切替用コンボ（全レイヤー共通） ---- */
 
-        combo_mo4_left {
+        combo_mo5_left {
             timeout-ms = <50>;
             key-positions = <56 57>;
-            bindings = <&mo 4>;
+            bindings = <&mo 5>;
         };
 
-        combo_mo4_right {
+        combo_mo5_right {
             timeout-ms = <50>;
             key-positions = <59 60>;
-            bindings = <&mo 4>;
+            bindings = <&mo 5>;
         };
 
-        combo_layer5_left {
+        combo_layer6_left {
             timeout-ms = <150>;
             key-positions = <53 54 55 56 57>;
-            bindings = <&mo 5>;
+            bindings = <&mo 6>;
         };
 
-        combo_layer5_right {
+        combo_layer6_right {
             timeout-ms = <150>;
             key-positions = <59 60 61 62 63>;
-            bindings = <&mo 5>;
+            bindings = <&mo 6>;
         };
     };
 
@@ -297,8 +311,8 @@
 &kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp MINUS
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
 &kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
-&kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &kp COMMA     &kp DOT    &kp FSLH    &kp RSHFT
-&kp C_MUTE  &kp LALT   &kp PSCRN     &lt 3 BSPC    &lt 2 SPACE   &lt 1 ENTER  &mkp MCLK        &lt 1 ENTER &lt 2 SPACE  &lt 3 BSPC    &kp DEL    &lt 3 ESC
+&kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &mm_comma     &mm_dot    &kp LS(FSLH) &kp RSHFT
+&kp C_MUTE  &kp LALT   &lt 4 PSCRN   &lt 3 BSPC    &lt 1 SPACE   &lt 2 ENTER  &mkp MCLK        &lt 2 ENTER &lt 1 SPACE  &lt 3 BSPC    &lt 4 DEL  &lt 4 ESC
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
@@ -311,7 +325,7 @@
 &kp TAB     &none            &none           &none            &none            &none              &kp DOWN_ARROW   &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
 &kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LEFT_ARROW   &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
 &kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp RIGHT_ARROW  &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
-&kp C_MUTE  &kp LALT         &kp PSCRN       &lt 3 BSPC       &lt 2 SPACE      &lt 1 ENTER        &mkp MCLK        &lt 1 ENTER      &lt 2 SPACE      &lt 3 BSPC  &kp DEL    &lt 3 ESC
+&kp C_MUTE  &kp LALT         &lt 4 PSCRN     &lt 3 BSPC       &lt 1 SPACE      &lt 2 ENTER        &mkp MCLK        &lt 2 ENTER      &lt 1 SPACE      &lt 3 BSPC  &lt 4 DEL  &lt 4 ESC
             >;
 
             sensor-bindings = <&rsr_vol &rsr_trans>;
@@ -320,11 +334,11 @@
 
         layer_2 {
             bindings = <
-&kp LG(FSLH)       &none              &none          &none          &none          &kp LG(BSLH)       &mmv MOVE_UP     &kp LG(BSLH)       &none          &none          &none          &none          &kp LG(FSLH)
-&kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &mmv MOVE_DOWN   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
-&kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &mmv MOVE_LEFT   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
-&kp LG(M)          &kp LG(R)          &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(SPACE)      &mmv MOVE_RIGHT  &kp LG(SPACE)      &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(R)      &kp LG(M)
-&kp C_MUTE         &kp LALT           &kp PSCRN      &lt 3 BSPC     &lt 2 SPACE    &lt 1 ENTER        &mkp MCLK        &lt 1 ENTER        &lt 2 SPACE    &lt 3 BSPC     &kp DEL        &lt 3 ESC
+&kp ESC  &none    &none      &none      &none      &none      &mmv MOVE_UP     &none      &none           &none           &none           &none    &none
+&kp TAB  &kp END  &kp PG_DN  &kp UP_ARROW &kp PG_UP  &kp HOME   &mmv MOVE_DOWN   &kp HOME   &kp PG_UP       &kp UP_ARROW    &kp PG_DN       &kp END  &none
+&kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &mmv MOVE_LEFT   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
+&kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &kp RSHFT
+&kp C_MUTE         &kp LALT           &lt 4 PSCRN    &lt 3 BSPC     &lt 1 SPACE    &lt 2 ENTER        &mkp MCLK        &lt 2 ENTER        &lt 1 SPACE    &lt 3 BSPC     &lt 4 DEL      &lt 4 ESC
             >;
 
             display-name = "LAYER2";
@@ -333,11 +347,11 @@
 
         layer_3 {
             bindings = <
-&kp ESC  &none    &none      &none      &none      &none      &mmv MOVE_UP     &none      &none           &none           &none           &none    &none
-&kp TAB  &kp END  &kp PG_DN  &mmv MOVE_UP &kp PG_UP  &kp HOME   &mmv MOVE_DOWN   &kp HOME   &kp PG_UP       &mmv MOVE_UP    &kp PG_DN       &kp END  &none
-&kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
-&kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
-&kp C_MUTE &kp LALT &kp PSCRN &lt 3 BSPC &lt 2 SPACE &lt 1 ENTER &mkp MCLK      &lt 1 ENTER &lt 2 SPACE    &lt 3 BSPC      &kp DEL         &lt 3 ESC
+&kp LG(FSLH)       &none              &none          &none          &none          &kp LG(BSLH)       &mmv MOVE_UP     &kp LG(BSLH)       &none          &none          &none          &none          &kp LG(FSLH)
+&kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &mmv MOVE_DOWN   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
+&kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &mmv MOVE_LEFT   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
+&kp LG(M)          &kp LG(R)          &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(SPACE)      &mmv MOVE_RIGHT  &kp LG(SPACE)      &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(R)      &kp LG(M)
+&kp C_MUTE &kp LALT &lt 4 PSCRN &lt 3 BSPC &lt 1 SPACE &lt 2 ENTER &mkp MCLK      &lt 2 ENTER &lt 1 SPACE    &lt 3 BSPC      &lt 4 DEL         &lt 4 ESC
             >;
 
             display-name = "LAYER3";
@@ -346,27 +360,40 @@
 
         layer_4 {
             bindings = <
-&kp ESC  &kp F1  &kp F2  &kp F3  &kp F4  &kp F5    &kp UP_ARROW  &kp F6  &kp F7  &kp F8  &kp F9  &kp F10 &none
-&kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
-&kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
-&kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
-&kp C_MUTE &kp LALT &kp PSCRN &lt 3 BSPC &lt 2 SPACE &lt 1 ENTER  &mkp MCLK &lt 1 ENTER &lt 2 SPACE &lt 3 BSPC &kp DEL &lt 3 ESC
+&kp ESC  &none    &none      &none      &none      &none      &mmv MOVE_UP     &none      &none           &none           &none           &none    &none
+&kp TAB  &kp END  &kp PG_DN  &mmv MOVE_UP &kp PG_UP  &kp HOME   &mmv MOVE_DOWN   &kp HOME   &kp PG_UP       &mmv MOVE_UP    &kp PG_DN       &kp END  &none
+&kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
+&kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
+&kp C_MUTE &kp LALT &lt 4 PSCRN &lt 3 BSPC &lt 1 SPACE &lt 2 ENTER &mkp MCLK      &lt 2 ENTER &lt 1 SPACE    &lt 3 BSPC      &lt 4 DEL         &lt 4 ESC
             >;
- 
+
             display-name = "LAYER4";
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
 
         layer_5 {
             bindings = <
+&kp ESC  &kp F1  &kp F2  &kp F3  &kp F4  &kp F5    &kp UP_ARROW  &kp F6  &kp F7  &kp F8  &kp F9  &kp F10 &none
+&kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
+&kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
+&kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
+&kp C_MUTE &kp LALT &lt 4 PSCRN &lt 3 BSPC &lt 1 SPACE &lt 2 ENTER &mkp MCLK &lt 2 ENTER &lt 1 SPACE &lt 3 BSPC &lt 4 DEL &lt 4 ESC
+            >;
+ 
+            display-name = "LAYER5";
+            sensor-bindings = <&rsr_vol &rsr_trans>;
+        };
+
+        layer_6 {
+            bindings = <
 &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &kp UP_ARROW  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &bt BT_CLR
 &bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
 &none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
 &none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
-&kp C_MUTE  &kp LALT      &kp PSCRN     &lt 3 BSPC    &lt 2 SPACE   &lt 1 ENTER   &mkp MCLK     &lt 1 ENTER   &lt 2 SPACE   &lt 3 BSPC    &kp DEL       &lt 3 ESC
+&kp C_MUTE  &kp LALT      &lt 4 PSCRN   &lt 3 BSPC    &lt 1 SPACE   &lt 2 ENTER   &mkp MCLK     &lt 2 ENTER   &lt 1 SPACE   &lt 3 BSPC    &lt 4 DEL     &lt 4 ESC
             >;
 
-            display-name = "LAYER5";
+            display-name = "LAYER6";
             sensor-bindings = <&rsr_vol &rsr_trans>;
         };
     };
