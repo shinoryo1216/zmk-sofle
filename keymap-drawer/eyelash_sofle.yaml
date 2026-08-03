@@ -145,17 +145,17 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:keyboard-tab$$
-  - END
-  - PG DN
-  - $$mdi:arrow-up-bold$$
-  - PG UP
   - HOME
+  - PG UP
+  - $$mdi:arrow-up-bold$$
+  - PG DN
+  - END
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
-  - HOME
-  - PG UP
-  - $$mdi:arrow-up-bold$$
-  - PG DN
   - END
+  - PG DN
+  - $$mdi:arrow-up-bold$$
+  - PG UP
+  - HOME
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:apple-keyboard-control$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -275,17 +275,17 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:keyboard-tab$$
-  - END
-  - PG DN
-  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
-  - PG UP
   - HOME
+  - PG UP
+  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - PG DN
+  - END
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
-  - HOME
-  - PG UP
-  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
-  - PG DN
   - END
+  - PG DN
+  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - PG UP
+  - HOME
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:apple-keyboard-control$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
