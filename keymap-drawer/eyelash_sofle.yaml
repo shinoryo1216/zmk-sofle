@@ -653,34 +653,34 @@ layers:
 combos:
 - p: [46, 47]
   k: $$mdi:mouse-left-click-outline$$
-  l: [LAYER0]
+  l: [LAYER0, ONISHI]
 - p: [43, 44]
   k: $$mdi:mouse-left-click-outline$$
-  l: [LAYER0]
+  l: [LAYER0, ONISHI]
 - p: [47, 48]
   k: $$mdi:mouse-right-click-outline$$
-  l: [LAYER0]
+  l: [LAYER0, ONISHI]
 - p: [42, 43]
   k: $$mdi:mouse-right-click-outline$$
-  l: [LAYER0]
+  l: [LAYER0, ONISHI]
 - p: [34, 35, 36]
   k: {t: '$$mdi:keyboard-return$$', type: enter}
-  l: [LAYER0, LAYER1]
+  l: [LAYER0, ONISHI]
 - p: [28, 29, 30]
   k: {t: '$$mdi:keyboard-return$$', type: enter}
-  l: [LAYER0, LAYER1]
+  l: [LAYER0, ONISHI]
 - p: [47, 48, 49]
   k: {t: '$$mdi:backspace$$', type: backspace}
-  l: [LAYER0, LAYER1]
+  l: [LAYER0, ONISHI]
 - p: [41, 42, 43]
   k: {t: '$$mdi:backspace$$', type: backspace}
-  l: [LAYER0, LAYER1]
+  l: [LAYER0, ONISHI]
 - p: [21, 22, 23]
   k: {t: '`', s: '~'}
-  l: [LAYER0, LAYER1]
+  l: [LAYER0, ONISHI]
 - p: [15, 16, 17]
   k: {t: '`', s: '~'}
-  l: [LAYER0, LAYER1]
+  l: [LAYER0, ONISHI]
 - p: [47, 48]
   k: '&mkp MB4'
   l: [LAYER3]
