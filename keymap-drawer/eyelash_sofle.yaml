@@ -586,26 +586,26 @@ layers:
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
   ONISHI SYM:
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - $$mdi:keyboard-esc$$
+  - {t: '1', s: '!'}
+  - {t: '2', s: '@'}
+  - {t: '3', s: '#'}
+  - {t: '4', s: $}
+  - {t: '5', s: '%'}
+  - $$mdi:arrow-up-bold$$
+  - {t: '6', s: ^}
+  - {t: '7', s: '&'}
+  - {t: '8', s: '*'}
+  - {t: '9', s: (}
+  - {t: '0', s: )}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:keyboard-tab$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '[', s: '{'}
   - '"'
   - {t: ']', s: '}'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - $$mdi:arrow-down-bold$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - <
   - {t: '=', s: +}
@@ -618,127 +618,39 @@ layers:
   - {t: '''', s: '"'}
   - )
   - '&'
-  - {t: '$$mdi:transfer$$', type: trans}
+  - $$mdi:arrow-left-bold$$
   - ^
   - +
   - {t: '-', s: _}
   - '*'
   - {t: /, s: '?'}
   - {t: \, s: '|'}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - $$mdi:apple-keyboard-shift$$
   - $
   - '{'
   - {t: '`', s: '~'}
   - '}'
   - {t: ., s: '>'}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - $$mdi:arrow-right-bold$$
   - _
   - '!'
   - '?'
   - ':'
   - {t: ;, s: ':'}
   - '%'
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {type: held}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {type: held alternate}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: LAYER7, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: LAYER4}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
+  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM, type: held}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
+  - $$mdi:mouse-scroll-wheel$$
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
+  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
+  - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
 combos:
-- p: [46, 47]
-  k: $$mdi:mouse-left-click-outline$$
-  l: [LAYER0]
-- p: [43, 44]
-  k: $$mdi:mouse-left-click-outline$$
-  l: [LAYER0]
-- p: [47, 48]
-  k: $$mdi:mouse-right-click-outline$$
-  l: [LAYER0]
-- p: [42, 43]
-  k: $$mdi:mouse-right-click-outline$$
-  l: [LAYER0]
-- p: [34, 35, 36]
-  k: {t: '$$mdi:keyboard-return$$', type: enter}
-  l: [LAYER0, LAYER1]
-- p: [28, 29, 30]
-  k: {t: '$$mdi:keyboard-return$$', type: enter}
-  l: [LAYER0, LAYER1]
-- p: [47, 48, 49]
-  k: {t: '$$mdi:backspace$$', type: backspace}
-  l: [LAYER0, LAYER1]
-- p: [41, 42, 43]
-  k: {t: '$$mdi:backspace$$', type: backspace}
-  l: [LAYER0, LAYER1]
-- p: [21, 22, 23]
-  k: {t: '`', s: '~'}
-  l: [LAYER0, LAYER1]
-- p: [15, 16, 17]
-  k: {t: '`', s: '~'}
-  l: [LAYER0, LAYER1]
-- p: [47, 48]
-  k: '&mkp MB4'
-  l: [LAYER3]
-- p: [41, 42]
-  k: '&mkp MB4'
-  l: [LAYER3]
-- p: [48, 49]
-  k: '&mkp MB5'
-  l: [LAYER3]
-- p: [42, 43]
-  k: '&mkp MB5'
-  l: [LAYER3]
-- p: [21, 22]
-  k: Gui+W
-  l: [LAYER2, LAYER3]
-- p: [16, 17]
-  k: Gui+W
-  l: [LAYER2, LAYER3]
-- p: [22, 23]
-  k: {t: C, h: '$$mdi:apple-keyboard-command$$'}
-  l: [LAYER2, LAYER3]
-- p: [15, 16]
-  k: {t: C, h: '$$mdi:apple-keyboard-command$$'}
-  l: [LAYER2, LAYER3]
-- p: [34, 35, 36]
-  k: Gui+$$mdi:keyboard-tab$$
-  l: [LAYER3]
-- p: [28, 29, 30]
-  k: Gui+$$mdi:keyboard-tab$$
-  l: [LAYER3]
-- p: [21, 22]
-  k: $$mdi:mouse-left-click-outline$$
-  l: [LAYER4]
-- p: [16, 17]
-  k: $$mdi:mouse-left-click-outline$$
-  l: [LAYER4]
-- p: [21, 22, 23]
-  k: $$mdi:mouse-scroll-wheel$$
-  l: [LAYER4]
-- p: [15, 16, 17]
-  k: $$mdi:mouse-scroll-wheel$$
-  l: [LAYER4]
-- p: [22, 23]
-  k: $$mdi:mouse-right-click-outline$$
-  l: [LAYER4]
-- p: [15, 16]
-  k: $$mdi:mouse-right-click-outline$$
-  l: [LAYER4]
-- p: [56, 57]
-  k: LAYER5
-- p: [59, 60]
-  k: LAYER5
-- p: [53, 54, 55, 56, 57]
-  k: LAYER6
-- p: [59, 60, 61, 62, 63]
-  k: LAYER6
-- p: [53, 54, 62, 63]
-  k: {t: ONISHI, h: toggle}
 - p: [46, 47]
   k: $$mdi:mouse-left-click-outline$$
   l: [LAYER0]
