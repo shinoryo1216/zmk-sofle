@@ -87,76 +87,76 @@
     combos {
         compatible = "zmk,combos";
 
-        /* ---- Layer0専用コンボ ---- */
+        /* ---- Layer0・Layer8共通コンボ ---- */
 
         combo_lclk_nm {
             timeout-ms = <50>;
             key-positions = <46 47>;
             bindings = <&mkp LCLK>;
-            layers = <0>;
+            layers = <0 8>;
         };
 
         combo_lclk_vb {
             timeout-ms = <50>;
             key-positions = <43 44>;
             bindings = <&mkp LCLK>;
-            layers = <0>;
+            layers = <0 8>;
         };
 
         combo_rclk_mcomma {
             timeout-ms = <50>;
             key-positions = <47 48>;
             bindings = <&mkp RCLK>;
-            layers = <0>;
+            layers = <0 8>;
         };
 
         combo_rclk_cv {
             timeout-ms = <50>;
             key-positions = <42 43>;
             bindings = <&mkp RCLK>;
-            layers = <0>;
+            layers = <0 8>;
         };
 
         combo_enter_jkl {
             timeout-ms = <50>;
             key-positions = <34 35 36>;
             bindings = <&kp ENTER>;
-            layers = <0 1>;
+            layers = <0 8>;
         };
 
         combo_enter_sdf {
             timeout-ms = <50>;
             key-positions = <28 29 30>;
             bindings = <&kp ENTER>;
-            layers = <0 1>;
+            layers = <0 8>;
         };
 
         combo_bspc_mcommadot {
             timeout-ms = <50>;
             key-positions = <47 48 49>;
             bindings = <&kp BSPC>;
-            layers = <0 1>;
+            layers = <0 8>;
         };
 
         combo_bspc_xcv {
             timeout-ms = <50>;
             key-positions = <41 42 43>;
             bindings = <&kp BSPC>;
-            layers = <0 1>;
+            layers = <0 8>;
         };
 
         combo_hankaku_uio {
             timeout-ms = <50>;
             key-positions = <21 22 23>;
             bindings = <&kp GRAVE>;
-            layers = <0 1>;
+            layers = <0 8>;
         };
 
         combo_hankaku_wer {
             timeout-ms = <50>;
             key-positions = <15 16 17>;
             bindings = <&kp GRAVE>;
-            layers = <0 1>;
+            layers = <0 8>;
         };
 
         /* ---- ウィンドウ管理コンボ（新Layer3=ウィンドウ管理レイヤー） ---- */
