@@ -29,6 +29,16 @@
 
 &soft_off { hold-time-ms = <2000>; };
 
+// 親指行の&lt（レイヤータップ）挙動を調整。
+// デフォルト(flavor未指定=hold-preferred)だと、タップ中に別のキーが押されただけで
+// 即座にホールド判定されてしまい、通常のタイピング中に誤ってレイヤーが開いてしまう。
+// balancedにし、タイムアウトを伸ばすことでタップ優先寄りにして誤判定を減らす。
+&lt {
+    flavor = "balanced";
+    tapping-term-ms = <200>;
+    quick-tap-ms = <175>;
+};
+
 / {
     scroll_encoder: scroll_encoder {
         compatible = "zmk,behavior-sensor-rotate";
@@ -88,34 +98,6 @@
         compatible = "zmk,combos";
 
         /* ---- Layer0・Layer1(大西配列)共通コンボ ---- */
-
-        combo_lclk_nm {
-            timeout-ms = <50>;
-            key-positions = <46 47>;
-            bindings = <&mkp LCLK>;
-            layers = <0 1>;
-        };
-
-        combo_lclk_vb {
-            timeout-ms = <50>;
-            key-positions = <43 44>;
-            bindings = <&mkp LCLK>;
-            layers = <0 1>;
-        };
-
-        combo_rclk_mcomma {
-            timeout-ms = <50>;
-            key-positions = <47 48>;
-            bindings = <&mkp RCLK>;
-            layers = <0 1>;
-        };
-
-        combo_rclk_cv {
-            timeout-ms = <50>;
-            key-positions = <42 43>;
-            bindings = <&mkp RCLK>;
-            layers = <0 1>;
-        };
 
         combo_enter_jkl {
             timeout-ms = <50>;
@@ -339,7 +321,7 @@
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
 &kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &mm_comma     &mm_dot    &kp LS(FSLH) &kp RSHFT
-&tog 9  &kp LALT   &lt 6 PSCRN   &lt 4 BSPC    &lt 2 SPACE   &lt 5 ENTER  &mkp MCLK        &lt 5 ENTER &lt 2 SPACE  &lt 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 9  &kp LALT   &lt 6 PSCRN   &lt 4 BSPC    &mkp RCLK   &lt 5 ENTER  &mkp LCLK        &lt 5 ENTER &lt 2 SPACE  &lt 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -354,7 +336,7 @@
 &kp TAB     &kp Q      &kp L         &kp U         &kp F         &kp GRAVE    &kp DOWN_ARROW   &kp GRAVE  &kp W         &kp R         &kp Y      &kp P       &none
 &kp LCTRL   &kp E      &kp I         &kp A         &kp O         &kp MINUS    &kp LEFT_ARROW   &kp K      &kp T         &kp N         &kp S      &kp H       &none
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp COMMA    &kp RIGHT_ARROW  &kp G      &kp D         &kp M         &kp J      &kp B       &kp RSHFT
-&tog 9  &kp LALT   &lt 6 PSCRN   &lt 4 BSPC    &lt 3 SPACE   &lt 5 ENTER  &mkp MCLK        &lt 5 ENTER &lt 3 SPACE  &lt 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 9  &kp LALT   &lt 6 PSCRN   &lt 4 BSPC    &mkp RCLK   &lt 5 ENTER  &mkp LCLK        &lt 5 ENTER &lt 3 SPACE  &lt 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
