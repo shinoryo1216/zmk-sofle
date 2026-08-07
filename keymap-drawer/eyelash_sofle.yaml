@@ -65,6 +65,71 @@ layers:
   - {t: '$$mdi:backspace$$', h: LAYER2}
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
+  ONISHI:
+  - $$mdi:keyboard-esc$$
+  - {t: '1', s: '!'}
+  - {t: '2', s: '@'}
+  - {t: '3', s: '#'}
+  - {t: '4', s: $}
+  - {t: '5', s: '%'}
+  - $$mdi:arrow-up-bold$$
+  - {t: '6', s: ^}
+  - {t: '7', s: '&'}
+  - {t: '8', s: '*'}
+  - {t: '9', s: (}
+  - {t: '0', s: )}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:keyboard-tab$$
+  - Q
+  - L
+  - U
+  - F
+  - {t: '`', s: '~'}
+  - $$mdi:arrow-down-bold$$
+  - {t: '`', s: '~'}
+  - W
+  - R
+  - Y
+  - P
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-control$$
+  - E
+  - I
+  - A
+  - O
+  - {t: '-', s: _}
+  - $$mdi:arrow-left-bold$$
+  - K
+  - T
+  - N
+  - S
+  - H
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-shift$$
+  - Z
+  - X
+  - C
+  - V
+  - {t: ',', s: <}
+  - $$mdi:arrow-right-bold$$
+  - G
+  - D
+  - M
+  - J
+  - B
+  - $$mdi:apple-keyboard-shift$$
+  - {t: LAYER7, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: LAYER4}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
+  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
+  - $$mdi:mouse-scroll-wheel$$
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
+  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
+  - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
   LAYER1:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
@@ -127,6 +192,71 @@ layers:
   - $$mdi:mouse-scroll-wheel$$
   - {t: '$$mdi:keyboard-return$$', h: LAYER3}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
+  - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
+  ONISHI SYM:
+  - $$mdi:keyboard-esc$$
+  - {t: '1', s: '!'}
+  - {t: '2', s: '@'}
+  - {t: '3', s: '#'}
+  - {t: '4', s: $}
+  - {t: '5', s: '%'}
+  - $$mdi:arrow-up-bold$$
+  - {t: '6', s: ^}
+  - {t: '7', s: '&'}
+  - {t: '8', s: '*'}
+  - {t: '9', s: (}
+  - {t: '0', s: )}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:keyboard-tab$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '[', s: '{'}
+  - '"'
+  - {t: ']', s: '}'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-down-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - <
+  - {t: '=', s: +}
+  - '>'
+  - '|'
+  - '@'
+  - '~'
+  - '#'
+  - (
+  - {t: '''', s: '"'}
+  - )
+  - '&'
+  - $$mdi:arrow-left-bold$$
+  - ^
+  - +
+  - {t: '-', s: _}
+  - '*'
+  - {t: /, s: '?'}
+  - {t: \, s: '|'}
+  - $$mdi:apple-keyboard-shift$$
+  - $
+  - '{'
+  - {t: '`', s: '~'}
+  - '}'
+  - {t: ., s: '>'}
+  - $$mdi:arrow-right-bold$$
+  - _
+  - '!'
+  - '?'
+  - ':'
+  - {t: ;, s: ':'}
+  - '%'
+  - {t: LAYER7, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: LAYER4}
+  - {t: '$$mdi:backspace$$', h: LAYER2}
+  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM, type: held}
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
+  - $$mdi:mouse-scroll-wheel$$
+  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
+  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM, type: held alternate}
   - {t: '$$mdi:backspace$$', h: LAYER2}
   - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
   - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
@@ -520,136 +650,6 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  ONISHI:
-  - $$mdi:keyboard-esc$$
-  - {t: '1', s: '!'}
-  - {t: '2', s: '@'}
-  - {t: '3', s: '#'}
-  - {t: '4', s: $}
-  - {t: '5', s: '%'}
-  - $$mdi:arrow-up-bold$$
-  - {t: '6', s: ^}
-  - {t: '7', s: '&'}
-  - {t: '8', s: '*'}
-  - {t: '9', s: (}
-  - {t: '0', s: )}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:keyboard-tab$$
-  - Q
-  - L
-  - U
-  - F
-  - {t: '`', s: '~'}
-  - $$mdi:arrow-down-bold$$
-  - {t: '`', s: '~'}
-  - W
-  - R
-  - Y
-  - P
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:apple-keyboard-control$$
-  - E
-  - I
-  - A
-  - O
-  - {t: '-', s: _}
-  - $$mdi:arrow-left-bold$$
-  - K
-  - T
-  - N
-  - S
-  - H
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:apple-keyboard-shift$$
-  - Z
-  - X
-  - C
-  - V
-  - {t: ',', s: <}
-  - $$mdi:arrow-right-bold$$
-  - G
-  - D
-  - M
-  - J
-  - B
-  - $$mdi:apple-keyboard-shift$$
-  - {t: LAYER7, h: toggle}
-  - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: LAYER4}
-  - {t: '$$mdi:backspace$$', h: LAYER2}
-  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM}
-  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
-  - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
-  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM}
-  - {t: '$$mdi:backspace$$', h: LAYER2}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
-  - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
-  ONISHI SYM:
-  - $$mdi:keyboard-esc$$
-  - {t: '1', s: '!'}
-  - {t: '2', s: '@'}
-  - {t: '3', s: '#'}
-  - {t: '4', s: $}
-  - {t: '5', s: '%'}
-  - $$mdi:arrow-up-bold$$
-  - {t: '6', s: ^}
-  - {t: '7', s: '&'}
-  - {t: '8', s: '*'}
-  - {t: '9', s: (}
-  - {t: '0', s: )}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:keyboard-tab$$
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '[', s: '{'}
-  - '"'
-  - {t: ']', s: '}'}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:arrow-down-bold$$
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - <
-  - {t: '=', s: +}
-  - '>'
-  - '|'
-  - '@'
-  - '~'
-  - '#'
-  - (
-  - {t: '''', s: '"'}
-  - )
-  - '&'
-  - $$mdi:arrow-left-bold$$
-  - ^
-  - +
-  - {t: '-', s: _}
-  - '*'
-  - {t: /, s: '?'}
-  - {t: \, s: '|'}
-  - $$mdi:apple-keyboard-shift$$
-  - $
-  - '{'
-  - {t: '`', s: '~'}
-  - '}'
-  - {t: ., s: '>'}
-  - $$mdi:arrow-right-bold$$
-  - _
-  - '!'
-  - '?'
-  - ':'
-  - {t: ;, s: ':'}
-  - '%'
-  - {t: LAYER7, h: toggle}
-  - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: LAYER4}
-  - {t: '$$mdi:backspace$$', h: LAYER2}
-  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
-  - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: LAYER3}
-  - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: LAYER2}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: LAYER4}
-  - {t: '$$mdi:keyboard-esc$$', h: LAYER4}
 combos:
 - p: [46, 47]
   k: $$mdi:mouse-left-click-outline$$
