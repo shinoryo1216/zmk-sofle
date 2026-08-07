@@ -87,192 +87,192 @@
     combos {
         compatible = "zmk,combos";
 
-        /* ---- Layer0・Layer8共通コンボ ---- */
+        /* ---- Layer0・Layer1(大西配列)共通コンボ ---- */
 
         combo_lclk_nm {
             timeout-ms = <50>;
             key-positions = <46 47>;
             bindings = <&mkp LCLK>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
         combo_lclk_vb {
             timeout-ms = <50>;
             key-positions = <43 44>;
             bindings = <&mkp LCLK>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
         combo_rclk_mcomma {
             timeout-ms = <50>;
             key-positions = <47 48>;
             bindings = <&mkp RCLK>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
         combo_rclk_cv {
             timeout-ms = <50>;
             key-positions = <42 43>;
             bindings = <&mkp RCLK>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
         combo_enter_jkl {
             timeout-ms = <50>;
             key-positions = <34 35 36>;
             bindings = <&kp ENTER>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
         combo_enter_sdf {
             timeout-ms = <50>;
             key-positions = <28 29 30>;
             bindings = <&kp ENTER>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
         combo_bspc_mcommadot {
             timeout-ms = <50>;
             key-positions = <47 48 49>;
             bindings = <&kp BSPC>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
         combo_bspc_xcv {
             timeout-ms = <50>;
             key-positions = <41 42 43>;
             bindings = <&kp BSPC>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
         combo_hankaku_uio {
             timeout-ms = <50>;
             key-positions = <21 22 23>;
             bindings = <&kp GRAVE>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
         combo_hankaku_wer {
             timeout-ms = <50>;
             key-positions = <15 16 17>;
             bindings = <&kp GRAVE>;
-            layers = <0 8>;
+            layers = <0 1>;
         };
 
-        /* ---- ウィンドウ管理コンボ（新Layer3=ウィンドウ管理レイヤー） ---- */
+        /* ---- ウィンドウ管理コンボ（新Layer5=ウィンドウ管理レイヤー） ---- */
 
         combo_l2_mb4_mcomma {
             timeout-ms = <50>;
             key-positions = <47 48>;
             bindings = <&mkp MB4>;
-            layers = <3>;
+            layers = <5>;
         };
 
         combo_l2_mb4_cx {
             timeout-ms = <50>;
             key-positions = <41 42>;
             bindings = <&mkp MB4>;
-            layers = <3>;
+            layers = <5>;
         };
 
         combo_l2_mb5_commadot {
             timeout-ms = <50>;
             key-positions = <48 49>;
             bindings = <&mkp MB5>;
-            layers = <3>;
+            layers = <5>;
         };
 
         combo_l2_mb5_cv {
             timeout-ms = <50>;
             key-positions = <42 43>;
             bindings = <&mkp MB5>;
-            layers = <3>;
+            layers = <5>;
         };
 
         combo_l2_maximize_ui {
             timeout-ms = <50>;
             key-positions = <21 22>;
             bindings = <&kp LG(W)>;
-            layers = <2 3>;
+            layers = <4 5>;
         };
 
         combo_l2_maximize_er {
             timeout-ms = <50>;
             key-positions = <16 17>;
             bindings = <&kp LG(W)>;
-            layers = <2 3>;
+            layers = <4 5>;
         };
 
         combo_l2_close_io {
             timeout-ms = <50>;
             key-positions = <22 23>;
             bindings = <&kp LG(C)>;
-            layers = <2 3>;
+            layers = <4 5>;
         };
 
         combo_l2_close_we {
             timeout-ms = <50>;
             key-positions = <15 16>;
             bindings = <&kp LG(C)>;
-            layers = <2 3>;
+            layers = <4 5>;
         };
 
         combo_l2_mission_jkl {
             timeout-ms = <50>;
             key-positions = <34 35 36>;
             bindings = <&kp LG(TAB)>;
-            layers = <3>;
+            layers = <5>;
         };
 
         combo_l2_mission_sdf {
             timeout-ms = <50>;
             key-positions = <28 29 30>;
             bindings = <&kp LG(TAB)>;
-            layers = <3>;
+            layers = <5>;
         };
 
-        /* ---- Layer4専用コンボ（マウスレイヤー） ---- */
+        /* ---- Layer6専用コンボ（マウスレイヤー） ---- */
 
         combo_l4_lclk_ui {
             timeout-ms = <50>;
             key-positions = <21 22>;
             bindings = <&mkp LCLK>;
-            layers = <4>;
+            layers = <6>;
         };
 
         combo_l4_lclk_er {
             timeout-ms = <50>;
             key-positions = <16 17>;
             bindings = <&mkp LCLK>;
-            layers = <4>;
+            layers = <6>;
         };
 
         combo_l4_mclk_uio {
             timeout-ms = <50>;
             key-positions = <21 22 23>;
             bindings = <&mkp MCLK>;
-            layers = <4>;
+            layers = <6>;
         };
 
         combo_l4_mclk_wer {
             timeout-ms = <50>;
             key-positions = <15 16 17>;
             bindings = <&mkp MCLK>;
-            layers = <4>;
+            layers = <6>;
         };
 
         combo_l4_rclk_io {
             timeout-ms = <50>;
             key-positions = <22 23>;
             bindings = <&mkp RCLK>;
-            layers = <4>;
+            layers = <6>;
         };
 
         combo_l4_rclk_we {
             timeout-ms = <50>;
             key-positions = <15 16>;
             bindings = <&mkp RCLK>;
-            layers = <4>;
+            layers = <6>;
         };
 
         /* ---- レイヤー切替用コンボ（全レイヤー共通） ---- */
@@ -280,25 +280,25 @@
         combo_mo5_left {
             timeout-ms = <50>;
             key-positions = <56 57>;
-            bindings = <&mo 5>;
+            bindings = <&mo 7>;
         };
 
         combo_mo5_right {
             timeout-ms = <50>;
             key-positions = <59 60>;
-            bindings = <&mo 5>;
+            bindings = <&mo 7>;
         };
 
         combo_layer6_left {
             timeout-ms = <150>;
             key-positions = <53 54 55 56 57>;
-            bindings = <&mo 6>;
+            bindings = <&mo 8>;
         };
 
         combo_layer6_right {
             timeout-ms = <150>;
             key-positions = <59 60 61 62 63>;
-            bindings = <&mo 6>;
+            bindings = <&mo 8>;
         };
 
         /* ---- System B（大西配列）切替コンボ ---- */
@@ -306,7 +306,7 @@
         combo_onishi_toggle {
             timeout-ms = <50>;
             key-positions = <53 54 62 63>;
-            bindings = <&tog 8>;
+            bindings = <&tog 1>;
         };
     };
 
@@ -325,6 +325,9 @@
 
             label = "SHIFT_MCLK";
         };
+
+        // 半角/全角キーはGRAVE単体（Windows/Linuxで動作確認済み）。
+        // macOS/iPadOSではLANG2を使う必要があるが、LANG2は「英数固定」でトグルにならないため見送り。
     };
 
     keymap {
@@ -336,11 +339,26 @@
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
 &kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &mm_comma     &mm_dot    &kp LS(FSLH) &kp RSHFT
-&tog 7  &kp LALT   &lt 4 PSCRN   &lt 2 BSPC    &lt 1 SPACE   &lt 3 ENTER  &mkp MCLK        &lt 3 ENTER &lt 1 SPACE  &lt 2 BSPC    &lt 4 DEL  &lt 4 ESC
+&tog 9  &kp LALT   &lt 6 PSCRN   &lt 4 BSPC    &lt 2 SPACE   &lt 5 ENTER  &mkp MCLK        &lt 5 ENTER &lt 2 SPACE  &lt 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
             display-name = "LAYER0";
+        };
+
+        layer_8_onishi {
+            // System B：大西配列 新Layer0（レイヤー番号1）
+            // SPACE/L1のみ Layer3（大西配列専用の記号レイヤー）を指す。他はLayer0と全く同じ共有レイヤーを指す
+            bindings = <
+&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &none
+&kp TAB     &kp Q      &kp L         &kp U         &kp F         &kp GRAVE    &kp DOWN_ARROW   &kp GRAVE  &kp W         &kp R         &kp Y      &kp P       &none
+&kp LCTRL   &kp E      &kp I         &kp A         &kp O         &kp MINUS    &kp LEFT_ARROW   &kp K      &kp T         &kp N         &kp S      &kp H       &none
+&kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp COMMA    &kp RIGHT_ARROW  &kp G      &kp D         &kp M         &kp J      &kp B       &kp RSHFT
+&tog 9  &kp LALT   &lt 6 PSCRN   &lt 4 BSPC    &lt 3 SPACE   &lt 5 ENTER  &mkp MCLK        &lt 5 ENTER &lt 3 SPACE  &lt 4 BSPC    &lt 6 DEL  &lt 6 ESC
+            >;
+
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "ONISHI";
         };
 
         layer_1 {
@@ -349,11 +367,25 @@
 &kp TAB     &none            &none           &none            &none            &none              &kp DOWN_ARROW   &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
 &kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LEFT_ARROW   &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
 &kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp RIGHT_ARROW  &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
-&tog 7  &kp LALT         &lt 4 PSCRN     &lt 2 BSPC       &lt 1 SPACE      &lt 3 ENTER        &mkp MCLK        &lt 3 ENTER      &lt 1 SPACE      &lt 2 BSPC  &lt 4 DEL  &lt 4 ESC
+&tog 9  &kp LALT         &lt 6 PSCRN     &lt 4 BSPC       &lt 2 SPACE      &lt 5 ENTER        &mkp MCLK        &lt 5 ENTER      &lt 2 SPACE      &lt 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
             display-name = "LAYER1";
+        };
+
+        layer_9_onishi_symbol {
+            // System B：大西配列 新Layer1（記号）※Layer1(ONISHI)のSPACE/L3ホールドでアクセス
+            // 透過(&trans)ではなく、ONISHIレイヤーで実際に出力される値を明示的に指定
+            bindings = <
+&kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5         &kp UP_ARROW    &kp N6      &kp N7     &kp N8     &kp N9     &kp N0     &none
+&kp TAB   &none      &kp LBKT  &kp DQT    &kp RBKT   &none          &kp DOWN_ARROW  &none       &kp LT     &kp EQUAL  &kp GT     &kp PIPE   &kp AT
+&kp TILDE &kp HASH   &kp LPAR  &kp SQT    &kp RPAR   &kp AMPS       &kp LEFT_ARROW  &kp CARET   &kp PLUS   &kp MINUS  &kp STAR   &kp FSLH   &kp BSLH
+&kp LSHFT &kp DLLR   &kp LBRC  &kp GRAVE  &kp RBRC   &kp DOT        &kp RIGHT_ARROW &kp UNDER   &kp EXCL   &kp QMARK  &kp COLON  &kp SEMI   &kp PRCNT
+&tog 9  &kp LALT  &lt 6 PSCRN  &lt 4 BSPC  &lt 3 SPACE  &lt 5 ENTER      &mkp MCLK   &lt 5 ENTER  &lt 3 SPACE  &lt 4 BSPC  &lt 6 DEL  &lt 6 ESC
+            >;
+
+            display-name = "ONISHI SYM";
         };
 
         layer_2 {
@@ -362,7 +394,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &mmv MOVE_LEFT   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &kp RSHFT
-&tog 7         &kp LALT           &lt 4 PSCRN    &lt 2 BSPC     &lt 1 SPACE    &lt 3 ENTER        &mkp MCLK        &lt 3 ENTER        &lt 1 SPACE    &lt 2 BSPC     &lt 4 DEL      &lt 4 ESC
+&tog 9         &kp LALT           &lt 6 PSCRN    &lt 4 BSPC     &lt 2 SPACE    &lt 5 ENTER        &mkp MCLK        &lt 5 ENTER        &lt 2 SPACE    &lt 4 BSPC     &lt 6 DEL      &lt 6 ESC
             >;
 
             display-name = "LAYER2";
@@ -375,7 +407,7 @@
 &kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &mmv MOVE_DOWN   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
 &kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &mmv MOVE_LEFT   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
 &kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &mmv MOVE_RIGHT  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
-&tog 7 &kp LALT &lt 4 PSCRN &lt 2 BSPC &lt 1 SPACE &lt 3 ENTER &mkp MCLK      &lt 3 ENTER &lt 1 SPACE    &lt 2 BSPC      &lt 4 DEL         &lt 4 ESC
+&tog 9 &kp LALT &lt 6 PSCRN &lt 4 BSPC &lt 2 SPACE &lt 5 ENTER &mkp MCLK      &lt 5 ENTER &lt 2 SPACE    &lt 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
             display-name = "LAYER3";
@@ -388,7 +420,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
-&tog 7 &kp LALT &lt 4 PSCRN &lt 2 BSPC &lt 1 SPACE &lt 3 ENTER &mkp MCLK      &lt 3 ENTER &lt 1 SPACE    &lt 2 BSPC      &lt 4 DEL         &lt 4 ESC
+&tog 9 &kp LALT &lt 6 PSCRN &lt 4 BSPC &lt 2 SPACE &lt 5 ENTER &mkp MCLK      &lt 5 ENTER &lt 2 SPACE    &lt 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
             display-name = "LAYER4";
@@ -401,7 +433,7 @@
 &kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
 &kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
 &kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
-&tog 7 &kp LALT &lt 4 PSCRN &lt 2 BSPC &lt 1 SPACE &lt 3 ENTER &mkp MCLK &lt 3 ENTER &lt 1 SPACE &lt 2 BSPC &lt 4 DEL &lt 4 ESC
+&tog 9 &kp LALT &lt 6 PSCRN &lt 4 BSPC &lt 2 SPACE &lt 5 ENTER &mkp MCLK &lt 5 ENTER &lt 2 SPACE &lt 4 BSPC &lt 6 DEL &lt 6 ESC
             >;
  
             display-name = "LAYER5";
@@ -414,7 +446,7 @@
 &bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
 &none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
 &none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
-&tog 7  &kp LALT      &lt 4 PSCRN   &lt 2 BSPC    &lt 1 SPACE   &lt 3 ENTER   &mkp MCLK     &lt 3 ENTER   &lt 1 SPACE   &lt 2 BSPC    &lt 4 DEL     &lt 4 ESC
+&tog 9  &kp LALT      &lt 6 PSCRN   &lt 4 BSPC    &lt 2 SPACE   &lt 5 ENTER   &mkp MCLK     &lt 5 ENTER   &lt 2 SPACE   &lt 4 BSPC    &lt 6 DEL     &lt 6 ESC
             >;
 
             display-name = "LAYER6";
@@ -432,35 +464,6 @@
 
             display-name = "LAYER7";
             sensor-bindings = <&rsr_cursor_lr &rsr_trans>;
-        };
-
-        layer_8_onishi {
-            // System B：大西配列 新Layer0
-            // SPACE/L1のみ Layer9（大西配列専用の記号レイヤー）を指す。他はLayer0と全く同じレイヤーを共有
-            bindings = <
-&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &none
-&kp TAB     &kp Q      &kp L         &kp U         &kp F         &kp GRAVE    &kp DOWN_ARROW   &kp GRAVE  &kp W         &kp R         &kp Y      &kp P       &none
-&kp LCTRL   &kp E      &kp I         &kp A         &kp O         &kp MINUS    &kp LEFT_ARROW   &kp K      &kp T         &kp N         &kp S      &kp H       &none
-&kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp COMMA    &kp RIGHT_ARROW  &kp G      &kp D         &kp M         &kp J      &kp B       &kp RSHFT
-&tog 7  &kp LALT   &lt 4 PSCRN   &lt 2 BSPC    &lt 9 SPACE   &lt 3 ENTER  &mkp MCLK        &lt 3 ENTER &lt 9 SPACE  &lt 2 BSPC    &lt 4 DEL  &lt 4 ESC
-            >;
-
-            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
-            display-name = "ONISHI";
-        };
-
-        layer_9_onishi_symbol {
-            // System B：大西配列 新Layer1（記号）※Layer8のSPACE/L9ホールドでアクセス
-            // 透過(&trans)ではなく、Layer8で実際に出力される値を明示的に指定
-            bindings = <
-&kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5         &kp UP_ARROW    &kp N6      &kp N7     &kp N8     &kp N9     &kp N0     &none
-&kp TAB   &none      &kp LBKT  &kp DQT    &kp RBKT   &none          &kp DOWN_ARROW  &none       &kp LT     &kp EQUAL  &kp GT     &kp PIPE   &kp AT
-&kp TILDE &kp HASH   &kp LPAR  &kp SQT    &kp RPAR   &kp AMPS       &kp LEFT_ARROW  &kp CARET   &kp PLUS   &kp MINUS  &kp STAR   &kp FSLH   &kp BSLH
-&kp LSHFT &kp DLLR   &kp LBRC  &kp GRAVE  &kp RBRC   &kp DOT        &kp RIGHT_ARROW &kp UNDER   &kp EXCL   &kp QMARK  &kp COLON  &kp SEMI   &kp PRCNT
-&tog 7  &kp LALT  &lt 4 PSCRN  &lt 2 BSPC  &lt 9 SPACE  &lt 3 ENTER      &mkp MCLK   &lt 3 ENTER  &lt 9 SPACE  &lt 2 BSPC  &lt 4 DEL  &lt 4 ESC
-            >;
-
-            display-name = "ONISHI SYM";
         };
     };
 };
