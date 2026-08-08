@@ -39,6 +39,24 @@
     quick-tap-ms = <175>;
 };
 
+// 親指行のENTER/SPACE/BSPCは特にタップ頻度が高く、200msだと
+// 通常のタイピング速度でもホールドと誤判定されやすいため、
+// 専用のlt_thumbビヘイビアを用意してtapping-term-msを280msに緩和。
+// PSCRN/DEL/ESC（&ltのまま）は使用頻度が低くレイヤーホールド用途が
+// 主なので200msのまま据え置き。
+/ {
+    behaviors {
+        lt_thumb: lt_thumb {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            bindings = <&mo>, <&kp>;
+        };
+    };
+};
+
 / {
     scroll_encoder: scroll_encoder {
         compatible = "zmk,behavior-sensor-rotate";
@@ -330,7 +348,7 @@
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
 &kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &mm_comma     &mm_dot    &kp LS(FSLH) &kp RSHFT
-&tog 9  &kp LALT   &lt 6 PSCRN   &lt 4 BSPC    &mkp RCLK   &lt 5 ENTER  &td_joystick_click        &lt 5 ENTER &lt 2 SPACE  &lt 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 9  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &mkp RCLK   &lt_thumb 5 ENTER  &td_joystick_click        &lt_thumb 5 ENTER &lt_thumb 2 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -345,7 +363,7 @@
 &kp TAB     &kp Q      &kp L         &kp U         &kp F         &kp GRAVE    &kp DOWN_ARROW   &kp GRAVE  &kp W         &kp R         &kp Y      &kp P       &none
 &kp LCTRL   &kp E      &kp I         &kp A         &kp O         &kp MINUS    &kp LEFT_ARROW   &kp K      &kp T         &kp N         &kp S      &kp H       &none
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp COMMA    &kp RIGHT_ARROW  &kp G      &kp D         &kp M         &kp J      &kp B       &kp RSHFT
-&tog 9  &kp LALT   &lt 6 PSCRN   &lt 4 BSPC    &mkp RCLK   &lt 5 ENTER  &td_joystick_click        &lt 5 ENTER &lt 3 SPACE  &lt 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 9  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &mkp RCLK   &lt_thumb 5 ENTER  &td_joystick_click        &lt_thumb 5 ENTER &lt_thumb 3 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -358,7 +376,7 @@
 &kp TAB     &none            &none           &none            &none            &none              &kp DOWN_ARROW   &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
 &kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LEFT_ARROW   &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
 &kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp RIGHT_ARROW  &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
-&tog 9  &kp LALT         &lt 6 PSCRN     &lt 4 BSPC       &lt 2 SPACE      &lt 5 ENTER        &mkp MCLK        &lt 5 ENTER      &lt 2 SPACE      &lt 4 BSPC  &lt 6 DEL  &lt 6 ESC
+&tog 9  &kp LALT         &lt 6 PSCRN     &lt_thumb 4 BSPC       &lt_thumb 2 SPACE      &lt_thumb 5 ENTER        &mkp MCLK        &lt_thumb 5 ENTER      &lt_thumb 2 SPACE      &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -373,7 +391,7 @@
 &kp TAB   &none      &kp LBKT  &kp DQT    &kp RBKT   &none          &kp DOWN_ARROW  &none       &kp LT     &kp EQUAL  &kp GT     &kp PIPE   &kp AT
 &kp TILDE &kp HASH   &kp LPAR  &kp SQT    &kp RPAR   &kp AMPS       &kp LEFT_ARROW  &kp CARET   &kp PLUS   &kp MINUS  &kp STAR   &kp FSLH   &kp BSLH
 &kp LSHFT &kp DLLR   &kp LBRC  &kp GRAVE  &kp RBRC   &kp DOT        &kp RIGHT_ARROW &kp UNDER   &kp EXCL   &kp QMARK  &kp COLON  &kp SEMI   &kp PRCNT
-&tog 9  &kp LALT  &lt 6 PSCRN  &lt 4 BSPC  &lt 3 SPACE  &lt 5 ENTER      &mkp MCLK   &lt 5 ENTER  &lt 3 SPACE  &lt 4 BSPC  &lt 6 DEL  &lt 6 ESC
+&tog 9  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb 3 SPACE  &lt_thumb 5 ENTER      &mkp MCLK   &lt_thumb 5 ENTER  &lt_thumb 3 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
             display-name = "ONISHI SYM";
@@ -385,7 +403,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &mmv MOVE_LEFT   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &kp RSHFT
-&tog 9         &kp LALT           &lt 6 PSCRN    &lt 4 BSPC     &lt 2 SPACE    &lt 5 ENTER        &mkp MCLK        &lt 5 ENTER        &lt 2 SPACE    &lt 4 BSPC     &lt 6 DEL      &lt 6 ESC
+&tog 9         &kp LALT           &lt 6 PSCRN    &lt_thumb 4 BSPC     &lt_thumb 2 SPACE    &lt_thumb 5 ENTER        &mkp MCLK        &lt_thumb 5 ENTER        &lt_thumb 2 SPACE    &lt_thumb 4 BSPC     &lt 6 DEL      &lt 6 ESC
             >;
 
             display-name = "LAYER2";
@@ -398,7 +416,7 @@
 &kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &mmv MOVE_DOWN   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
 &kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &mmv MOVE_LEFT   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
 &kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &mmv MOVE_RIGHT  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
-&tog 9 &kp LALT &lt 6 PSCRN &lt 4 BSPC &lt 2 SPACE &lt 5 ENTER &mkp MCLK      &lt 5 ENTER &lt 2 SPACE    &lt 4 BSPC      &lt 6 DEL         &lt 6 ESC
+&tog 9 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
             display-name = "LAYER3";
@@ -411,7 +429,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
-&tog 9 &kp LALT &lt 6 PSCRN &lt 4 BSPC &lt 2 SPACE &lt 5 ENTER &mkp MCLK      &lt 5 ENTER &lt 2 SPACE    &lt 4 BSPC      &lt 6 DEL         &lt 6 ESC
+&tog 9 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
             display-name = "LAYER4";
@@ -424,7 +442,7 @@
 &kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
 &kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
 &kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
-&tog 9 &kp LALT &lt 6 PSCRN &lt 4 BSPC &lt 2 SPACE &lt 5 ENTER &mkp MCLK &lt 5 ENTER &lt 2 SPACE &lt 4 BSPC &lt 6 DEL &lt 6 ESC
+&tog 9 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb 2 SPACE &lt_thumb 5 ENTER &mkp MCLK &lt_thumb 5 ENTER &lt_thumb 2 SPACE &lt_thumb 4 BSPC &lt 6 DEL &lt 6 ESC
             >;
  
             display-name = "LAYER5";
@@ -437,7 +455,7 @@
 &bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
 &none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
 &none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
-&tog 9  &kp LALT      &lt 6 PSCRN   &lt 4 BSPC    &lt 2 SPACE   &lt 5 ENTER   &mkp MCLK     &lt 5 ENTER   &lt 2 SPACE   &lt 4 BSPC    &lt 6 DEL     &lt 6 ESC
+&tog 9  &kp LALT      &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb 2 SPACE   &lt_thumb 5 ENTER   &mkp MCLK     &lt_thumb 5 ENTER   &lt_thumb 2 SPACE   &lt_thumb 4 BSPC    &lt 6 DEL     &lt 6 ESC
             >;
 
             display-name = "LAYER6";
