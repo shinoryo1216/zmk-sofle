@@ -59,7 +59,7 @@ layers:
   - {t: '$$mdi:backspace$$', h: LAYER2}
   - $$mdi:mouse-right-click-outline$$
   - {t: '$$mdi:keyboard-return$$', h: LAYER3}
-  - $$mdi:mouse-left-click-outline$$
+  - '&td_joystick_click'
   - {t: '$$mdi:keyboard-return$$', h: LAYER3}
   - {t: '$$mdi:keyboard-space$$', h: LAYER1}
   - {t: '$$mdi:backspace$$', h: LAYER2}
@@ -124,7 +124,7 @@ layers:
   - {t: '$$mdi:backspace$$', h: LAYER2}
   - $$mdi:mouse-right-click-outline$$
   - {t: '$$mdi:keyboard-return$$', h: LAYER3}
-  - $$mdi:mouse-left-click-outline$$
+  - '&td_joystick_click'
   - {t: '$$mdi:keyboard-return$$', h: LAYER3}
   - {t: '$$mdi:keyboard-space$$', h: ONISHI SYM}
   - {t: '$$mdi:backspace$$', h: LAYER2}
@@ -651,22 +651,22 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
 combos:
-- p: [34, 35, 36]
+- p: [34, 35]
   k: {t: '$$mdi:keyboard-return$$', type: enter}
   l: [LAYER0, ONISHI]
-- p: [28, 29, 30]
+- p: [29, 30]
   k: {t: '$$mdi:keyboard-return$$', type: enter}
   l: [LAYER0, ONISHI]
-- p: [47, 48, 49]
+- p: [47, 48]
   k: {t: '$$mdi:backspace$$', type: backspace}
   l: [LAYER0, ONISHI]
-- p: [41, 42, 43]
+- p: [42, 43]
   k: {t: '$$mdi:backspace$$', type: backspace}
   l: [LAYER0, ONISHI]
-- p: [21, 22, 23]
+- p: [21, 22]
   k: {t: '`', s: '~'}
   l: [LAYER0, ONISHI]
-- p: [15, 16, 17]
+- p: [16, 17]
   k: {t: '`', s: '~'}
   l: [LAYER0, ONISHI]
 - p: [47, 48]
