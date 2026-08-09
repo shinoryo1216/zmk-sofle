@@ -211,41 +211,41 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:keyboard-tab$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '[', s: '{'}
-  - '"'
   - {t: ']', s: '}'}
+  - {t: Sft+2, s: Sft+@}
+  - {t: \, s: '|'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:arrow-down-bold$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - <
-  - {t: '=', s: +}
+  - {t: Sft+-, s: Sft+_}
   - '>'
-  - '|'
-  - '@'
-  - '~'
+  - Sft+INT3
+  - {t: '[', s: '{'}
+  - {t: Sft+=, s: Sft++}
   - '#'
-  - (
-  - {t: '''', s: '"'}
-  - )
-  - '&'
+  - {t: Sft+8, s: Sft+*}
+  - {t: Sft+7, s: Sft+&}
+  - {t: Sft+9, s: Sft+(}
+  - {t: Sft+6, s: Sft+^}
   - $$mdi:arrow-left-bold$$
-  - ^
-  - +
+  - {t: '=', s: +}
+  - {t: Sft+;, s: 'Sft+:'}
   - {t: '-', s: _}
-  - '*'
+  - {t: Sft+', s: Sft+"}
   - {t: /, s: '?'}
-  - {t: \, s: '|'}
+  - INT1
   - $$mdi:apple-keyboard-shift$$
   - $
-  - '{'
+  - {t: 'Sft+]', s: 'Sft+}'}
   - {t: 'Sft+[', s: 'Sft+{'}
-  - '}'
+  - {t: Sft+\, s: Sft+|}
   - {t: ., s: '>'}
   - $$mdi:arrow-right-bold$$
-  - _
+  - Sft+INT1
   - '!'
   - '?'
-  - ':'
+  - {t: '''', s: '"'}
   - {t: ;, s: ':'}
   - '%'
   - {t: L9 ENCODER LR, h: toggle}
