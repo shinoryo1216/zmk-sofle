@@ -238,7 +238,7 @@ layers:
   - $$mdi:apple-keyboard-shift$$
   - $
   - '{'
-  - {t: '`', s: '~'}
+  - {t: 'Sft+[', s: 'Sft+{'}
   - '}'
   - {t: ., s: '>'}
   - $$mdi:arrow-right-bold$$
