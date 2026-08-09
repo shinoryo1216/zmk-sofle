@@ -598,8 +598,10 @@ rect.held, rect.combo.held {
 <g transform="translate(314, 283) rotate(30.0)" class="key keypos-56">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:mouse-right-click-outline" xlink:href="#mdi:mouse-right-click-outline" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:mouse-right-click-outline"/>
-</g>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<a href="#LAYER1">
+<text x="0" y="24" class="key hold layer-activator">LAYER1</text>
+</a></g>
 <g transform="translate(389, 294) rotate(30.0)" class="key keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
@@ -674,16 +676,24 @@ rect.held, rect.combo.held {
 <text x="224" y="76" class="combo shifted">~</text>
 </g>
 <g class="combo combopos-6">
+<rect rx="6" ry="6" x="266" y="22" width="28" height="26" class="combo"/>
+<text x="280" y="35" class="combo tap">LANG1</text>
+</g>
+<g class="combo combopos-7">
+<rect rx="6" ry="6" x="630" y="22" width="28" height="26" class="combo"/>
+<text x="644" y="35" class="combo tap">LANG2</text>
+</g>
+<g class="combo combopos-8">
 <rect rx="6" ry="6" x="338" y="276" width="28" height="26" class="combo"/>
 <a href="#LAYER5">
 <text x="352" y="289" class="combo tap layer-activator">LAYER5</text>
 </a></g>
-<g class="combo combopos-7">
+<g class="combo combopos-9">
 <rect rx="6" ry="6" x="558" y="276" width="28" height="26" class="combo"/>
 <a href="#LAYER5">
 <text x="572" y="289" class="combo tap layer-activator">LAYER5</text>
 </a></g>
-<g class="combo combopos-8">
+<g class="combo combopos-10">
 <path d="M258,269 l-100,-9" class="combo"/>
 <path d="M258,269 l-44,-12" class="combo"/>
 <path d="M258,269 l38,9" class="combo"/>
@@ -692,7 +702,7 @@ rect.held, rect.combo.held {
 <a href="#LAYER6">
 <text x="258" y="269" class="combo tap layer-activator">LAYER6</text>
 </a></g>
-<g class="combo combopos-9">
+<g class="combo combopos-11">
 <path d="M666,269 l-112,21" class="combo"/>
 <path d="M666,269 l-38,9" class="combo"/>
 <path d="M666,269 l44,-12" class="combo"/>
@@ -701,7 +711,7 @@ rect.held, rect.combo.held {
 <a href="#LAYER6">
 <text x="666" y="269" class="combo tap layer-activator">LAYER6</text>
 </a></g>
-<g class="combo combopos-10">
+<g class="combo combopos-12">
 <path d="M462,256 l-303,3" class="combo"/>
 <path d="M462,256 l-247,-3" class="combo"/>
 <path d="M462,256 l247,-3" class="combo"/>
@@ -1019,8 +1029,10 @@ rect.held, rect.combo.held {
 <g transform="translate(314, 283) rotate(30.0)" class="key keypos-56">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:mouse-right-click-outline" xlink:href="#mdi:mouse-right-click-outline" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:mouse-right-click-outline"/>
-</g>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<a href="#ONISHI-SYM">
+<text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 60%">ONISHI SYM</tspan></text>
+</a></g>
 <g transform="translate(389, 294) rotate(30.0)" class="key keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
@@ -1095,16 +1107,24 @@ rect.held, rect.combo.held {
 <text x="224" y="76" class="combo shifted">~</text>
 </g>
 <g class="combo combopos-6">
+<rect rx="6" ry="6" x="266" y="22" width="28" height="26" class="combo"/>
+<text x="280" y="35" class="combo tap">LANG1</text>
+</g>
+<g class="combo combopos-7">
+<rect rx="6" ry="6" x="630" y="22" width="28" height="26" class="combo"/>
+<text x="644" y="35" class="combo tap">LANG2</text>
+</g>
+<g class="combo combopos-8">
 <rect rx="6" ry="6" x="338" y="276" width="28" height="26" class="combo"/>
 <a href="#LAYER5">
 <text x="352" y="289" class="combo tap layer-activator">LAYER5</text>
 </a></g>
-<g class="combo combopos-7">
+<g class="combo combopos-9">
 <rect rx="6" ry="6" x="558" y="276" width="28" height="26" class="combo"/>
 <a href="#LAYER5">
 <text x="572" y="289" class="combo tap layer-activator">LAYER5</text>
 </a></g>
-<g class="combo combopos-8">
+<g class="combo combopos-10">
 <path d="M258,269 l-100,-9" class="combo"/>
 <path d="M258,269 l-44,-12" class="combo"/>
 <path d="M258,269 l38,9" class="combo"/>
@@ -1113,7 +1133,7 @@ rect.held, rect.combo.held {
 <a href="#LAYER6">
 <text x="258" y="269" class="combo tap layer-activator">LAYER6</text>
 </a></g>
-<g class="combo combopos-9">
+<g class="combo combopos-11">
 <path d="M666,269 l-112,21" class="combo"/>
 <path d="M666,269 l-38,9" class="combo"/>
 <path d="M666,269 l44,-12" class="combo"/>
@@ -1122,7 +1142,7 @@ rect.held, rect.combo.held {
 <a href="#LAYER6">
 <text x="666" y="269" class="combo tap layer-activator">LAYER6</text>
 </a></g>
-<g class="combo combopos-10">
+<g class="combo combopos-12">
 <path d="M462,256 l-303,3" class="combo"/>
 <path d="M462,256 l-247,-3" class="combo"/>
 <path d="M462,256 l247,-3" class="combo"/>
@@ -1462,12 +1482,12 @@ rect.held, rect.combo.held {
 <a href="#LAYER2">
 <text x="0" y="24" class="key hold layer-activator">LAYER2</text>
 </a></g>
-<g transform="translate(314, 283) rotate(30.0)" class="key keypos-56">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
-<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<g transform="translate(314, 283) rotate(30.0)" class="key held keypos-56">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
+<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:keyboard-space"/>
 <a href="#LAYER1">
-<text x="0" y="24" class="key hold layer-activator">LAYER1</text>
+<text x="0" y="24" class="key held hold layer-activator">LAYER1</text>
 </a></g>
 <g transform="translate(389, 294) rotate(30.0)" class="key keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
@@ -1488,12 +1508,12 @@ rect.held, rect.combo.held {
 <a href="#LAYER3">
 <text x="0" y="24" class="key hold layer-activator">LAYER3</text>
 </a></g>
-<g transform="translate(610, 283) rotate(-30.0)" class="key held keypos-60">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
-<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:keyboard-space"/>
+<g transform="translate(610, 283) rotate(-30.0)" class="key held alternate keypos-60">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
+<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#LAYER1">
-<text x="0" y="24" class="key held hold layer-activator">LAYER1</text>
+<text x="0" y="24" class="key held alternate hold layer-activator">LAYER1</text>
 </a></g>
 <g transform="translate(672, 259)" class="key keypos-61">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
@@ -1865,12 +1885,12 @@ rect.held, rect.combo.held {
 <a href="#LAYER2">
 <text x="0" y="24" class="key hold layer-activator">LAYER2</text>
 </a></g>
-<g transform="translate(314, 283) rotate(30.0)" class="key keypos-56">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
-<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<g transform="translate(314, 283) rotate(30.0)" class="key held keypos-56">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
+<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:keyboard-space"/>
 <a href="#ONISHI-SYM">
-<text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 60%">ONISHI SYM</tspan></text>
+<text x="0" y="24" class="key held hold layer-activator"><tspan style="font-size: 60%">ONISHI SYM</tspan></text>
 </a></g>
 <g transform="translate(389, 294) rotate(30.0)" class="key keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
@@ -1891,12 +1911,12 @@ rect.held, rect.combo.held {
 <a href="#LAYER3">
 <text x="0" y="24" class="key hold layer-activator">LAYER3</text>
 </a></g>
-<g transform="translate(610, 283) rotate(-30.0)" class="key held keypos-60">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
-<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:keyboard-space"/>
+<g transform="translate(610, 283) rotate(-30.0)" class="key held alternate keypos-60">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
+<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#ONISHI-SYM">
-<text x="0" y="24" class="key held hold layer-activator"><tspan style="font-size: 60%">ONISHI SYM</tspan></text>
+<text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 60%">ONISHI SYM</tspan></text>
 </a></g>
 <g transform="translate(672, 259)" class="key keypos-61">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
@@ -2260,12 +2280,12 @@ rect.held, rect.combo.held {
 <a href="#LAYER2">
 <text x="0" y="24" class="key held hold layer-activator">LAYER2</text>
 </a></g>
-<g transform="translate(314, 283) rotate(30.0)" class="key keypos-56">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
-<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<g transform="translate(314, 283) rotate(30.0)" class="key held alternate keypos-56">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
+<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#LAYER1">
-<text x="0" y="24" class="key hold layer-activator">LAYER1</text>
+<text x="0" y="24" class="key held alternate hold layer-activator">LAYER1</text>
 </a></g>
 <g transform="translate(389, 294) rotate(30.0)" class="key keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
@@ -2693,12 +2713,12 @@ rect.held, rect.combo.held {
 <a href="#LAYER2">
 <text x="0" y="24" class="key held alternate hold layer-activator">LAYER2</text>
 </a></g>
-<g transform="translate(314, 283) rotate(30.0)" class="key keypos-56">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
-<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<g transform="translate(314, 283) rotate(30.0)" class="key held alternate keypos-56">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
+<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#LAYER1">
-<text x="0" y="24" class="key hold layer-activator">LAYER1</text>
+<text x="0" y="24" class="key held alternate hold layer-activator">LAYER1</text>
 </a></g>
 <g transform="translate(389, 294) rotate(30.0)" class="key held keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
@@ -3150,12 +3170,12 @@ rect.held, rect.combo.held {
 <a href="#LAYER2">
 <text x="0" y="24" class="key held alternate hold layer-activator">LAYER2</text>
 </a></g>
-<g transform="translate(314, 283) rotate(30.0)" class="key keypos-56">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
-<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<g transform="translate(314, 283) rotate(30.0)" class="key held alternate keypos-56">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
+<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#LAYER1">
-<text x="0" y="24" class="key hold layer-activator">LAYER1</text>
+<text x="0" y="24" class="key held alternate hold layer-activator">LAYER1</text>
 </a></g>
 <g transform="translate(389, 294) rotate(30.0)" class="key held alternate keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
