@@ -49,9 +49,9 @@ layers:
   - $$mdi:arrow-right-bold$$
   - N
   - M
-  - {t: ',', s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: ., s: 'Sft+$$mdi:arrow-right-bold$$'}
-  - {t: Sft+/, s: 'Sft+?'}
+  - {t: ',', s: <}
+  - {t: ., s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: Sft+/, s: 'Sft+$$mdi:arrow-right-bold$$'}
   - $$mdi:apple-keyboard-shift$$
   - {t: LAYER7, h: toggle}
   - $$mdi:apple-keyboard-option$$
