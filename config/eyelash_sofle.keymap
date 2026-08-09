@@ -1,4 +1,3 @@
-
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // 600
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25   // 10
 
@@ -178,11 +177,14 @@
          * 150ms以内にコンボのキーが押された場合は発火しない。高速タイピング中に
          * D+F/C+V/E+R（特に左手側）が意図せず同時押し判定されてしまう問題への対策。
          * 同じ理由で右手側（J+K/M+,/U+I）にも念のため統一して適用。
+         * ※150→125msに緩和。Backspace（M+,/C+V）等は「誤字を打った直後」に
+         * 押すことが多く、まさにその状況が「直前のキー入力から間もない」に
+         * 該当してコンボ自体が抑制され、稀に発動しない原因になっていたため。
          */
 
         combo_enter_jkl {
             timeout-ms = <50>;
-            require-prior-idle-ms = <150>;
+            require-prior-idle-ms = <125>;
             key-positions = <34 35>;
             bindings = <&kp ENTER>;
             layers = <0 1>;
@@ -190,7 +192,7 @@
 
         combo_enter_sdf {
             timeout-ms = <50>;
-            require-prior-idle-ms = <150>;
+            require-prior-idle-ms = <125>;
             key-positions = <29 30>;
             bindings = <&kp ENTER>;
             layers = <0 1>;
@@ -198,7 +200,7 @@
 
         combo_bspc_mcommadot {
             timeout-ms = <50>;
-            require-prior-idle-ms = <150>;
+            require-prior-idle-ms = <125>;
             key-positions = <47 48>;
             bindings = <&kp BSPC>;
             layers = <0 1>;
@@ -206,7 +208,7 @@
 
         combo_bspc_xcv {
             timeout-ms = <50>;
-            require-prior-idle-ms = <150>;
+            require-prior-idle-ms = <125>;
             key-positions = <42 43>;
             bindings = <&kp BSPC>;
             layers = <0 1>;
@@ -214,7 +216,7 @@
 
         combo_hankaku_uio {
             timeout-ms = <50>;
-            require-prior-idle-ms = <150>;
+            require-prior-idle-ms = <125>;
             key-positions = <21 22>;
             bindings = <&kp GRAVE>;
             layers = <0 1>;
@@ -222,7 +224,7 @@
 
         combo_hankaku_wer {
             timeout-ms = <50>;
-            require-prior-idle-ms = <150>;
+            require-prior-idle-ms = <125>;
             key-positions = <16 17>;
             bindings = <&kp GRAVE>;
             layers = <0 1>;
