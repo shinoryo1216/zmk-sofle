@@ -469,11 +469,16 @@
         layer_9_onishi_symbol {
             // System B：大西配列 新Layer1（記号）※Layer1(ONISHI)のSPACE/L3ホールドでアクセス
             // 透過(&trans)ではなく、ONISHIレイヤーで実際に出力される値を明示的に指定
+            // ※行4 L4の「`」はGRAVEキーコードではなくLS(LBKT)を使用。このLinux環境では
+            // GRAVEキーコード自体が日本語/英語入力切替のショートカットとして割り当てられて
+            // いるため（半角/全角コンボがGRAVEで動作するのもこれを利用しているため）、
+            // 素のGRAVEを送ると文字ではなく言語切替が発動してしまう。Layer2と同じ
+            // LS(LBKT)方式に変更して回避している。
             bindings = <
 &kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5         &kp UP_ARROW    &kp N6      &kp N7     &kp N8     &kp N9     &kp N0     &none
 &kp TAB   &none      &kp LBKT  &kp DQT    &kp RBKT   &none          &kp DOWN_ARROW  &none       &kp LT     &kp EQUAL  &kp GT     &kp PIPE   &kp AT
 &kp TILDE &kp HASH   &kp LPAR  &kp SQT    &kp RPAR   &kp AMPS       &kp LEFT_ARROW  &kp CARET   &kp PLUS   &kp MINUS  &kp STAR   &kp FSLH   &kp BSLH
-&kp LSHFT &kp DLLR   &kp LBRC  &kp GRAVE  &kp RBRC   &kp DOT        &kp RIGHT_ARROW &kp UNDER   &kp EXCL   &kp QMARK  &kp COLON  &kp SEMI   &kp PRCNT
+&kp LSHFT &kp DLLR   &kp LBRC  &kp LS(LBKT)  &kp RBRC   &kp DOT        &kp RIGHT_ARROW &kp UNDER   &kp EXCL   &kp QMARK  &kp COLON  &kp SEMI   &kp PRCNT
 &tog 9  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_space 3 SPACE  &lt_thumb 5 ENTER      &mkp MCLK   &lt_thumb 5 ENTER  &lt_thumb_space 3 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
