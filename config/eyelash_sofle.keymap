@@ -1,3 +1,4 @@
+
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // 600
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25   // 10
 
@@ -172,10 +173,16 @@
     combos {
         compatible = "zmk,combos";
 
-        /* ---- Layer0・Layer1(大西配列)共通コンボ ---- */
+        /* ---- Layer0・Layer1(大西配列)共通コンボ ----
+         * require-prior-idle-msを追加：直前の（コンボと無関係な）キー入力から
+         * 150ms以内にコンボのキーが押された場合は発火しない。高速タイピング中に
+         * D+F/C+V/E+R（特に左手側）が意図せず同時押し判定されてしまう問題への対策。
+         * 同じ理由で右手側（J+K/M+,/U+I）にも念のため統一して適用。
+         */
 
         combo_enter_jkl {
             timeout-ms = <50>;
+            require-prior-idle-ms = <150>;
             key-positions = <34 35>;
             bindings = <&kp ENTER>;
             layers = <0 1>;
@@ -183,6 +190,7 @@
 
         combo_enter_sdf {
             timeout-ms = <50>;
+            require-prior-idle-ms = <150>;
             key-positions = <29 30>;
             bindings = <&kp ENTER>;
             layers = <0 1>;
@@ -190,6 +198,7 @@
 
         combo_bspc_mcommadot {
             timeout-ms = <50>;
+            require-prior-idle-ms = <150>;
             key-positions = <47 48>;
             bindings = <&kp BSPC>;
             layers = <0 1>;
@@ -197,6 +206,7 @@
 
         combo_bspc_xcv {
             timeout-ms = <50>;
+            require-prior-idle-ms = <150>;
             key-positions = <42 43>;
             bindings = <&kp BSPC>;
             layers = <0 1>;
@@ -204,6 +214,7 @@
 
         combo_hankaku_uio {
             timeout-ms = <50>;
+            require-prior-idle-ms = <150>;
             key-positions = <21 22>;
             bindings = <&kp GRAVE>;
             layers = <0 1>;
@@ -211,27 +222,30 @@
 
         combo_hankaku_wer {
             timeout-ms = <50>;
+            require-prior-idle-ms = <150>;
             key-positions = <16 17>;
             bindings = <&kp GRAVE>;
             layers = <0 1>;
         };
 
-        /* macOS/iPadOSの日本語⇔英語入力切り替え。
-         * LANG1=かな(日本語IMEをON)、LANG2=英数(IMEをOFF=英語入力)。
-         * どちらもmacOS/iPadOSが標準で認識するJISキーボードの言語切替キーで、
-         * OS側の追加設定なしにそのまま機能する。
-         * 1行目の数字キー「4+5」(左手)＝日本語切替、「6+7」(右手)＝英語切替。 */
+        /* Gboard（iPadで使用）は物理キーボードの言語切替にShift+Spaceという
+         * 独自ショートカットを使う。BT接続先やレイヤーに応じて中身を変える
+         * 案は、有線接続に自動で切り替わった際にレイヤーが追従せず不整合が
+         * 起きる問題があるため破棄。4+5・6+7はどの接続先でも常に単純に
+         * Shift+Spaceを送るだけにする。
+         * ※macOSのLANG1(かな)/LANG2(英数)は使わない方針に変更。Shift+Space
+         * はmacOS上ではIME切替ではなく単なる半角スペース入力になる点に注意。 */
         combo_ime_japanese {
             timeout-ms = <50>;
             key-positions = <4 5>;
-            bindings = <&kp LANG1>;
+            bindings = <&kp LS(SPACE)>;
             layers = <0 1>;
         };
 
         combo_ime_english {
             timeout-ms = <50>;
             key-positions = <7 8>;
-            bindings = <&kp LANG2>;
+            bindings = <&kp LS(SPACE)>;
             layers = <0 1>;
         };
 
@@ -419,7 +433,7 @@
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
-            display-name = "LAYER0";
+            display-name = "L0 BASE";
         };
 
         layer_8_onishi {
@@ -434,7 +448,7 @@
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
-            display-name = "ONISHI";
+            display-name = "L1 ONISHI";
         };
 
         layer_1 {
@@ -447,7 +461,7 @@
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
-            display-name = "LAYER1";
+            display-name = "L2 SYMBOL";
         };
 
         layer_9_onishi_symbol {
@@ -461,7 +475,7 @@
 &tog 9  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_space 3 SPACE  &lt_thumb 5 ENTER      &mkp MCLK   &lt_thumb 5 ENTER  &lt_thumb_space 3 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
-            display-name = "ONISHI SYM";
+            display-name = "L3 ONISHI SYM";
         };
 
         layer_2 {
@@ -473,7 +487,7 @@
 &tog 9         &kp LALT           &lt 6 PSCRN    &lt_thumb 4 BSPC     &lt_thumb_space 2 SPACE    &lt_thumb 5 ENTER        &mkp MCLK        &lt_thumb 5 ENTER        &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC     &lt 6 DEL      &lt 6 ESC
             >;
 
-            display-name = "LAYER2";
+            display-name = "L4 CURSOR";
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
         };
 
@@ -486,7 +500,7 @@
 &tog 9 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
-            display-name = "LAYER3";
+            display-name = "L5 WINDOW";
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
         };
 
@@ -499,7 +513,7 @@
 &tog 9 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
-            display-name = "LAYER4";
+            display-name = "L6 MOUSE";
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
         };
 
@@ -512,7 +526,7 @@
 &tog 9 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE &lt_thumb 4 BSPC &lt 6 DEL &lt 6 ESC
             >;
  
-            display-name = "LAYER5";
+            display-name = "L7 FKEYS";
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
         };
 
@@ -525,7 +539,7 @@
 &tog 9  &kp LALT      &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_space 2 SPACE   &lt_thumb 5 ENTER   &mkp MCLK     &lt_thumb 5 ENTER   &lt_thumb_space 2 SPACE   &lt_thumb 4 BSPC    &lt 6 DEL     &lt 6 ESC
             >;
 
-            display-name = "LAYER6";
+            display-name = "L8 BLUETOOTH";
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
         };
 
@@ -538,7 +552,7 @@
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
             >;
 
-            display-name = "LAYER7";
+            display-name = "L9 ENCODER LR";
             sensor-bindings = <&rsr_cursor_lr &rsr_trans>;
         };
     };
