@@ -49,14 +49,26 @@
 // 同一キーの「連打」対策はquick-tap-msで対応（直前に同じキーがタップ
 // 確定した直後の再押下は、押している時間に関わらずタップ扱いになる）。
 // 200ms→175msでは連打時に弾かれるケースがあったため200msに緩和。
+//
+// ※flavorはtap-preferred→balancedに変更。
+// tap-preferredは「割り込みキーが来てもホールドキー自身がtapping-term-ms
+// (280ms)を超えるまでホールド確定しない」ため、記号レイヤーを親指キーで
+// ホールドしたまま記号キーを押しても、その記号キーの入力自体が最大280ms
+// 遅延して送信され、これが「記号入力時の引っかかり」の原因だった。
+// balancedは「割り込みキーが押されて、かつそのキーが離された時点」で
+// ホールドを確定するため、記号キーをタップした瞬間（通常100ms未満）で
+// ホールドが確定し、レイヤー切替の体感遅延がほぼ無くなる。
+// 一方、割り込みキーが無い単独タップ（＝連打）はflavorに関係なく
+// tapping-term-ms/quick-tap-msだけで判定されるため、この変更で連打の
+// 誤ホールド対策が後退することはない。
 // PSCRN/DEL/ESC（&ltのまま）は使用頻度が低くレイヤーホールド用途が
-// 主なので200msのまま据え置き。
+// 主なので200ms・tap-preferredのまま据え置き。
 / {
     behaviors {
         lt_thumb: lt_thumb {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "tap-preferred";
+            flavor = "balanced";
             tapping-term-ms = <280>;
             quick-tap-ms = <200>;
             bindings = <&mo>, <&kp>;
