@@ -230,24 +230,21 @@
             layers = <0 1>;
         };
 
-        /* Gboard（iPadで使用）は物理キーボードの言語切替にShift+Spaceという
-         * 独自ショートカットを使う。BT接続先やレイヤーに応じて中身を変える
-         * 案は、有線接続に自動で切り替わった際にレイヤーが追従せず不整合が
-         * 起きる問題があるため破棄。4+5・6+7はどの接続先でも常に単純に
-         * Shift+Spaceを送るだけにする。
-         * ※macOSのLANG1(かな)/LANG2(英数)は使わない方針に変更。Shift+Space
-         * はmacOS上ではIME切替ではなく単なる半角スペース入力になる点に注意。 */
+        /* macOS/iPadOSの日本語⇔英語入力切り替え。
+         * LANG1=かな(日本語IMEをON)、LANG2=英数(IMEをOFF=英語入力)。
+         * Gboard向けのShift+Spaceは実機で機能しなかったため撤回し、
+         * LANG1/LANG2方式に戻した。 */
         combo_ime_japanese {
             timeout-ms = <50>;
             key-positions = <4 5>;
-            bindings = <&kp LS(SPACE)>;
+            bindings = <&kp LANG1>;
             layers = <0 1>;
         };
 
         combo_ime_english {
             timeout-ms = <50>;
             key-positions = <7 8>;
-            bindings = <&kp LS(SPACE)>;
+            bindings = <&kp LANG2>;
             layers = <0 1>;
         };
 
@@ -500,7 +497,7 @@
 
         layer_3 {
             bindings = <
-&kp LG(FSLH)       &none              &none          &none          &none          &kp LG(BSLH)       &mmv MOVE_UP     &kp LG(BSLH)       &none          &none          &none          &none          &kp LG(FSLH)
+&kp LG(FSLH)       &none              &none          &none          &none          &none              &mmv MOVE_UP     &none              &none          &none          &none          &none          &kp LG(FSLH)
 &kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &mmv MOVE_DOWN   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
 &kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &mmv MOVE_LEFT   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
 &kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &mmv MOVE_RIGHT  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
