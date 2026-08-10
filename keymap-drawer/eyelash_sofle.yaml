@@ -331,9 +331,9 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: Gui+\, s: Gui+|}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
-  - {t: Gui+\, s: Gui+|}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -670,10 +670,10 @@ combos:
   k: {t: '`', s: '~'}
   l: [L0 BASE, L1 ONISHI]
 - p: [4, 5]
-  k: Sft+$$mdi:keyboard-space$$
+  k: LANG1
   l: [L0 BASE, L1 ONISHI]
 - p: [7, 8]
-  k: Sft+$$mdi:keyboard-space$$
+  k: LANG2
   l: [L0 BASE, L1 ONISHI]
 - p: [47, 48]
   k: '&mkp MB4'
