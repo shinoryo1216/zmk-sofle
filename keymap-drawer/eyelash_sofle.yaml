@@ -53,7 +53,7 @@ layers:
   - {t: ., s: 'Sft+$$mdi:arrow-left-bold$$'}
   - {t: Sft+/, s: 'Sft+$$mdi:arrow-right-bold$$'}
   - $$mdi:apple-keyboard-shift$$
-  - {t: L9 ENCODER LR, h: toggle}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
@@ -118,7 +118,7 @@ layers:
   - J
   - B
   - $$mdi:apple-keyboard-shift$$
-  - {t: L9 ENCODER LR, h: toggle}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
@@ -183,7 +183,7 @@ layers:
   - {t: Sft+., s: Sft+>}
   - {t: /, s: '?'}
   - INT1
-  - {t: L9 ENCODER LR, h: toggle}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
@@ -248,7 +248,7 @@ layers:
   - {t: '''', s: '"'}
   - {t: ;, s: ':'}
   - '%'
-  - {t: L9 ENCODER LR, h: toggle}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
@@ -267,7 +267,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -280,7 +280,7 @@ layers:
   - $$mdi:arrow-up-bold$$
   - PG DN
   - END
-  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - END
   - PG DN
   - $$mdi:arrow-up-bold$$
@@ -313,7 +313,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:apple-keyboard-shift$$
-  - {t: L9 ENCODER LR, h: toggle}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held}
@@ -332,7 +332,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -345,7 +345,7 @@ layers:
   - Gui+$$mdi:arrow-up-bold$$
   - {t: Gui+., s: Gui+>}
   - Gui+Sft+J
-  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - Gui+Sft+K
   - {t: 'Gui+,', s: Gui+<}
   - Gui+$$mdi:arrow-up-bold$$
@@ -378,7 +378,7 @@ layers:
   - Gui+B
   - Gui+R
   - Gui+M
-  - {t: L9 ENCODER LR, h: toggle}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
@@ -443,7 +443,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: L10 MOUSE ENC UD, h: toggle}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE, type: held}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
@@ -508,7 +508,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: L9 ENCODER LR, h: toggle}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
@@ -573,7 +573,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: L9 ENCODER LR, h: toggle}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - {t: '$$mdi:apple-keyboard-option$$', type: held}
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE, type: held}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held}
@@ -651,6 +651,71 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   L10 MOUSE ENC UD:
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  L11 ENCODER PUSH MARKER:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
