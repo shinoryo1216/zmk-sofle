@@ -30,10 +30,33 @@
     // ロータリーエンコーダーはtap-ms=70ms程度の短いタップでmmvを駆動しているため、
     // 500msだと加速カーブの最初の一部（12%程度）しか使われず移動量が小さすぎた。
     // 80msに短縮することで、短いタップでも最高速度付近まで到達できるようにする。
-    // ※これはジョイスティックによる連続移動にも影響する（加速がほぼ即座に最高速度に
-    // 達するようになり、ジョイスティックを傾けた瞬間から速く動く。ゆっくり加速する
-    // 感触を優先したい場合は、この値を大きくして戻すこと）。
+    // ※この設定は&mmvを直接使う箇所すべてに影響する。ジョイスティックの直接キー
+    // 割り当て（下のjoystick_mmv）は別インスタンスに分離したため、この80ms設定は
+    // 実質ロータリーエンコーダー（rsr_mouse_lr/rsr_mouse_ud）専用になっている。
     time-to-max-speed-ms = <80>;
+    acceleration-exponent = <1>;
+    trigger-period-ms = <16>;
+};
+
+// ジョイスティックの直接キー割り当て（Layer6のMid列4方向）専用のmmvインスタンス。
+// &mmvと同じ"zmk,behavior-input-two-axis"の別インスタンスとして定義し、
+// time-to-max-speed-msだけ独自に長め（400ms）に設定。
+// 理由：&mmv本体はロータリーエンコーダー用に80ms（即座に最高速度に達する設定）に
+// 短縮したため、これをジョイスティックの「傾け続けて動かす」用途にそのまま使うと
+// 傾けた瞬間から常に最高速度になり、低速での細かい操作ができず使いづらかった。
+// ジョイスティックは物理的に押し続けている間だけ動くため、エンコーダーの短いタップ
+// とは異なり、ゆっくり加速するカーブの方が本来の操作感に合う。
+// ※このインスタンスが&mmv_input_listenerのinput-processors（zip_xy_scaler 2倍）を
+// 継承するかは未確認。継承されない場合、joystick_mmv経由の移動は&mmv経由より
+// さらに遅くなる可能性がある。実機で試して、遅すぎる場合はtime-to-max-speed-msを
+// 下げるか、ZMK_POINTING_DEFAULT_MOVE_VALとは別に、MOVE_X()/MOVE_Y()で明示的に
+// 大きな値を指定する方法も検討すること。
+joystick_mmv: joystick_mmv {
+    compatible = "zmk,behavior-input-two-axis";
+    #binding-cells = <1>;
+    x-input-code = <INPUT_REL_X>;
+    y-input-code = <INPUT_REL_Y>;
+    time-to-max-speed-ms = <400>;
     acceleration-exponent = <1>;
     trigger-period-ms = <16>;
 };
@@ -561,10 +584,10 @@
 
         layer_4 {
             bindings = <
-&kp ESC  &none    &none      &none      &none      &none      &mmv MOVE_UP     &none      &none           &none           &none           &none    &none
-&kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
-&kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
-&kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
+&kp ESC  &none    &none      &none      &none      &none      &joystick_mmv MOVE_UP     &none      &none           &none           &none           &none    &none
+&kp TAB  &kp HOME  &kp PG_UP  &joystick_mmv MOVE_UP &kp PG_DN  &kp END   &joystick_mmv MOVE_DOWN   &kp END   &kp PG_DN       &joystick_mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
+&kp LCTRL &none   &joystick_mmv MOVE_LEFT &joystick_mmv MOVE_DOWN &joystick_mmv MOVE_RIGHT &none      &joystick_mmv MOVE_LEFT   &none      &joystick_mmv MOVE_LEFT  &joystick_mmv MOVE_DOWN  &joystick_mmv MOVE_RIGHT &none    &none
+&kp LSHFT &none   &none      &none      &none      &none      &joystick_mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
 &tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
