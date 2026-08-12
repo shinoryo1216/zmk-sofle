@@ -152,24 +152,23 @@
 
         // Layer6（マウス操作）のロータリーエンコーダー用。
         // CW（右回転）=マウスポインタ右移動、CCW（左回転）=マウスポインタ左移動。
-        // tap-msは短め（30ms）に設定：長いと&mmvの加速が蓄積し、素早く回した際に
-        // 惰性で動き続ける（オーバーシュート）原因になるため。trigger-period-ms(16ms)は
-        // 下回らない値にしておくこと（1detentあたり最低1回は移動レポートを発生させるため）。
+        // tap-msの調整履歴：5ms→動かない／100ms→動くが惰性で暴走／30ms→短すぎて再び動かない
+        // →60msに調整。trigger-period-ms(16ms)の3〜4周期分を確保しつつ、加速の蓄積を抑える狙い。
         rsr_mouse_lr: rsr_mouse_lr {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <30>;
+            tap-ms = <60>;
             cw-binding = <&mmv MOVE_RIGHT>;
             ccw-binding = <&mmv MOVE_LEFT>;
         };
 
         // Layer10（L6専用・エンコーダー押し込みでトグル）のロータリーエンコーダー用。
         // CW（右回転）=マウスポインタ下移動、CCW（左回転）=マウスポインタ上移動。
-        // tap-msの考え方はrsr_mouse_lrと同じ（惰性軽減のため短め）。
+        // tap-msの考え方はrsr_mouse_lrと同じ。
         rsr_mouse_ud: rsr_mouse_ud {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <30>;
+            tap-ms = <60>;
             cw-binding = <&mmv MOVE_DOWN>;
             ccw-binding = <&mmv MOVE_UP>;
         };
