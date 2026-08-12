@@ -176,7 +176,7 @@ layers:
   - {t: '-', s: _}
   - {t: /, s: '?'}
   - {t: Sft+-, s: Sft+_}
-  - Ctl+Y
+  - Ctl+Sft+Z
   - Sft+INT1
   - INT3
   - {t: 'Sft+,', s: Sft+<}
@@ -241,7 +241,7 @@ layers:
   - {t: 'Sft+[', s: 'Sft+{'}
   - {t: Sft+\, s: Sft+|}
   - {t: ., s: '>'}
-  - Ctl+Y
+  - Ctl+Sft+Z
   - Sft+INT1
   - '!'
   - '?'
