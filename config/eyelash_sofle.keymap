@@ -51,14 +51,16 @@
 // さらに遅くなる可能性がある。実機で試して、遅すぎる場合はtime-to-max-speed-msを
 // 下げるか、ZMK_POINTING_DEFAULT_MOVE_VALとは別に、MOVE_X()/MOVE_Y()で明示的に
 // 大きな値を指定する方法も検討すること。
-joystick_mmv: joystick_mmv {
-    compatible = "zmk,behavior-input-two-axis";
-    #binding-cells = <1>;
-    x-input-code = <INPUT_REL_X>;
-    y-input-code = <INPUT_REL_Y>;
-    time-to-max-speed-ms = <400>;
-    acceleration-exponent = <1>;
-    trigger-period-ms = <16>;
+/ {
+    joystick_mmv: joystick_mmv {
+        compatible = "zmk,behavior-input-two-axis";
+        #binding-cells = <1>;
+        x-input-code = <INPUT_REL_X>;
+        y-input-code = <INPUT_REL_Y>;
+        time-to-max-speed-ms = <400>;
+        acceleration-exponent = <1>;
+        trigger-period-ms = <16>;
+    };
 };
 
 &soft_off { hold-time-ms = <2000>; };
