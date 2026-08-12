@@ -121,12 +121,12 @@
         };
 
         // Layer2（記号）・Layer3（大西配列専用記号）のジョイスティック/エンコーダー
-        // 左右操作用。CW（右）=やり直し(Ctrl+Y)、CCW（左）=元に戻す(Ctrl+Z)。
+        // 左右操作用。CW（右）=やり直し(Ctrl+Shift+Z)、CCW（左）=元に戻す(Ctrl+Z)。
         rsr_undo_redo: rsr_undo_redo {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
             tap-ms = <5>;
-            cw-binding = <&kp LC(Y)>;
+            cw-binding = <&kp LC(LS(Z))>;
             ccw-binding = <&kp LC(Z)>;
         };
 
@@ -152,20 +152,24 @@
 
         // Layer6（マウス操作）のロータリーエンコーダー用。
         // CW（右回転）=マウスポインタ右移動、CCW（左回転）=マウスポインタ左移動。
+        // tap-msは短め（30ms）に設定：長いと&mmvの加速が蓄積し、素早く回した際に
+        // 惰性で動き続ける（オーバーシュート）原因になるため。trigger-period-ms(16ms)は
+        // 下回らない値にしておくこと（1detentあたり最低1回は移動レポートを発生させるため）。
         rsr_mouse_lr: rsr_mouse_lr {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <100>;
+            tap-ms = <30>;
             cw-binding = <&mmv MOVE_RIGHT>;
             ccw-binding = <&mmv MOVE_LEFT>;
         };
 
         // Layer10（L6専用・エンコーダー押し込みでトグル）のロータリーエンコーダー用。
         // CW（右回転）=マウスポインタ下移動、CCW（左回転）=マウスポインタ上移動。
+        // tap-msの考え方はrsr_mouse_lrと同じ（惰性軽減のため短め）。
         rsr_mouse_ud: rsr_mouse_ud {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <100>;
+            tap-ms = <30>;
             cw-binding = <&mmv MOVE_DOWN>;
             ccw-binding = <&mmv MOVE_UP>;
         };
@@ -489,7 +493,7 @@
 &kp ESC     &kp N1           &kp N2          &kp N3           &kp N4           &kp N5             &kp LC(C)        &kp N6           &kp N7           &kp N8      &kp N9     &kp N0            &kp MINUS
 &kp TAB     &none            &none           &none            &none            &none              &kp LC(V)        &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
 &kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LC(Z)        &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
-&kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp LC(Y)        &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
+&kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp LC(LS(Z))        &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
 &tog 11  &kp LALT         &lt 6 PSCRN     &lt_thumb 4 BSPC       &lt_thumb_space 2 SPACE      &lt_thumb 5 ENTER        &kp LC(A)        &lt_thumb 5 ENTER      &lt_thumb_space 2 SPACE      &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
@@ -509,7 +513,7 @@
 &kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5              &kp LC(C)       &kp N6         &kp N7        &kp N8        &kp N9      &kp N0      &none
 &kp TAB   &none      &kp RBKT  &kp LS(N2) &kp BSLH   &none               &kp LC(V)       &none          &kp LT        &kp LS(MINUS) &kp GT      &kp LS(INT3) &kp LBKT
 &kp LS(EQUAL) &kp HASH &kp LS(N8) &kp LS(N7) &kp LS(N9) &kp LS(N6)       &kp LC(Z)       &kp EQUAL      &kp LS(SEMI)  &kp MINUS     &kp LS(SQT) &kp FSLH    &kp INT1
-&kp LSHFT &kp DLLR   &kp LS(RBKT) &kp LS(LBKT) &kp LS(BSLH) &kp DOT      &kp LC(Y)       &kp LS(INT1)   &kp EXCL      &kp QMARK     &kp SQT     &kp SEMI    &kp PRCNT
+&kp LSHFT &kp DLLR   &kp LS(RBKT) &kp LS(LBKT) &kp LS(BSLH) &kp DOT      &kp LC(LS(Z))       &kp LS(INT1)   &kp EXCL      &kp QMARK     &kp SQT     &kp SEMI    &kp PRCNT
 &tog 11  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_space 3 SPACE  &lt_thumb 5 ENTER      &kp LC(A)   &lt_thumb 5 ENTER  &lt_thumb_space 3 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
