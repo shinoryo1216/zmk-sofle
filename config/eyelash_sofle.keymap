@@ -1,4 +1,8 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // 600
+// ZMK_POINTING_DEFAULT_MOVE_VAL：1200→600に戻した。
+// time-to-max-speed-msを80msに短縮した結果、加速がすぐ最高速度に達するようになり、
+// 常にほぼ最高速度で動く状態になったため、速度の絶対値（この値）自体が
+// 速すぎる/大きすぎると感じられるようになったため。
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 600  // 1200
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25   // 10
 
 #include <input/processors.dtsi>
