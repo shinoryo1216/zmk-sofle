@@ -136,6 +136,36 @@
             ccw-binding = <&kp LEFT_ARROW>;
         };
 
+        // Layer2（記号）・Layer3（大西配列専用記号）のジョイスティック/エンコーダー
+        // 左右操作用。CW（右）=やり直し(Ctrl+Y)、CCW（左）=元に戻す(Ctrl+Z)。
+        rsr_undo_redo: rsr_undo_redo {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp LC(Y)>;
+            ccw-binding = <&kp LC(Z)>;
+        };
+
+        // Layer4（カーソル移動）のジョイスティック/エンコーダー左右操作用。
+        // CW（右）=進む(Alt+→)、CCW（左）=戻る(Alt+←)。
+        rsr_browser_nav: rsr_browser_nav {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp LA(RIGHT)>;
+            ccw-binding = <&kp LA(LEFT)>;
+        };
+
+        // Layer6（マウス操作）のジョイスティック/エンコーダー左右操作用。
+        // CW（右）=次のタブ(Ctrl+Tab)、CCW（左）=前のタブ(Ctrl+Shift+Tab)。
+        rsr_tab_nav: rsr_tab_nav {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp LC(TAB)>;
+            ccw-binding = <&kp LC(LS(TAB))>;
+        };
+
         rsr_trans: rsr_trans {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
@@ -452,14 +482,14 @@
 
         layer_1 {
             bindings = <
-&kp ESC     &kp N1           &kp N2          &kp N3           &kp N4           &kp N5             &kp UP_ARROW     &kp N6           &kp N7           &kp N8      &kp N9     &kp N0            &kp MINUS
-&kp TAB     &none            &none           &none            &none            &none              &kp DOWN_ARROW   &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
-&kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LEFT_ARROW   &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
-&kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp RIGHT_ARROW  &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
-&tog 9  &kp LALT         &lt 6 PSCRN     &lt_thumb 4 BSPC       &lt_thumb_space 2 SPACE      &lt_thumb 5 ENTER        &mkp MCLK        &lt_thumb 5 ENTER      &lt_thumb_space 2 SPACE      &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
+&kp ESC     &kp N1           &kp N2          &kp N3           &kp N4           &kp N5             &kp LC(C)        &kp N6           &kp N7           &kp N8      &kp N9     &kp N0            &kp MINUS
+&kp TAB     &none            &none           &none            &none            &none              &kp LC(V)        &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
+&kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LC(Z)        &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
+&kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp LC(Y)        &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
+&tog 9  &kp LALT         &lt 6 PSCRN     &lt_thumb 4 BSPC       &lt_thumb_space 2 SPACE      &lt_thumb 5 ENTER        &kp LC(A)        &lt_thumb 5 ENTER      &lt_thumb_space 2 SPACE      &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
-            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            sensor-bindings = <&rsr_undo_redo &rsr_trans>;
             display-name = "L2 SYMBOL";
         };
 
@@ -472,13 +502,14 @@
             // （例：LBKTは意図"["のはずが実際は"@"）、無変換扱いで何も入力されない
             // （TILDE）等の問題があった。
             bindings = <
-&kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5              &kp UP_ARROW    &kp N6         &kp N7        &kp N8        &kp N9      &kp N0      &none
-&kp TAB   &none      &kp RBKT  &kp LS(N2) &kp BSLH   &none               &kp DOWN_ARROW  &none          &kp LT        &kp LS(MINUS) &kp GT      &kp LS(INT3) &kp LBKT
-&kp LS(EQUAL) &kp HASH &kp LS(N8) &kp LS(N7) &kp LS(N9) &kp LS(N6)       &kp LEFT_ARROW  &kp EQUAL      &kp LS(SEMI)  &kp MINUS     &kp LS(SQT) &kp FSLH    &kp INT1
-&kp LSHFT &kp DLLR   &kp LS(RBKT) &kp LS(LBKT) &kp LS(BSLH) &kp DOT      &kp RIGHT_ARROW &kp LS(INT1)   &kp EXCL      &kp QMARK     &kp SQT     &kp SEMI    &kp PRCNT
-&tog 9  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_space 3 SPACE  &lt_thumb 5 ENTER      &mkp MCLK   &lt_thumb 5 ENTER  &lt_thumb_space 3 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
+&kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5              &kp LC(C)       &kp N6         &kp N7        &kp N8        &kp N9      &kp N0      &none
+&kp TAB   &none      &kp RBKT  &kp LS(N2) &kp BSLH   &none               &kp LC(V)       &none          &kp LT        &kp LS(MINUS) &kp GT      &kp LS(INT3) &kp LBKT
+&kp LS(EQUAL) &kp HASH &kp LS(N8) &kp LS(N7) &kp LS(N9) &kp LS(N6)       &kp LC(Z)       &kp EQUAL      &kp LS(SEMI)  &kp MINUS     &kp LS(SQT) &kp FSLH    &kp INT1
+&kp LSHFT &kp DLLR   &kp LS(RBKT) &kp LS(LBKT) &kp LS(BSLH) &kp DOT      &kp LC(Y)       &kp LS(INT1)   &kp EXCL      &kp QMARK     &kp SQT     &kp SEMI    &kp PRCNT
+&tog 9  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_space 3 SPACE  &lt_thumb 5 ENTER      &kp LC(A)   &lt_thumb 5 ENTER  &lt_thumb_space 3 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
+            sensor-bindings = <&rsr_undo_redo &rsr_trans>;
             display-name = "L3 ONISHI SYM";
         };
 
@@ -486,13 +517,13 @@
             bindings = <
 &kp ESC  &none    &none      &none      &none      &none      &mmv MOVE_UP     &none      &none           &none           &none           &none    &none
 &kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
-&kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &mmv MOVE_LEFT   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
-&kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &kp RSHFT
+&kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &kp LA(LEFT)   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
+&kp LSHFT &none   &none      &none      &none      &none      &kp LA(RIGHT)  &none      &none           &none           &none           &none    &kp RSHFT
 &tog 9         &kp LALT           &lt 6 PSCRN    &lt_thumb 4 BSPC     &lt_thumb_space 2 SPACE    &lt_thumb 5 ENTER        &mkp MCLK        &lt_thumb 5 ENTER        &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC     &lt 6 DEL      &lt 6 ESC
             >;
 
             display-name = "L4 CURSOR";
-            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            sensor-bindings = <&rsr_browser_nav &rsr_trans>;
         };
 
         layer_3 {
@@ -512,13 +543,13 @@
             bindings = <
 &kp ESC  &none    &none      &none      &none      &none      &mmv MOVE_UP     &none      &none           &none           &none           &none    &none
 &kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
-&kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
-&kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
+&kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &kp LC(LS(TAB))   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
+&kp LSHFT &none   &none      &none      &none      &none      &kp LC(TAB)  &none      &none           &none           &none           &none    &none
 &tog 9 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
             display-name = "L6 MOUSE";
-            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            sensor-bindings = <&rsr_tab_nav &rsr_trans>;
         };
 
         layer_5 {
