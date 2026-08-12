@@ -137,7 +137,7 @@ layers:
   - {t: '3', s: '#'}
   - {t: '4', s: $}
   - {t: '5', s: '%'}
-  - $$mdi:arrow-up-bold$$
+  - Ctl+C
   - {t: '6', s: ^}
   - {t: '7', s: '&'}
   - {t: '8', s: '*'}
@@ -150,7 +150,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:arrow-down-bold$$
+  - Ctl+V
   - {t: 'Sft+]', s: 'Sft+}'}
   - {t: Sft+\, s: Sft+|}
   - {t: ']', s: '}'}
@@ -163,7 +163,7 @@ layers:
   - {t: Sft+3, s: Sft+#}
   - {t: Sft+4, s: Sft+$}
   - {t: Sft+5, s: Sft+%}
-  - $$mdi:arrow-left-bold$$
+  - Ctl+Z
   - {t: Sft+6, s: Sft+^}
   - {t: Sft+7, s: Sft+&}
   - {t: Sft+8, s: Sft+*}
@@ -176,7 +176,7 @@ layers:
   - {t: '-', s: _}
   - {t: /, s: '?'}
   - {t: Sft+-, s: Sft+_}
-  - $$mdi:arrow-right-bold$$
+  - Ctl+Y
   - Sft+INT1
   - INT3
   - {t: 'Sft+,', s: Sft+<}
@@ -189,7 +189,7 @@ layers:
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held}
   - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
-  - $$mdi:mouse-scroll-wheel$$
+  - Ctl+A
   - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
   - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
@@ -202,7 +202,7 @@ layers:
   - {t: '3', s: '#'}
   - {t: '4', s: $}
   - {t: '5', s: '%'}
-  - $$mdi:arrow-up-bold$$
+  - Ctl+C
   - {t: '6', s: ^}
   - {t: '7', s: '&'}
   - {t: '8', s: '*'}
@@ -215,7 +215,7 @@ layers:
   - {t: Sft+2, s: Sft+@}
   - {t: \, s: '|'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:arrow-down-bold$$
+  - Ctl+V
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - <
   - {t: Sft+-, s: Sft+_}
@@ -228,7 +228,7 @@ layers:
   - {t: Sft+7, s: Sft+&}
   - {t: Sft+9, s: Sft+(}
   - {t: Sft+6, s: Sft+^}
-  - $$mdi:arrow-left-bold$$
+  - Ctl+Z
   - {t: '=', s: +}
   - {t: Sft+;, s: 'Sft+:'}
   - {t: '-', s: _}
@@ -241,7 +241,7 @@ layers:
   - {t: 'Sft+[', s: 'Sft+{'}
   - {t: Sft+\, s: Sft+|}
   - {t: ., s: '>'}
-  - $$mdi:arrow-right-bold$$
+  - Ctl+Y
   - Sft+INT1
   - '!'
   - '?'
@@ -254,7 +254,7 @@ layers:
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:keyboard-space$$', h: L3 ONISHI SYM, type: held}
   - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
-  - $$mdi:mouse-scroll-wheel$$
+  - Ctl+A
   - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
   - {t: '$$mdi:keyboard-space$$', h: L3 ONISHI SYM, type: held alternate}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
@@ -293,7 +293,7 @@ layers:
   - $$mdi:arrow-down-bold$$
   - $$mdi:arrow-right-bold$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
+  - Alt+$$mdi:arrow-left-bold$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:arrow-left-bold$$
   - $$mdi:arrow-down-bold$$
@@ -306,7 +306,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
+  - Alt+$$mdi:arrow-right-bold$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -423,7 +423,7 @@ layers:
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
+  - Ctl+Sft+$$mdi:keyboard-tab$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
@@ -436,7 +436,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
+  - Ctl+$$mdi:keyboard-tab$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
