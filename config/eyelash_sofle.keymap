@@ -22,7 +22,14 @@
 };
 
 &mmv {
-    time-to-max-speed-ms = <500>;
+    // time-to-max-speed-ms：500ms→80msに短縮。
+    // ロータリーエンコーダーはtap-ms=70ms程度の短いタップでmmvを駆動しているため、
+    // 500msだと加速カーブの最初の一部（12%程度）しか使われず移動量が小さすぎた。
+    // 80msに短縮することで、短いタップでも最高速度付近まで到達できるようにする。
+    // ※これはジョイスティックによる連続移動にも影響する（加速がほぼ即座に最高速度に
+    // 達するようになり、ジョイスティックを傾けた瞬間から速く動く。ゆっくり加速する
+    // 感触を優先したい場合は、この値を大きくして戻すこと）。
+    time-to-max-speed-ms = <80>;
     acceleration-exponent = <1>;
     trigger-period-ms = <16>;
 };
@@ -153,11 +160,13 @@
         // Layer6（マウス操作）のロータリーエンコーダー用。
         // CW（右回転）=マウスポインタ右移動、CCW（左回転）=マウスポインタ左移動。
         // tap-msの調整履歴：5ms→動かない／100ms→動くが惰性で暴走／30ms→短すぎて再び動かない
-        // →60msに調整。trigger-period-ms(16ms)の3〜4周期分を確保しつつ、加速の蓄積を抑える狙い。
+        // ／60ms→動くが移動量が小さく惰性も残る。
+        // →根本原因は&mmvの加速カーブ（time-to-max-speed-ms）が500msと長すぎたこと
+        // （ファイル冒頭の&mmv設定を80msに短縮済み）。それに合わせてtap-msも70msに調整。
         rsr_mouse_lr: rsr_mouse_lr {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <60>;
+            tap-ms = <70>;
             cw-binding = <&mmv MOVE_RIGHT>;
             ccw-binding = <&mmv MOVE_LEFT>;
         };
@@ -168,7 +177,7 @@
         rsr_mouse_ud: rsr_mouse_ud {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <60>;
+            tap-ms = <70>;
             cw-binding = <&mmv MOVE_DOWN>;
             ccw-binding = <&mmv MOVE_UP>;
         };
