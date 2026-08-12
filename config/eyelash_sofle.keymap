@@ -155,7 +155,7 @@
         rsr_mouse_lr: rsr_mouse_lr {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <5>;
+            tap-ms = <100>;
             cw-binding = <&mmv MOVE_RIGHT>;
             ccw-binding = <&mmv MOVE_LEFT>;
         };
@@ -165,7 +165,7 @@
         rsr_mouse_ud: rsr_mouse_ud {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <5>;
+            tap-ms = <100>;
             cw-binding = <&mmv MOVE_DOWN>;
             ccw-binding = <&mmv MOVE_UP>;
         };
@@ -462,7 +462,7 @@
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
 &kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &kp COMMA     &mm_dot    &mm_fslh     &kp RSHFT
-&tog 9  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_space 2 SPACE   &lt_thumb 5 ENTER  &td_joystick_click        &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_space 2 SPACE   &lt_thumb 5 ENTER  &td_joystick_click        &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -477,7 +477,7 @@
 &kp TAB     &kp Q      &kp L         &kp U         &kp F         &kp GRAVE    &kp DOWN_ARROW   &kp GRAVE  &kp W         &kp R         &kp Y      &kp P       &none
 &kp LCTRL   &kp E      &kp I         &kp A         &kp O         &kp MINUS    &kp LEFT_ARROW   &kp K      &kp T         &kp N         &kp S      &kp H       &none
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp COMMA    &kp RIGHT_ARROW  &kp G      &kp D         &kp M         &kp J      &kp B       &kp RSHFT
-&tog 9  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_space 3 SPACE   &lt_thumb 5 ENTER  &td_joystick_click        &lt_thumb 5 ENTER &lt_thumb_space 3 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_space 3 SPACE   &lt_thumb 5 ENTER  &td_joystick_click        &lt_thumb 5 ENTER &lt_thumb_space 3 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -490,7 +490,7 @@
 &kp TAB     &none            &none           &none            &none            &none              &kp LC(V)        &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
 &kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LC(Z)        &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
 &kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp LC(Y)        &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
-&tog 9  &kp LALT         &lt 6 PSCRN     &lt_thumb 4 BSPC       &lt_thumb_space 2 SPACE      &lt_thumb 5 ENTER        &kp LC(A)        &lt_thumb 5 ENTER      &lt_thumb_space 2 SPACE      &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
+&tog 11  &kp LALT         &lt 6 PSCRN     &lt_thumb 4 BSPC       &lt_thumb_space 2 SPACE      &lt_thumb 5 ENTER        &kp LC(A)        &lt_thumb 5 ENTER      &lt_thumb_space 2 SPACE      &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_undo_redo &rsr_trans>;
@@ -510,7 +510,7 @@
 &kp TAB   &none      &kp RBKT  &kp LS(N2) &kp BSLH   &none               &kp LC(V)       &none          &kp LT        &kp LS(MINUS) &kp GT      &kp LS(INT3) &kp LBKT
 &kp LS(EQUAL) &kp HASH &kp LS(N8) &kp LS(N7) &kp LS(N9) &kp LS(N6)       &kp LC(Z)       &kp EQUAL      &kp LS(SEMI)  &kp MINUS     &kp LS(SQT) &kp FSLH    &kp INT1
 &kp LSHFT &kp DLLR   &kp LS(RBKT) &kp LS(LBKT) &kp LS(BSLH) &kp DOT      &kp LC(Y)       &kp LS(INT1)   &kp EXCL      &kp QMARK     &kp SQT     &kp SEMI    &kp PRCNT
-&tog 9  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_space 3 SPACE  &lt_thumb 5 ENTER      &kp LC(A)   &lt_thumb 5 ENTER  &lt_thumb_space 3 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
+&tog 11  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_space 3 SPACE  &lt_thumb 5 ENTER      &kp LC(A)   &lt_thumb 5 ENTER  &lt_thumb_space 3 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_undo_redo &rsr_trans>;
@@ -519,11 +519,11 @@
 
         layer_2 {
             bindings = <
-&kp ESC  &none    &none      &none      &none      &none      &mmv MOVE_UP     &none      &none           &none           &none           &none    &none
-&kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
+&kp ESC  &none    &none      &none      &none      &none      &none     &none      &none           &none           &none           &none    &none
+&kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &none   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &kp LA(LEFT)   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &kp LA(RIGHT)  &none      &none           &none           &none           &none    &kp RSHFT
-&tog 9         &kp LALT           &lt 6 PSCRN    &lt_thumb 4 BSPC     &lt_thumb_space 2 SPACE    &lt_thumb 5 ENTER        &mkp MCLK        &lt_thumb 5 ENTER        &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC     &lt 6 DEL      &lt 6 ESC
+&tog 11         &kp LALT           &lt 6 PSCRN    &lt_thumb 4 BSPC     &lt_thumb_space 2 SPACE    &lt_thumb 5 ENTER        &mkp MCLK        &lt_thumb 5 ENTER        &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC     &lt 6 DEL      &lt 6 ESC
             >;
 
             display-name = "L4 CURSOR";
@@ -532,11 +532,11 @@
 
         layer_3 {
             bindings = <
-&kp LG(FSLH)       &none              &none          &none          &none          &none              &mmv MOVE_UP     &none              &none          &none          &none          &none          &kp LG(FSLH)
-&kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &mmv MOVE_DOWN   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
+&kp LG(FSLH)       &none              &none          &none          &none          &none              &none     &none              &none          &none          &none          &none          &kp LG(FSLH)
+&kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &none   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
 &kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &kp LC(LS(TAB))   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
 &kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &kp LC(TAB)  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
-&tog 9 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
+&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
             display-name = "L5 WINDOW";
@@ -549,7 +549,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
-&tog 10 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
+&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK      &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
             display-name = "L6 MOUSE";
@@ -562,7 +562,7 @@
 &kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
 &kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
 &kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
-&tog 9 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE &lt_thumb 4 BSPC &lt 6 DEL &lt 6 ESC
+&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_space 2 SPACE &lt_thumb 5 ENTER &mkp MCLK &lt_thumb 5 ENTER &lt_thumb_space 2 SPACE &lt_thumb 4 BSPC &lt 6 DEL &lt 6 ESC
             >;
  
             display-name = "L7 FKEYS";
@@ -575,7 +575,7 @@
 &bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
 &none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
 &none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
-&tog 9  &kp LALT      &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_space 2 SPACE   &lt_thumb 5 ENTER   &mkp MCLK     &lt_thumb 5 ENTER   &lt_thumb_space 2 SPACE   &lt_thumb 4 BSPC    &lt 6 DEL     &lt 6 ESC
+&tog 11  &kp LALT      &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_space 2 SPACE   &lt_thumb 5 ENTER   &mkp MCLK     &lt_thumb 5 ENTER   &lt_thumb_space 2 SPACE   &lt_thumb 4 BSPC    &lt 6 DEL     &lt 6 ESC
             >;
 
             display-name = "L8 BLUETOOTH";
@@ -583,6 +583,10 @@
         };
 
         layer_7 {
+            // 矢印左右モードのオーバーライドレイヤー。
+            // 直接トグルするのではなく、下のconditional_layersによって
+            // 「Layer0〜5・7・8のいずれか＋Layer11（エンコーダー押し込みマーカー）が両方アクティブな時だけ」
+            // 自動的に有効化される（Layer6の時だけLayer10が有効化されるので対象外）。
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
@@ -596,10 +600,10 @@
         };
 
         layer_10 {
-            // Layer6（マウス操作）専用の隠しレイヤー。
-            // Layer6上で親指行L1（ロータリーエンコーダー押し込み）を押すとトグルし、
+            // Layer6（マウス操作）用のオーバーライドレイヤー。
+            // 直接トグルするのではなく、下のconditional_layersによって
+            // 「Layer6とLayer11（エンコーダー押し込みマーカー）が両方アクティブな時だけ」自動的に有効化される。
             // エンコーダーの回転をマウス左右（rsr_mouse_lr）からマウス上下（rsr_mouse_ud）に切り替える。
-            // もう一度押し込むとLayer6のtog 10に戻り、元の左右操作に戻る（Layer9と同じトグル方式）。
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
@@ -611,5 +615,46 @@
             display-name = "L10 MOUSE ENC UD";
             sensor-bindings = <&rsr_mouse_ud &rsr_trans>;
         };
+
+        layer_11 {
+            // エンコーダー押し込みマーカーレイヤー。単体では何もしない（全キー透過・センサーも透過）。
+            // 全レイヤーの親指行L1（&tog 11）でこのレイヤーをON/OFFする。
+            // 実際の効果は下のconditional_layersが「このレイヤー＋現在のベースレイヤー」の組み合わせを見て、
+            // Layer9（多くのベースレイヤー用：矢印左右）またはLayer10（Layer6用：マウス上下）を自動的に有効化することで発生する。
+            // ベースレイヤーを切り替えると、この組み合わせ判定も自動的に更新されるため、
+            // マーカーをONにしたまま別レイヤーへ移動しても、移動先レイヤーに応じたオーバーライドへ自動で切り替わる。
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            display-name = "L11 ENCODER PUSH MARKER";
+        };
+    };
+
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        // ベースレイヤー0(L0 BASE)＋マーカー(L11) → Layer9（矢印左右モード）
+        cl_l0_l11 { if-layers = <0 11>; then-layer = <9>; };
+        // ベースレイヤー1(L1 ONISHI)＋マーカー(L11) → Layer9
+        cl_l1_l11 { if-layers = <1 11>; then-layer = <9>; };
+        // ベースレイヤー2(L2 SYMBOL)＋マーカー(L11) → Layer9
+        cl_l2_l11 { if-layers = <2 11>; then-layer = <9>; };
+        // ベースレイヤー3(L3 ONISHI SYM)＋マーカー(L11) → Layer9
+        cl_l3_l11 { if-layers = <3 11>; then-layer = <9>; };
+        // ベースレイヤー4(L4 CURSOR)＋マーカー(L11) → Layer9
+        cl_l4_l11 { if-layers = <4 11>; then-layer = <9>; };
+        // ベースレイヤー5(L5 WINDOW)＋マーカー(L11) → Layer9
+        cl_l5_l11 { if-layers = <5 11>; then-layer = <9>; };
+        // ベースレイヤー6(L6 MOUSE)＋マーカー(L11) → Layer10（マウス上下モード。L6だけ例外）
+        cl_l6_l11 { if-layers = <6 11>; then-layer = <10>; };
+        // ベースレイヤー7(L7 FKEYS)＋マーカー(L11) → Layer9
+        cl_l7_l11 { if-layers = <7 11>; then-layer = <9>; };
+        // ベースレイヤー8(L8 BLUETOOTH)＋マーカー(L11) → Layer9
+        cl_l8_l11 { if-layers = <8 11>; then-layer = <9>; };
     };
 };
