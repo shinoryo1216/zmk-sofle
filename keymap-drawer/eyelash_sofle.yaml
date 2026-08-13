@@ -49,19 +49,19 @@ layers:
   - $$mdi:arrow-right-bold$$
   - N
   - M
-  - {t: ',', s: <}
-  - {t: ., s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: Sft+/, s: 'Sft+$$mdi:arrow-right-bold$$'}
+  - {t: ',', s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., s: 'Sft+$$mdi:arrow-right-bold$$'}
+  - {t: Sft+/, s: 'Sft+?'}
   - $$mdi:apple-keyboard-shift$$
   - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL}
+  - '&lt_thumb_comma 5'
+  - '&lt_thumb_dot2 2'
   - '&td_joystick_click'
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - '&lt_thumb_dot2 2'
+  - '&lt_thumb_comma 5'
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -78,7 +78,7 @@ layers:
   - {t: '8', s: '*'}
   - {t: '9', s: (}
   - {t: '0', s: )}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - Gui+$$mdi:keyboard-space$$
   - $$mdi:keyboard-tab$$
   - Q
   - L
@@ -110,7 +110,7 @@ layers:
   - X
   - C
   - V
-  - {t: ',', s: <}
+  - {t: Sft+/, s: 'Sft+?'}
   - $$mdi:arrow-right-bold$$
   - G
   - D
@@ -122,11 +122,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-return$$', h: L3 ONISHI SYM}
+  - '&lt_thumb_comma 5'
+  - '&lt_thumb_dot2 3'
   - '&td_joystick_click'
-  - {t: '$$mdi:keyboard-return$$', h: L3 ONISHI SYM}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - '&lt_thumb_dot2 3'
+  - '&lt_thumb_comma 5'
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -187,11 +187,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held}
+  - '&lt_thumb_comma 5'
+  - '&lt_thumb_dot2 2'
   - Ctl+A
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - '&lt_thumb_dot2 2'
+  - '&lt_thumb_comma 5'
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -221,15 +221,15 @@ layers:
   - {t: Sft+-, s: Sft+_}
   - '>'
   - Sft+INT3
-  - {t: '[', s: '{'}
-  - {t: Sft+=, s: Sft++}
+  - '&macro_nakaguro'
+  - {t: '=', s: +}
   - '#'
   - {t: Sft+8, s: Sft+*}
   - {t: Sft+7, s: Sft+&}
   - {t: Sft+9, s: Sft+(}
-  - {t: Sft+6, s: Sft+^}
+  - {t: Sft+=, s: Sft++}
   - Ctl+Z
-  - {t: '=', s: +}
+  - {t: Sft+6, s: Sft+^}
   - {t: Sft+;, s: 'Sft+:'}
   - {t: '-', s: _}
   - {t: Sft+', s: Sft+"}
@@ -240,23 +240,23 @@ layers:
   - {t: 'Sft+]', s: 'Sft+}'}
   - {t: 'Sft+[', s: 'Sft+{'}
   - {t: Sft+\, s: Sft+|}
-  - {t: ., s: '>'}
+  - '!'
   - Ctl+Sft+Z
   - Sft+INT1
-  - '!'
-  - '?'
   - {t: '''', s: '"'}
   - {t: ;, s: ':'}
   - '%'
+  - {t: '[', s: '{'}
+  - $$mdi:apple-keyboard-shift$$
   - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-return$$', h: L3 ONISHI SYM, type: held}
+  - '&lt_thumb_comma 5'
+  - '&lt_thumb_dot2 3'
   - Ctl+A
-  - {t: '$$mdi:keyboard-return$$', h: L3 ONISHI SYM, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - '&lt_thumb_dot2 3'
+  - '&lt_thumb_comma 5'
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -317,11 +317,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - '&lt_thumb_comma 5'
+  - '&lt_thumb_dot2 2'
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - '&lt_thumb_dot2 2'
+  - '&lt_thumb_comma 5'
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -381,13 +381,13 @@ layers:
   - {t: L11 ENCODER PUSH MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: L4 CURSOR}
+  - '&lt_thumb_comma 5'
+  - '&lt_thumb_dot2 2'
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
+  - '&lt_thumb_dot2 2'
+  - '&lt_thumb_comma 5'
+  - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
   L6 MOUSE:
@@ -447,11 +447,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE, type: held}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - '&lt_thumb_comma 5'
+  - '&lt_thumb_dot2 2'
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
+  - '&lt_thumb_dot2 2'
+  - '&lt_thumb_comma 5'
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE, type: held alternate}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE, type: held alternate}
@@ -512,11 +512,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held}
+  - {t: '&lt_thumb_comma 5', type: held}
+  - {t: '&lt_thumb_dot2 2', type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
+  - {t: '&lt_thumb_dot2 2', type: held alternate}
+  - {t: '&lt_thumb_comma 5', type: held alternate}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -577,11 +577,11 @@ layers:
   - {t: '$$mdi:apple-keyboard-option$$', type: held}
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE, type: held}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held}
+  - {t: '&lt_thumb_comma 5', type: held}
+  - {t: '&lt_thumb_dot2 2', type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
+  - {t: '&lt_thumb_dot2 2', type: held alternate}
+  - {t: '&lt_thumb_comma 5', type: held alternate}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE, type: held alternate}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE, type: held alternate}
@@ -863,3 +863,6 @@ combos:
   k: L8 BLUETOOTH
 - p: [53, 54, 62, 63]
   k: {t: L1 ONISHI, h: toggle}
+- p: [35, 36]
+  k: '&macro_nn'
+  l: [L1 ONISHI]
