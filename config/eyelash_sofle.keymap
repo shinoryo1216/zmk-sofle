@@ -1,7 +1,8 @@
-// ZMK_POINTING_DEFAULT_MOVE_VAL：調整履歴 1200→600→150。
-// 「微調整が難しい」「1クリックの移動量が大きすぎる」という指摘を受け、
-// 移動量の絶対的な規模自体を大きく縮小した（600の1/4）。
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 150  // 600, 1200
+// ZMK_POINTING_DEFAULT_MOVE_VAL：調整履歴 1200→600→150→300。
+// 「移動量が大きすぎる」ため600→150に縮小したが、今度は「遅すぎる」となった。
+// 600×2倍（=1200相当、大きすぎ）と150×1倍（=150相当、遅すぎ）の中間として
+// 300×1倍（=300相当）に再設定。
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 300  // 150, 600, 1200
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25   // 10
 
 #include <input/processors.dtsi>
@@ -14,8 +15,7 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
-// zip_xy_scaler：2倍→1倍（スケーリングなし）に縮小。MOVE_VALの縮小と合わせて、
-// 移動量の規模全体をさらに絞り込むため。
+// zip_xy_scaler：1倍（スケーリングなし）のまま維持。速度調整はMOVE_VAL側で行う。
 &mmv_input_listener { input-processors = <&zip_xy_scaler 1 1>; };
 
 &msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
@@ -27,17 +27,17 @@
 };
 
 &mmv {
-    // time-to-max-speed-ms：調整履歴 500→80→300。
-    // 80msは「短いタップでも最高速度付近まで届く」ことを狙ったが、結果として
-    // ジョイスティック含め常にほぼ最高速度で動く状態になり、「加速が速すぎて
-    // 微調整が困難」「エンコーダー1クリックの移動量が大きすぎる」という問題が
-    // 生じた。300msに戻すことで、短いタップ（tap-ms=120ms程度）では加速カーブの
-    // 緩やかな初期部分（低速域）しか使われなくなり、1クリックの移動量が
-    // 自然に小さく・扱いやすくなる狙い。ジョイスティックも傾けた瞬間は低速から
-    // スタートし、押し続けるほど徐々に加速する、より直感的な挙動に近づく。
-    // ※MOVE_VAL(150)・zip_xy_scaler(1倍)の縮小と合わせての対応であり、
-    // この値だけを見て判断しないこと。
-    time-to-max-speed-ms = <300>;
+    // time-to-max-speed-ms：調整履歴 500→80→300→80。
+    // 300msへの変更は誤りだった。当初「短いタップでは低速域しか使われないので
+    // 移動量が小さくなるはず」と考えたが、実際には逆に惰性が著しく悪化した。
+    // 原因：加速カーブが長いほど、素早く回した時に複数クリックの
+    // 「まだ加速途中」の状態が重なり合う時間も長くなり、重なった分だけ
+    // 速度が積み上がってしまう。加速カーブが短いほど各クリックが速やかに
+    // 収束するため、重なりによる惰性は起きにくい（実際80msの時は
+    // 「許容範囲内」の停止のキレだった）。
+    // 移動量の大小は本来この値ではなくMOVE_VAL側で調整すべきだったため、
+    // 80msに戻し、移動量はMOVE_VAL=300で調整する。
+    time-to-max-speed-ms = <80>;
     acceleration-exponent = <1>;
     trigger-period-ms = <16>;
 };
@@ -168,15 +168,15 @@
         // Layer6（マウス操作）のロータリーエンコーダー用。
         // CW（右回転）=マウスポインタ右移動、CCW（左回転）=マウスポインタ左移動。
         // tap-msの調整履歴：5ms→動かない／100ms→動くが惰性で暴走／30ms→短すぎて再び動かない
-        // ／60ms→動くが移動量が小さく惰性も残る／70ms→動くが移動量が大きすぎて微調整困難、
-        // 惰性も未解消。
-        // →&mmvのtime-to-max-speed-msを300msに戻し（緩やかな加速）、MOVE_VAL/scalerも
-        // 縮小した上で、tap-msを120msに調整。加速カーブの緩やかな初期部分だけを使うことで、
-        // 1クリックの移動量を小さく抑える狙い。
+        // ／60ms→動くが移動量が小さく惰性も残る／70ms→動くが移動量が大きすぎて微調整困難
+        // （惰性は許容範囲内）／120ms（&mmvのtime-to-max-speed-msを300msに変更した際に
+        // 合わせて調整）→惰性が著しく悪化＋遅すぎる、失敗。
+        // →time-to-max-speed-msを80msに戻したことに合わせてtap-msも70msに戻した。
+        // 移動量の調整はMOVE_VAL側（現在300）で行う。
         rsr_mouse_lr: rsr_mouse_lr {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <120>;
+            tap-ms = <70>;
             cw-binding = <&mmv MOVE_RIGHT>;
             ccw-binding = <&mmv MOVE_LEFT>;
         };
@@ -187,7 +187,7 @@
         rsr_mouse_ud: rsr_mouse_ud {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <120>;
+            tap-ms = <70>;
             cw-binding = <&mmv MOVE_DOWN>;
             ccw-binding = <&mmv MOVE_UP>;
         };
