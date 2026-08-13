@@ -124,16 +124,16 @@
     };
 };
 
-// 親指行L5/R2（旧SPACE→カンマ）・L6/R1（旧ENTER→ピリオド）専用。
-// lt_thumb_space/lt_thumbはタップ側が&kp固定でランタイムのキーコードを
-// 受け取る形式のため、タップ側をShift対応モーフ（mm_thumb_comma/mm_thumb_dot）
-// に固定した専用ビヘイビアとして新設。#binding-cellsはホールド先レイヤー番号の
-// 1つのみ（例: &lt_thumb_comma 5）。
+// 親指行L5（旧SPACE→カンマ）・L6（旧ENTER→ピリオド）専用。
+// タップ側をShift対応モーフ（mm_thumb_comma/mm_thumb_dot）に固定した専用ビヘイビア。
+// 注：zmk,behavior-hold-tapは#binding-cellsが必ず2固定という制約があるため、
+// タップ側の値は実質無視されるが呼び出し時は2つ引数を渡す必要がある
+// （例: &lt_thumb_comma 5 0）。
 / {
     behaviors {
         lt_thumb_comma: lt_thumb_comma {
             compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <1>;
+            #binding-cells = <2>;
             flavor = "hold-preferred";
             tapping-term-ms = <280>;
             quick-tap-ms = <200>;
@@ -142,7 +142,7 @@
 
         lt_thumb_dot2: lt_thumb_dot2 {
             compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <1>;
+            #binding-cells = <2>;
             flavor = "balanced";
             tapping-term-ms = <280>;
             quick-tap-ms = <200>;
@@ -523,6 +523,16 @@
             bindings = <&macro_nn>;
             layers = <1>;
         };
+
+        // row3 L6+R1（Layer0基準でいうG+H の物理位置）で半角/全角。
+        // Layer1のrow2から半角/全角キーを撤去した代替アクセス手段。Layer1専用。
+        combo_onishi_hankaku {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <125>;
+            key-positions = <31 33>;
+            bindings = <&kp GRAVE>;
+            layers = <1>;
+        };
     };
 
     macros {
@@ -577,7 +587,7 @@
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
 &kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &mm_row_comma     &mm_dot    &kp LS(FSLH)     &kp RSHFT
-&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5   &lt_thumb_dot2 2  &td_joystick_click        &lt_thumb_dot2 2 &lt_thumb_comma 5  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 2 0  &td_joystick_click        &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -592,7 +602,7 @@
 &kp TAB     &kp Q      &kp L         &kp U         &kp F         &kp LEFT_ARROW    &kp DOWN_ARROW   &kp RIGHT_ARROW  &kp W         &kp R         &kp Y      &kp P       &kp UP_ARROW
 &kp LCTRL   &kp E      &kp I         &kp A         &kp O         &kp MINUS    &kp LEFT_ARROW   &kp K      &kp T         &kp N         &kp S      &kp H       &kp DOWN_ARROW
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp LS(FSLH)    &kp RIGHT_ARROW  &kp G      &kp D         &kp M         &kp J      &kp B       &kp RSHFT
-&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5   &lt_thumb_dot2 3  &td_joystick_click        &lt_thumb_dot2 3 &lt_thumb_comma 5  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 3 0  &td_joystick_click        &lt_thumb 3 ENTER &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -605,7 +615,7 @@
 &kp TAB     &none            &none           &none            &none            &none              &kp LC(V)        &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
 &kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LC(Z)        &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
 &kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp LC(LS(Z))        &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
-&tog 11  &kp LALT         &lt 6 PSCRN     &lt_thumb 4 BSPC       &lt_thumb_comma 5      &lt_thumb_dot2 2        &kp LC(A)        &lt_thumb_dot2 2      &lt_thumb_comma 5      &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
+&tog 11  &kp LALT         &lt 6 PSCRN     &lt_thumb 4 BSPC       &lt_thumb_comma 5 0      &lt_thumb_dot2 2 0        &kp LC(A)        &lt_thumb 2 ENTER      &lt_thumb_space 5 SPACE      &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_undo_redo &rsr_trans>;
@@ -622,10 +632,10 @@
             // （TILDE）等の問題があった。
             bindings = <
 &kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5              &kp LC(C)       &kp N6         &kp N7        &kp N8        &kp N9      &kp N0      &none
-&kp TAB   &none      &kp RBKT  &kp LS(N2) &kp BSLH   &none               &kp LC(V)       &none          &kp LT        &kp LS(MINUS) &kp GT      &kp LS(INT3) &macro_nakaguro
+&kp TAB   &macro_nakaguro  &kp RBKT  &kp LS(N2) &kp BSLH   &kp UP_ARROW               &kp LC(V)       &kp DOWN_ARROW          &kp LT        &kp LS(MINUS) &kp GT      &kp LS(INT3) &none
 &kp EQUAL &kp HASH &kp LS(N8) &kp LS(N7) &kp LS(N9) &kp LS(EQUAL)       &kp LC(Z)       &kp LS(N6)      &kp LS(SEMI)  &kp MINUS     &kp LS(SQT) &kp FSLH    &kp INT1
 &kp LSHFT &kp DLLR   &kp LS(RBKT) &kp LS(LBKT) &kp LS(BSLH) &kp EXCL      &kp LC(LS(Z))       &kp LS(INT1)   &kp SQT      &kp SEMI     &kp PRCNT     &kp LBKT       &kp RSHFT
-&tog 11  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_comma 5  &lt_thumb_dot2 3      &kp LC(A)   &lt_thumb_dot2 3  &lt_thumb_comma 5  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
+&tog 11  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_comma 5 0  &lt_thumb_dot2 3 0      &kp LC(A)   &lt_thumb 3 ENTER  &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_undo_redo &rsr_trans>;
@@ -638,7 +648,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &none   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &kp LA(LEFT)   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &kp LA(RIGHT)  &none      &none           &none           &none           &none    &kp RSHFT
-&tog 11         &kp LALT           &lt 6 PSCRN    &lt_thumb 4 BSPC     &lt_thumb_comma 5    &lt_thumb_dot2 2        &mkp MCLK        &lt_thumb_dot2 2        &lt_thumb_comma 5    &lt_thumb 4 BSPC     &lt 6 DEL      &lt 6 ESC
+&tog 11         &kp LALT           &lt 6 PSCRN    &lt_thumb 4 BSPC     &lt_thumb_comma 5 0    &lt_thumb_dot2 2 0        &mkp MCLK        &lt_thumb 2 ENTER        &lt_thumb_space 5 SPACE    &lt_thumb 4 BSPC     &lt 6 DEL      &lt 6 ESC
             >;
 
             display-name = "L4 CURSOR";
@@ -651,7 +661,7 @@
 &kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &none   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
 &kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &kp LC(LS(TAB))   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
 &kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &kp LC(TAB)  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
-&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_comma 5 &lt_thumb_dot2 2 &mkp MCLK      &lt_thumb_dot2 2 &lt_thumb_comma 5    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
+&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_comma 5 0 &lt_thumb_dot2 2 0 &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
             display-name = "L5 WINDOW";
@@ -664,7 +674,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
-&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_comma 5 &lt_thumb_dot2 2 &mkp MCLK      &lt_thumb_dot2 2 &lt_thumb_comma 5    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
+&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_comma 5 0 &lt_thumb_dot2 2 0 &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
             display-name = "L6 MOUSE";
@@ -677,7 +687,7 @@
 &kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
 &kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
 &kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
-&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_comma 5 &lt_thumb_dot2 2 &mkp MCLK &lt_thumb_dot2 2 &lt_thumb_comma 5 &lt_thumb 4 BSPC &lt 6 DEL &lt 6 ESC
+&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_comma 5 0 &lt_thumb_dot2 2 0 &mkp MCLK &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE &lt_thumb 4 BSPC &lt 6 DEL &lt 6 ESC
             >;
  
             display-name = "L7 FKEYS";
@@ -690,7 +700,7 @@
 &bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
 &none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
 &none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
-&tog 11  &kp LALT      &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5   &lt_thumb_dot2 2   &mkp MCLK     &lt_thumb_dot2 2   &lt_thumb_comma 5   &lt_thumb 4 BSPC    &lt 6 DEL     &lt 6 ESC
+&tog 11  &kp LALT      &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 2 0   &mkp MCLK     &lt_thumb 2 ENTER   &lt_thumb_space 5 SPACE   &lt_thumb 4 BSPC    &lt 6 DEL     &lt 6 ESC
             >;
 
             display-name = "L8 BLUETOOTH";
