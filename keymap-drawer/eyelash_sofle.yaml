@@ -57,11 +57,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL}
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL}
   - '&td_joystick_click'
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -84,14 +84,14 @@ layers:
   - L
   - U
   - F
-  - {t: '`', s: '~'}
+  - $$mdi:arrow-left-bold$$
   - $$mdi:arrow-down-bold$$
-  - {t: '`', s: '~'}
+  - $$mdi:arrow-right-bold$$
   - W
   - R
   - Y
   - P
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-up-bold$$
   - $$mdi:apple-keyboard-control$$
   - E
   - I
@@ -104,7 +104,7 @@ layers:
   - N
   - S
   - H
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-down-bold$$
   - $$mdi:apple-keyboard-shift$$
   - Z
   - X
@@ -122,11 +122,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L3 ONISHI SYM}
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-return$$', h: L3 ONISHI SYM}
   - '&td_joystick_click'
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-space$$', h: L3 ONISHI SYM}
+  - {t: '$$mdi:keyboard-return$$', h: L3 ONISHI SYM}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -187,11 +187,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held}
   - Ctl+A
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -252,11 +252,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L3 ONISHI SYM, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-return$$', h: L3 ONISHI SYM, type: held}
   - Ctl+A
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-space$$', h: L3 ONISHI SYM, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L3 ONISHI SYM, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -317,11 +317,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -382,11 +382,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW, type: held}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -447,11 +447,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE, type: held}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE, type: held alternate}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE, type: held alternate}
@@ -512,11 +512,11 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW, type: held}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
@@ -577,11 +577,11 @@ layers:
   - {t: '$$mdi:apple-keyboard-option$$', type: held}
   - {t: '$$mdi:printer-outline$$', h: L6 MOUSE, type: held}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held}
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW, type: held}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L5 WINDOW, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW, type: held alternate}
   - {t: '$$mdi:backspace$$', h: L4 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE, type: held alternate}
   - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE, type: held alternate}
@@ -782,10 +782,10 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
 combos:
 - p: [34, 35]
-  k: {t: '$$mdi:keyboard-return$$', type: enter}
+  k: $$mdi:keyboard-space$$
   l: [L0 BASE, L1 ONISHI]
 - p: [29, 30]
-  k: {t: '$$mdi:keyboard-return$$', type: enter}
+  k: $$mdi:keyboard-space$$
   l: [L0 BASE, L1 ONISHI]
 - p: [47, 48]
   k: {t: '$$mdi:backspace$$', type: backspace}
