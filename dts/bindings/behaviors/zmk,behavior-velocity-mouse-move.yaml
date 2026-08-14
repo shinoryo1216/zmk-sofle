@@ -1,0 +1,68 @@
+description: |
+  ロータリーエンコーダー用の「速度連動」マウスポインター移動ビヘイビア。
+  トリガーが呼ばれる間隔(直前のトリガーからの経過ミリ秒)を測定し、
+  間隔が短い(=素早く回している)ほど大きく、間隔が長い(=ゆっくり回している)
+  ほど小さく、1回のトリガーあたりの移動量を動的に変える。
+
+  #binding-cells = <1> で受け取るparam1の符号で方向を決める
+  (正=CW側、負=CCW側。呼び出し側は "&vel_move_x 1" / "&vel_move_x -1" のように
+  使う想定。実際の移動方向はaxisとparam1の符号の組み合わせで決まる)。
+
+  通常は zmk,behavior-sensor-rotate (ZMK公式・追加モジュール不要) の
+  bindings に指定して使う:
+
+    vel_move_x: vel_move_x {
+        compatible = "zmk,behavior-velocity-mouse-move";
+        #binding-cells = <1>;
+        input-code = <INPUT_REL_X>;
+    };
+
+    mouse_rot_lr: mouse_rot_lr {
+        compatible = "zmk,behavior-sensor-rotate";
+        #sensor-binding-cells = <0>;
+        bindings = <&vel_move_x 1>, <&vel_move_x -1>;
+    };
+
+  この挙動が実際にHIDマウスレポートとして送出されるためには、対応する
+  zmk,input-listener ノード (device = <&vel_move_x>;) を別途定義する必要がある。
+
+compatible: "zmk,behavior-velocity-mouse-move"
+
+include: one_param.yaml
+
+properties:
+  input-code:
+    type: int
+    required: true
+    description: |
+      移動を報告するZephyr Input Subsystemのコード。
+      INPUT_REL_X または INPUT_REL_Y を指定する
+      (<zephyr/dt-bindings/input/input-event-codes.h> のマクロ)。
+
+  min-move:
+    type: int
+    default: 2
+    description: |
+      ゆっくり回した時(トリガー間隔が max-interval-ms 以上)の
+      1トリガーあたりの移動量。
+
+  max-move:
+    type: int
+    default: 28
+    description: |
+      素早く回した時(トリガー間隔が min-interval-ms 以下)の
+      1トリガーあたりの移動量。
+
+  min-interval-ms:
+    type: int
+    default: 8
+    description: |
+      この値(ミリ秒)以下のトリガー間隔は「最速」とみなし、
+      max-move をそのまま使う。
+
+  max-interval-ms:
+    type: int
+    default: 120
+    description: |
+      この値(ミリ秒)以上のトリガー間隔は「最遅」とみなし、
+      min-move をそのまま使う。min-interval-msとの間は線形補間される。
