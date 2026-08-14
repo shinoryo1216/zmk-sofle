@@ -27,6 +27,28 @@
 
 &msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
 
+// mmv_enc（ロータリーエンコーダー専用のマウス移動ビヘイビア。定義は下の
+// behaviors ブロック内）専用の入力リスナー。
+// 【今回「エンコーダーのマウス移動が全く動かなくなった」原因】
+// &mmv や &msc はZMK本体側に、それぞれ専用の zmk,input-listener
+// （&mmv_input_listener / &msc_input_listener）があらかじめ定義・接続されて
+// おり、生成された移動イベントを拾ってHIDレポートに変換している。
+// 上のmmv_input_listener/msc_input_listenerの記述は、この既存ノードに
+// input-processorsを追加で「上書き」しているだけで、リスナー自体は
+// 元から存在していた。
+// 一方、mmv_encは全く新規に追加したインスタンスのため、対応する
+// input-listenerが存在せず、生成された移動イベントの受け取り先が
+// どこにもない状態だった。これにより、rsr_mouse_lr/udのキュー処理
+// 自体は正常に動作する（ビルドエラーにもならない）にもかかわらず、
+// 実際のマウスカーソルは一切動かない、という状態になっていた。
+// 対策として、mmv_enc専用のinput-listenerを新規に明示的に定義する。
+/ {
+    mmv_enc_input_listener: mmv_enc_input_listener {
+        compatible = "zmk,input-listener";
+        device = <&mmv_enc>;
+    };
+};
+
 &msc {
     acceleration-exponent = <1>;      // 0
     time-to-max-speed-ms = <100>;       // 300
