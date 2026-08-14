@@ -236,23 +236,35 @@
         // 効く値のため、ジョイスティックが完璧になった今、これ以上は上げられない。
         // →エンコーダー固有の調整レバーであるtap-msだけを35→55msに引き上げ、
         // MOVE_VAL（現在600）はジョイスティックの体感を維持するため変更しない。
+        // 【2025-XX 追記】1回転あたりの移動量が小さすぎるとのフィードバックを受け、
+        // MOVE_RIGHT/MOVE_LEFT（共通のZMK_POINTING_DEFAULT_MOVE_VAL=600を使う
+        // マクロ）から、MOVE_X(<値>) による明示的な速度指定に変更。
+        // MOVE_X/MOVE_Yはジョイスティック側のZMK_POINTING_DEFAULT_MOVE_VALとは
+        // 完全に独立した数値を渡せるため、ジョイスティックの速度・体感には
+        // 一切影響しない。
+        // tap-ms（キューの消化速度＝止まりの良さを決めるレバー）はあえて
+        // 変更せず20msのまま維持し、"速度の値"だけを上げることで移動量を
+        // 増やしている。acceleration-exponent=0（等速）のため、速度の値と
+        // 移動量はほぼ比例するので、体感に応じて下の数値をそのまま
+        // 増減させればよい（例: まだ足りなければ 3200, 4000 …／
+        // 逆に大きすぎると感じたら 1600 など）。
         rsr_mouse_lr: rsr_mouse_lr {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
             tap-ms = <20>;
-            cw-binding = <&mmv_enc MOVE_RIGHT>;
-            ccw-binding = <&mmv_enc MOVE_LEFT>;
+            cw-binding = <&mmv_enc MOVE_X(2400)>;
+            ccw-binding = <&mmv_enc MOVE_X(-2400)>;
         };
 
         // Layer10（L6専用・エンコーダー押し込みでトグル）のロータリーエンコーダー用。
         // CW（右回転）=マウスポインタ下移動、CCW（左回転）=マウスポインタ上移動。
-        // tap-msの考え方はrsr_mouse_lrと同じ。
+        // 速度指定の考え方はrsr_mouse_lrと同じ（MOVE_Yで独立指定）。
         rsr_mouse_ud: rsr_mouse_ud {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
             tap-ms = <20>;
-            cw-binding = <&mmv_enc MOVE_DOWN>;
-            ccw-binding = <&mmv_enc MOVE_UP>;
+            cw-binding = <&mmv_enc MOVE_Y(2400)>;
+            ccw-binding = <&mmv_enc MOVE_Y(-2400)>;
         };
 
         rsr_trans: rsr_trans {
