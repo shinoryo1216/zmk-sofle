@@ -217,9 +217,9 @@
         rsr_mouse_lr: rsr_mouse_lr {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <55>;
-            cw-binding = <&mmv MOVE_RIGHT>;
-            ccw-binding = <&mmv MOVE_LEFT>;
+            tap-ms = <20>;
+            cw-binding = <&mmv_enc MOVE_RIGHT>;
+            ccw-binding = <&mmv_enc MOVE_LEFT>;
         };
 
         // Layer10（L6専用・エンコーダー押し込みでトグル）のロータリーエンコーダー用。
@@ -228,15 +228,64 @@
         rsr_mouse_ud: rsr_mouse_ud {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <55>;
-            cw-binding = <&mmv MOVE_DOWN>;
-            ccw-binding = <&mmv MOVE_UP>;
+            tap-ms = <20>;
+            cw-binding = <&mmv_enc MOVE_DOWN>;
+            ccw-binding = <&mmv_enc MOVE_UP>;
         };
 
         rsr_trans: rsr_trans {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
             tap-ms = <0>;
+        };
+
+        // ロータリーエンコーダー専用のマウス移動ビヘイビア（2025-XX 追加）。
+        // 【これまでの問題の根本原因】
+        // zmk,behavior-runtime-sensor-rotate（rsr_mouse_lr/ud）はdetentごとに
+        // 「&mmvを press → tap-ms待機 → release」というキーイベントをキューに積んで
+        // 順番に消化する“離散トリガー”方式。一方、既存の&mmv（下記の&mmv{...}で
+        // 設定しているジョイスティック/キー用インスタンス）は
+        // time-to-max-speed-ms=80ms・acceleration-exponent=1（等加速）で、
+        // 「押しっぱなし」を前提に時間をかけて速度を積分していく“連続入力”方式。
+        // この2つの設計思想が根本的にミスマッチだったため、
+        // tap-msをどう調整しても「移動量を確保する」ことと
+        // 「止まった瞬間にぴたっと止まる（＝キューの消化を速くする）」ことが
+        // 原理的に両立しなかった（tap-msを削れば移動量が加速カーブの
+        // 立ち上がり待ちで消え、伸ばせばキューの消化待ちで惰性が悪化する）。
+        //
+        // 【対策】
+        // ジョイスティック/キー用の&mmvには一切手を触れず、エンコーダー専用に
+        // 独立した zmk,behavior-input-two-axis インスタンスを新設。
+        // acceleration-exponent=0（等速。加速カーブそのものが存在しない）
+        // ＋ time-to-max-speed-ms=0 にすることで、press直後の最初のtickから
+        // 常に最大速度で移動量を出す。これにより「加速カーブに乗り切る前に
+        // releaseされて移動量がほぼ0になる」という現象が原理的に発生しなくなり、
+        // tap-msをこれまでよりずっと短く（＝キューの消化を速く）しても
+        // 十分な移動量を確保できるようになる。
+        // trigger-period-msも16→1msに短縮し、短いtap-msの中でも移動量を
+        // 生成するタイミングを増やして粒度を細かくしている。
+        // ジョイスティック/キー操作用の&mmv（time-to-max-speed-ms=80,
+        // acceleration-exponent=1）とは完全に別インスタンスのため、
+        // こちらの「完璧な操作感」には一切影響しない。
+        // 速度の大きさは MOVE_RIGHT 等のマクロ経由でZMK_POINTING_DEFAULT_MOVE_VAL
+        // （現在600、ジョイスティックと共通）をそのまま使う。エンコーダーだけ
+        // 速度の大きさ自体を変えたい場合は、cw-binding/ccw-binding側で
+        // &mmv_enc MOVE_X(<値>) のように直接数値を渡すこと（MOVE_VALには影響しない）。
+        // 【重要】tap-ms=20は初期値。まずはこのままビルドして体感を確認し、
+        // 「移動量が足りない」→ tap-msを少しずつ上げる（例: 30, 40）、
+        // 「まだ止まらない」→ tap-msを少しずつ下げる、という順で追い込むこと。
+        // 従来と違い、この2つはもう「あちらを立てればこちらが立たず」の
+        // トレードオフではなく、どちらの方向に転んでも動きは素直で
+        // 予測しやすいはず（等速化により移動量とtap-msがほぼ比例するため）。
+        mmv_enc: mmv_enc {
+            compatible = "zmk,behavior-input-two-axis";
+            #binding-cells = <1>;
+            x-input-code = <INPUT_REL_X>;
+            y-input-code = <INPUT_REL_Y>;
+            trigger-period-ms = <1>;
+            delay-ms = <0>;
+            time-to-max-speed-ms = <0>;
+            acceleration-exponent = <0>;
         };
 
         // Layer0の行4 R3(,)/R4(.) にShift+←/→を配置。
