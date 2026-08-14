@@ -284,13 +284,13 @@
         mouse_rot_lr: mouse_rot_lr {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
-            bindings = <&vel_move_x 1>, <&vel_move_x -1>;
+            bindings = <&vel_move_x 1>, <&vel_move_x (-1)>;
         };
 
         mouse_rot_ud: mouse_rot_ud {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
-            bindings = <&vel_move_y 1>, <&vel_move_y -1>;
+            bindings = <&vel_move_y 1>, <&vel_move_y (-1)>;
         };
 
         rsr_trans: rsr_trans {
