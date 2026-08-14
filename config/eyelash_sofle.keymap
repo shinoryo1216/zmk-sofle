@@ -27,27 +27,22 @@
 
 &msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
 
-// mmv_enc（ロータリーエンコーダー専用のマウス移動ビヘイビア。定義は下の
-// behaviors ブロック内）専用の入力リスナー。
-// 【今回「エンコーダーのマウス移動が全く動かなくなった」原因】
-// &mmv や &msc はZMK本体側に、それぞれ専用の zmk,input-listener
-// （&mmv_input_listener / &msc_input_listener）があらかじめ定義・接続されて
-// おり、生成された移動イベントを拾ってHIDレポートに変換している。
-// 上のmmv_input_listener/msc_input_listenerの記述は、この既存ノードに
-// input-processorsを追加で「上書き」しているだけで、リスナー自体は
-// 元から存在していた。
-// 一方、mmv_encは全く新規に追加したインスタンスのため、対応する
-// input-listenerが存在せず、生成された移動イベントの受け取り先が
-// どこにもない状態だった。これにより、rsr_mouse_lr/udのキュー処理
-// 自体は正常に動作する（ビルドエラーにもならない）にもかかわらず、
-// 実際のマウスカーソルは一切動かない、という状態になっていた。
-// 対策として、mmv_enc専用のinput-listenerを新規に明示的に定義する。
+// vel_move_x / vel_move_y（速度連動マウス移動ビヘイビア。定義は下の
+// behaviors ブロック内。zmk,behavior-velocity-mouse-move。ソースは
+// このリポジトリに追加した src/behaviors/behavior_velocity_mouse_move.c）
+// 専用の入力リスナー。mmv_encの時と同様、この手のカスタム入力デバイスは
+// 明示的にzmk,input-listenerで接続しないとHIDへ届かないため必須。
 / {
-    mmv_enc_input_listener: mmv_enc_input_listener {
+    vel_move_x_listener: vel_move_x_listener {
         compatible = "zmk,input-listener";
-        device = <&mmv_enc>;
+        device = <&vel_move_x>;
+    };
+    vel_move_y_listener: vel_move_y_listener {
+        compatible = "zmk,input-listener";
+        device = <&vel_move_y>;
     };
 };
+
 
 &msc {
     acceleration-exponent = <1>;      // 0
@@ -236,35 +231,66 @@
         // 効く値のため、ジョイスティックが完璧になった今、これ以上は上げられない。
         // →エンコーダー固有の調整レバーであるtap-msだけを35→55msに引き上げ、
         // MOVE_VAL（現在600）はジョイスティックの体感を維持するため変更しない。
-        // 【2025-XX 追記】1回転あたりの移動量が小さすぎるとのフィードバックを受け、
-        // MOVE_RIGHT/MOVE_LEFT（共通のZMK_POINTING_DEFAULT_MOVE_VAL=600を使う
-        // マクロ）から、MOVE_X(<値>) による明示的な速度指定に変更。
-        // MOVE_X/MOVE_Yはジョイスティック側のZMK_POINTING_DEFAULT_MOVE_VALとは
-        // 完全に独立した数値を渡せるため、ジョイスティックの速度・体感には
-        // 一切影響しない。
-        // tap-ms（キューの消化速度＝止まりの良さを決めるレバー）はあえて
-        // 変更せず20msのまま維持し、"速度の値"だけを上げることで移動量を
-        // 増やしている。acceleration-exponent=0（等速）のため、速度の値と
-        // 移動量はほぼ比例するので、体感に応じて下の数値をそのまま
-        // 増減させればよい（例: まだ足りなければ 3200, 4000 …／
-        // 逆に大きすぎると感じたら 1600 など）。
-        rsr_mouse_lr: rsr_mouse_lr {
-            compatible = "zmk,behavior-runtime-sensor-rotate";
-            #sensor-binding-cells = <0>;
-            tap-ms = <20>;
-            cw-binding = <&mmv_enc MOVE_X(1600)>;
-            ccw-binding = <&mmv_enc MOVE_X(-1600)>;
+        // 【2025-XX 追記：速度連動の加速に変更】
+        // MOVE_X(2400)のような固定値では「1detentあたりの移動量」が常に
+        // 一定になってしまい、「大きく動かすには何度も回す必要がある」ことと
+        // 「1detentが微調整に使えるくらい小さい」ことが同時に成立しない、
+        // という指摘を受けた。これは単一の速度パラメータでは原理的に
+        // 解決できないトレードオフ（本物のマウスホイールが両立できて
+        // いるのは、回転速度に応じて移動量を動的に変える「加速」機能が
+        // あるため）。
+        //
+        // そこで、新規にカスタムビヘイビア zmk,behavior-velocity-mouse-move
+        // （このリポジトリに src/behaviors/behavior_velocity_mouse_move.c
+        // として追加。詳細はリポジトリ直下の実装解説ドキュメント参照）を
+        // 作成した。これは直前のトリガーからの経過時間を実測し、
+        //   - ゆっくり回す（間隔が長い）→ min-move（小さく動く。微調整向き）
+        //   - 素早く回す（間隔が短い）→ max-move（大きく動く。大移動向き）
+        // という形で、1トリガーあたりの移動量を動的に変える。
+        // 押しっぱなし時間に依存する&mmvとは違い、トリガーされた瞬間に
+        // 計算済みの移動量を即座にHIDへ送るだけなので、キューの消化待ちに
+        // よる惰性の問題も生じない。
+        //
+        // 【チューニングの考え方】
+        //   min-move / max-move      : 一番遅い時／一番速い時の移動量(px相当)
+        //   min-interval-ms          : この間隔以下は「最速」扱い(max-moveを適用)
+        //   max-interval-ms          : この間隔以上は「最遅」扱い(min-moveを適用)
+        // 微調整がしにくいと感じたら min-move を下げる、大きく動かすのに
+        // まだ物足りなければ max-move を上げる、というように独立に調整できる。
+        vel_move_x: vel_move_x {
+            compatible = "zmk,behavior-velocity-mouse-move";
+            #binding-cells = <1>;
+            input-code = <INPUT_REL_X>;
+            min-move = <2>;
+            max-move = <28>;
+            min-interval-ms = <8>;
+            max-interval-ms = <120>;
         };
 
-        // Layer10（L6専用・エンコーダー押し込みでトグル）のロータリーエンコーダー用。
-        // CW（右回転）=マウスポインタ下移動、CCW（左回転）=マウスポインタ上移動。
-        // 速度指定の考え方はrsr_mouse_lrと同じ（MOVE_Yで独立指定）。
-        rsr_mouse_ud: rsr_mouse_ud {
-            compatible = "zmk,behavior-runtime-sensor-rotate";
+        vel_move_y: vel_move_y {
+            compatible = "zmk,behavior-velocity-mouse-move";
+            #binding-cells = <1>;
+            input-code = <INPUT_REL_Y>;
+            min-move = <2>;
+            max-move = <28>;
+            min-interval-ms = <8>;
+            max-interval-ms = <120>;
+        };
+
+        // vel_move_x/yはCW/CCWの区別を持たないので、公式のzmk,behavior-sensor-rotate
+        // （追加のwestモジュール不要。ZMK本体組み込み）でCW→param1=1、CCW→param1=-1
+        // を割り当てる。tap-msの概念はここには存在しない（瞬時に移動量を送るだけ
+        // のビヘイビアのため、押しっぱなし時間に依存しない）。
+        mouse_rot_lr: mouse_rot_lr {
+            compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
-            tap-ms = <20>;
-            cw-binding = <&mmv_enc MOVE_Y(1600)>;
-            ccw-binding = <&mmv_enc MOVE_Y(-1600)>;
+            bindings = <&vel_move_x 1>, <&vel_move_x -1>;
+        };
+
+        mouse_rot_ud: mouse_rot_ud {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&vel_move_y 1>, <&vel_move_y -1>;
         };
 
         rsr_trans: rsr_trans {
@@ -273,54 +299,6 @@
             tap-ms = <0>;
         };
 
-        // ロータリーエンコーダー専用のマウス移動ビヘイビア（2025-XX 追加）。
-        // 【これまでの問題の根本原因】
-        // zmk,behavior-runtime-sensor-rotate（rsr_mouse_lr/ud）はdetentごとに
-        // 「&mmvを press → tap-ms待機 → release」というキーイベントをキューに積んで
-        // 順番に消化する“離散トリガー”方式。一方、既存の&mmv（下記の&mmv{...}で
-        // 設定しているジョイスティック/キー用インスタンス）は
-        // time-to-max-speed-ms=80ms・acceleration-exponent=1（等加速）で、
-        // 「押しっぱなし」を前提に時間をかけて速度を積分していく“連続入力”方式。
-        // この2つの設計思想が根本的にミスマッチだったため、
-        // tap-msをどう調整しても「移動量を確保する」ことと
-        // 「止まった瞬間にぴたっと止まる（＝キューの消化を速くする）」ことが
-        // 原理的に両立しなかった（tap-msを削れば移動量が加速カーブの
-        // 立ち上がり待ちで消え、伸ばせばキューの消化待ちで惰性が悪化する）。
-        //
-        // 【対策】
-        // ジョイスティック/キー用の&mmvには一切手を触れず、エンコーダー専用に
-        // 独立した zmk,behavior-input-two-axis インスタンスを新設。
-        // acceleration-exponent=0（等速。加速カーブそのものが存在しない）
-        // ＋ time-to-max-speed-ms=0 にすることで、press直後の最初のtickから
-        // 常に最大速度で移動量を出す。これにより「加速カーブに乗り切る前に
-        // releaseされて移動量がほぼ0になる」という現象が原理的に発生しなくなり、
-        // tap-msをこれまでよりずっと短く（＝キューの消化を速く）しても
-        // 十分な移動量を確保できるようになる。
-        // trigger-period-msも16→1msに短縮し、短いtap-msの中でも移動量を
-        // 生成するタイミングを増やして粒度を細かくしている。
-        // ジョイスティック/キー操作用の&mmv（time-to-max-speed-ms=80,
-        // acceleration-exponent=1）とは完全に別インスタンスのため、
-        // こちらの「完璧な操作感」には一切影響しない。
-        // 速度の大きさは MOVE_RIGHT 等のマクロ経由でZMK_POINTING_DEFAULT_MOVE_VAL
-        // （現在600、ジョイスティックと共通）をそのまま使う。エンコーダーだけ
-        // 速度の大きさ自体を変えたい場合は、cw-binding/ccw-binding側で
-        // &mmv_enc MOVE_X(<値>) のように直接数値を渡すこと（MOVE_VALには影響しない）。
-        // 【重要】tap-ms=20は初期値。まずはこのままビルドして体感を確認し、
-        // 「移動量が足りない」→ tap-msを少しずつ上げる（例: 30, 40）、
-        // 「まだ止まらない」→ tap-msを少しずつ下げる、という順で追い込むこと。
-        // 従来と違い、この2つはもう「あちらを立てればこちらが立たず」の
-        // トレードオフではなく、どちらの方向に転んでも動きは素直で
-        // 予測しやすいはず（等速化により移動量とtap-msがほぼ比例するため）。
-        mmv_enc: mmv_enc {
-            compatible = "zmk,behavior-input-two-axis";
-            #binding-cells = <1>;
-            x-input-code = <INPUT_REL_X>;
-            y-input-code = <INPUT_REL_Y>;
-            trigger-period-ms = <1>;
-            delay-ms = <0>;
-            time-to-max-speed-ms = <0>;
-            acceleration-exponent = <0>;
-        };
 
         // Layer0の行4 R3(,)/R4(.) にShift+←/→を配置。
         // mm_row_comma: 通常タップ=カンマ／Shift併用タップ=Shift+←
@@ -769,7 +747,7 @@
             >;
 
             display-name = "L6 MOUSE";
-            sensor-bindings = <&rsr_mouse_lr &rsr_trans>;
+            sensor-bindings = <&mouse_rot_lr &rsr_trans>;
         };
 
         layer_5 {
@@ -819,7 +797,7 @@
             // Layer6（マウス操作）用のオーバーライドレイヤー。
             // 直接トグルするのではなく、下のconditional_layersによって
             // 「Layer6とLayer11（エンコーダー押し込みマーカー）が両方アクティブな時だけ」自動的に有効化される。
-            // エンコーダーの回転をマウス左右（rsr_mouse_lr）からマウス上下（rsr_mouse_ud）に切り替える。
+            // エンコーダーの回転をマウス左右（mouse_rot_lr）からマウス上下（mouse_rot_ud）に切り替える。
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
@@ -829,7 +807,7 @@
             >;
 
             display-name = "L10 MOUSE ENC UD";
-            sensor-bindings = <&rsr_mouse_ud &rsr_trans>;
+            sensor-bindings = <&mouse_rot_ud &rsr_trans>;
         };
 
         layer_11 {
