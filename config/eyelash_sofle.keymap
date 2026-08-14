@@ -252,8 +252,8 @@
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
             tap-ms = <20>;
-            cw-binding = <&mmv_enc MOVE_X(2400)>;
-            ccw-binding = <&mmv_enc MOVE_X(-2400)>;
+            cw-binding = <&mmv_enc MOVE_X(1600)>;
+            ccw-binding = <&mmv_enc MOVE_X(-1600)>;
         };
 
         // Layer10（L6専用・エンコーダー押し込みでトグル）のロータリーエンコーダー用。
@@ -263,8 +263,8 @@
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
             tap-ms = <20>;
-            cw-binding = <&mmv_enc MOVE_Y(2400)>;
-            ccw-binding = <&mmv_enc MOVE_Y(-2400)>;
+            cw-binding = <&mmv_enc MOVE_Y(1600)>;
+            ccw-binding = <&mmv_enc MOVE_Y(-1600)>;
         };
 
         rsr_trans: rsr_trans {
