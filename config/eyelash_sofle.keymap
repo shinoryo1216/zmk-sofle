@@ -705,16 +705,16 @@
         compatible = "zmk,keymap";
 
         layer0 {
-            // 【重要】row5col1は他の全レイヤーと同じく&tog 11
-            // （L11 ENCODER PUSH MARKER）を使う。
-            // 以前はL0専用に&tog 12（L12）を新設して切り分けていたが、
-            // L12がONのままレイヤーを移動すると、移動先レイヤーでL9が
-            // 強制的にONのまま残ってしまい、押し込みによる切り替えが
-            // 効かなくなる不具合が発生した（&togはレイヤー移動をまたいでも
-            // 自動でOFFに戻らないため）。
-            // 下のconditional_layersを「ベースレイヤー番号を条件に含めない、
-            // L11単体がONかどうかだけを見る単一ルール」に設計し直したことで、
-            // L0だけ特別扱いする必要がなくなったため、L11に統一した。
+            // row5col1は他の全レイヤーと同じく&tog 11（トグル式。押したら
+            // ロックされ、もう一度押すまで戻らない）を使う。
+            // 【設計】L0を含む全レイヤーで「if-layersにレイヤー番号を
+            // 直接指定する」方式そのものをやめ、下のconditional_layersを
+            // 「L11単体がONならデフォルトでLayer9（矢印）」という
+            // “フォールバック”＋「特定のベースレイヤー＋L11のときだけ、
+            // そのレイヤー自身の機能を保つ上書きレイヤーで“フォールバックを
+            // 覆す”」という2段構成に変更した。L0はこのフォールバックだけで
+            // 完結するため、L0をif-layersに登場させる必要が一切ない。
+            // 詳しい理由は下のconditional_layersのコメントを参照。
             bindings = <
 &kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp MINUS
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
@@ -891,30 +891,121 @@
 
             display-name = "L11 ENCODER PUSH MARKER";
         };
+
+        // 【追加】L2/L3, L4, L5, L7/L8 それぞれの「押し込み中でも自分自身の
+        // エンコーダー機能を維持する」ための、専用の上書き専用レイヤー。
+        // 中身は全キー&trans（ベースレイヤー自身のキー配置をそのまま透過）で、
+        // sensor-bindingsだけ、そのグループ本来の機能を明示的に再指定している。
+        // L6→L10のときと全く同じ仕組み（L9(index9)より大きいindexのレイヤーを
+        // 用意し、そちらを優先させる）を、L2〜L8にも展開したもの。
+        // L2とL3、L7とL8はそれぞれ同じ機能（undo/redo, cursor_ud）なので
+        // 1枚のレイヤーを共有している。
+        layer_ov_undo_redo {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_undo_redo &rsr_trans>;
+            display-name = "L2/L3 PUSH PASSTHRU";
+        };
+
+        layer_ov_browser_nav {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_browser_nav &rsr_trans>;
+            display-name = "L4 PUSH PASSTHRU";
+        };
+
+        layer_ov_tab_nav {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_tab_nav &rsr_trans>;
+            display-name = "L5 PUSH PASSTHRU";
+        };
+
+        layer_ov_cursor_ud {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "L7/L8 PUSH PASSTHRU";
+        };
     };
 
     conditional_layers {
         compatible = "zmk,conditional-layers";
 
-        // 【設計変更】以前はベースレイヤーごとに cl_l0_l11, cl_l1_l11, ... と
-        // 「特定のベースレイヤー番号＋L11」という組み合わせを個別に定義していたが、
-        // 2つの問題が判明したため、L11単体のみを見る単一ルールに統一した。
-        //   ① if-layersにレイヤー0（デフォルトレイヤー）を含めると
-        //      正しく判定されないことがある（L0だけ矢印モードに切り替わらない不具合）。
-        //   ② ①の対策としてL0専用の別マーカー（L12）を作ったところ、
-        //      L12をOFFに戻さないまま別レイヤーへ移動すると、移動先レイヤーで
-        //      L9が強制的にONのまま残ってしまい、押し込みによる切り替えが
-        //      効かなくなる不具合が新たに発生した（&togはレイヤー移動をまたいでも
-        //      自動ではOFFに戻らないため）。
-        // 「L11単体がONかどうか」だけを見る単一ルールにすれば、そもそも
-        // ベースレイヤー番号（0を含む）を条件に含める必要がなくなり、
-        // ①も②も原理的に起こらなくなる。
-        // L11がONの間は、どのベースレイヤーにいてもLayer9（矢印左右モード）になる。
+        // 【根本的な再設計】
+        // これまで何度か「L0（デフォルトレイヤー）をif-layersに直接指定する」
+        // 方式（if-layers = <0 11>）を試みたが、期待通りに動作しなかった。
+        // ZMK公式ドキュメント・ソースコード（issue #699等）を調査したところ、
+        // デフォルトレイヤーの扱いにはバージョンによる差異・既知の癖が
+        // 複数報告されており、確実に安全と言い切れる保証がなかった。
+        // そこで今回は「L0をif-layersの条件式に一切登場させない」設計に
+        // 変更し、この不確実性ごと回避することにした。
+        //
+        // 【新しい仕組み：フォールバック＋上書きの2段構成】
+        // ① フォールバック：ベースレイヤーを問わず、L11単体がONなら
+        //    常にLayer9（矢印左右）にする。
+        //      cl_l11 { if-layers = <11>; then-layer = <9>; };
+        //    L0はこのフォールバック“だけ”で完結する（L0を条件に一切
+        //    登場させる必要がないため、L0固有の不確実性を踏まない）。
+        //    L1（矢印でよい）も、あえて個別ルールを作らずこのフォールバック
+        //    に任せている（結果は同じなので、ルールを増やさない）。
+        // ② 上書き：L2〜L8のように「押し込み中も自分自身の機能を維持したい」
+        //    レイヤーには、そのレイヤー専用の、Layer9（index9）より
+        //    indexの大きい上書きレイヤーを個別に用意する。
+        //    ZMK公式ドキュメント通り「同じベースレイヤーの間で複数の
+        //    then-layerが同時に成立してもよく、インデックスが大きい方が
+        //    優先される」という仕様に則り、これらの上書きレイヤーが
+        //    ①のフォールバックより優先されるようにしている。
+        //    if-layersには2,3,4,5,6,7,8という非デフォルトレイヤー番号
+        //    しか登場しないため、L0固有の癖を踏む心配がない。
+        //
+        // 【L0の操作感について】
+        // L0の押し込みキーは&tog 11（トグル式）に戻した。上のフォールバック
+        // ①がL0を無条件でカバーするため、L0専用の特別な仕組み
+        // （ホールド式の&mo等）はもう一切不要。押し込みは全レイヤーで
+        // 統一して「押す→ロック→もう一度押すまで維持」というトグル式になる。
+
+        // ①フォールバック：L11単体がONなら常にLayer9（矢印左右）。
+        // L0・L1はこれだけで正しく動作する。
         cl_l11 { if-layers = <11>; then-layer = <9>; };
-        // L6（マウス）だけは例外：L6+L11のときはLayer10（マウス上下モード）を使いたいため、
-        // 個別のルールを維持する。L10（index10）はL9（index9）より数字が大きいため、
-        // 両方の条件が同時に満たされた場合（L6上でL11がON）でも、キー/センサーの
-        // 解決では上位レイヤーであるL10が優先され、意図通りマウス上下になる。
+
+        // ②上書き：L2(SYMBOL)＋L11 → L2自身の機能（undo/redo）を維持（index12）
+        cl_l2_l11 { if-layers = <2 11>; then-layer = <12>; };
+        // L3(ONISHI SYM)＋L11 → L3自身の機能（undo/redo）を維持（同じくindex12を共有）
+        cl_l3_l11 { if-layers = <3 11>; then-layer = <12>; };
+        // L4(CURSOR)＋L11 → L4自身の機能（browser-nav）を維持（index13）
+        cl_l4_l11 { if-layers = <4 11>; then-layer = <13>; };
+        // L5(WINDOW)＋L11 → L5自身の機能（tab-nav）を維持（index14）
+        cl_l5_l11 { if-layers = <5 11>; then-layer = <14>; };
+        // L6(MOUSE)＋L11 → Layer10（マウス上下）
         cl_l6_l11 { if-layers = <6 11>; then-layer = <10>; };
+        // L7(FKEYS)＋L11 → L7自身の機能（cursor_ud）を維持（index15）
+        cl_l7_l11 { if-layers = <7 11>; then-layer = <15>; };
+        // L8(BLUETOOTH)＋L11 → L8自身の機能（cursor_ud）を維持（同じくindex15を共有）
+        cl_l8_l11 { if-layers = <8 11>; then-layer = <15>; };
     };
 };
