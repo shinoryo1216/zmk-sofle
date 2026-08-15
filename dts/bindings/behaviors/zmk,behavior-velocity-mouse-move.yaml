@@ -41,7 +41,7 @@ properties:
 
   min-move:
     type: int
-    default: 2
+    default: 8
     description: |
       ゆっくり回した時(トリガー間隔が max-interval-ms 以上)の
       1トリガーあたりの移動量。

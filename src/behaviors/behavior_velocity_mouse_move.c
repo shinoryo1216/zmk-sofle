@@ -106,7 +106,16 @@ static int behavior_velocity_mouse_move_pressed(struct zmk_behavior_binding *bin
     data->last_trigger_time_ms = now_ms;
 
     int32_t magnitude = compute_move_magnitude(config, interval_ms);
-    int32_t direction = (binding->param1 >= 0) ? 1 : -1;
+    /* 【重要】ZMKの struct zmk_behavior_binding の param1/param2 は
+     * uint32_t（符号なし）で定義されている。devicetree側で <&vel_move_x (-1)>
+     * のように負の値を渡しても、符号なし整数としては非常に大きな正の値
+     * （0xFFFFFFFF = 4294967295）として格納されるため、
+     * 「param1 >= 0」という判定は常にtrueになってしまい、
+     * 常に正方向（右/下）に動くバグになっていた。
+     * ビット列としては2の補数表現の-1がそのまま入っているので、
+     * int32_tへキャストしてから符号を判定すれば正しく復元できる。 */
+    int32_t signed_param1 = (int32_t)binding->param1;
+    int32_t direction = (signed_param1 >= 0) ? 1 : -1;
     int32_t value = magnitude * direction;
 
     LOG_DBG("velocity-mouse-move: interval=%lldms magnitude=%d value=%d", interval_ms, magnitude,

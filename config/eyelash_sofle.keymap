@@ -261,7 +261,7 @@
             compatible = "zmk,behavior-velocity-mouse-move";
             #binding-cells = <1>;
             input-code = <INPUT_REL_X>;
-            min-move = <2>;
+            min-move = <8>;
             max-move = <28>;
             min-interval-ms = <8>;
             max-interval-ms = <120>;
@@ -271,7 +271,7 @@
             compatible = "zmk,behavior-velocity-mouse-move";
             #binding-cells = <1>;
             input-code = <INPUT_REL_Y>;
-            min-move = <2>;
+            min-move = <8>;
             max-move = <28>;
             min-interval-ms = <8>;
             max-interval-ms = <120>;
