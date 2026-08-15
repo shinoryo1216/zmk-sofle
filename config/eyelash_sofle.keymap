@@ -651,12 +651,25 @@
         compatible = "zmk,keymap";
 
         layer0 {
+            // 【重要】row5col1は他の全レイヤーでは&tog 11（L11 ENCODER PUSH MARKER）
+            // だが、L0（デフォルトレイヤー＝レイヤー0）だけは&tog 12
+            // （専用のL12 ENCODER PUSH MARKER (L0 ONLY)）を使う。
+            // 理由：conditional_layersのif-layersにレイヤー0（デフォルトレイヤー）を
+            // 含めた組み合わせ（if-layers = <0 11>）は、ZMKの実装上、正しく
+            // 判定されないことがある（デフォルトレイヤーは常時アクティブという
+            // 特別扱いのため、他の非デフォルトレイヤーと同列に判定されない場合がある）。
+            // 実際に「L0でエンコーダー押し込み→矢印左右（Layer9）にならない。
+            // L1（ONISHI、レイヤー1）では正常動作する」という非対称な不具合が発生した。
+            // これを回避するため、L0専用の別マーカー（L12）を新設し、
+            // 「L12単体がアクティブならLayer9」という、デフォルトレイヤーの
+            // 判定に依存しないシンプルな条件に変更している
+            // （下のconditional_layersの cl_l12 を参照）。
             bindings = <
 &kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp MINUS
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
 &kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &mm_row_comma     &mm_dot    &kp LS(FSLH)     &kp RSHFT
-&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 2 0  &td_joystick_click        &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 12  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 2 0  &td_joystick_click        &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -827,13 +840,40 @@
 
             display-name = "L11 ENCODER PUSH MARKER";
         };
+
+        layer_12 {
+            // L0（デフォルトレイヤー）専用のエンコーダー押し込みマーカー。
+            // L11と同じく単体では何もしない（全キー透過・センサーも透過）。
+            // L0のrow5col1だけがこのレイヤーを&tog 12でON/OFFする
+            // （他の全レイヤーは引き続き&tog 11＋L11を使う）。
+            // 【なぜL0だけ別マーカーにしたか】
+            // conditional_layersのif-layersにレイヤー0（デフォルトレイヤー）を
+            // 含めると（if-layers = <0 11>）、正しく判定されない不具合が確認された
+            // （L0では矢印左右レイヤーに切り替わらないが、同じ仕組みのL1では
+            // 正常動作する、という非対称な症状として現れた）。
+            // L12は「単体でアクティブかどうか」だけを見るシンプルな条件
+            // （下のcl_l12）にすることで、デフォルトレイヤー特有の
+            // 判定不具合を回避している。
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            display-name = "L12 ENCODER PUSH MARKER (L0 ONLY)";
+        };
     };
 
     conditional_layers {
         compatible = "zmk,conditional-layers";
 
-        // ベースレイヤー0(L0 BASE)＋マーカー(L11) → Layer9（矢印左右モード）
-        cl_l0_l11 { if-layers = <0 11>; then-layer = <9>; };
+        // ベースレイヤー0(L0 BASE)専用：L12単体がアクティブ → Layer9（矢印左右モード）
+        // （以前はcl_l0_l11 { if-layers = <0 11>; ... } だったが、レイヤー0を
+        // if-layersに含めると正しく判定されない不具合があったため、
+        // L0専用マーカー(L12)を使う単一条件に置き換えた）
+        cl_l12 { if-layers = <12>; then-layer = <9>; };
         // ベースレイヤー1(L1 ONISHI)＋マーカー(L11) → Layer9
         cl_l1_l11 { if-layers = <1 11>; then-layer = <9>; };
         // ベースレイヤー2(L2 SYMBOL)＋マーカー(L11) → Layer9
