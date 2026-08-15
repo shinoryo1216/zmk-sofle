@@ -115,6 +115,60 @@
     };
 };
 
+// Home row mods（L0/L1の人差し指=Shift、薬指=Ctrl）。
+// 【物理配置】キーマトリクスは5行×13列（列6はジョイスティック用の
+// 中央列でスキップ）、位置は0〜63の通し番号。ホームロウ（3段目）は
+// 左手 pos26-31、ジョイスティック pos32、右手 pos33-38。
+// L0とL1でホームロウの文字は異なる（例：左人差し指ホームキーは
+// L0=F、L1=O）が、位置ベースでビヘイビアを割り当てているため、
+// どちらのレイヤーでも同じ指に同じmodが乗る。
+//
+// 【同じ手内の誤発火対策（位置ベース制限）】
+// 通常のhold-tapは「タイマー内に別のキーが押されたらホールド」と
+// 単純に判定するため、Shiftを持つ指と同じ手で別の文字を連続して
+// 打つと（単語の先頭を大文字にする、等）、誤ってホールド（mod）と
+// 判定されやすい。これを防ぐため、hold-trigger-key-positionsで
+// 「反対の手のキーが押された時だけホールド候補にする」よう制限する。
+// 同じ手の中の組み合わせは、位置的にホールドの引き金にならないため、
+// 常にタップ（文字）優先で安全側に倒れる。
+// さらにhold-trigger-on-releaseを付け、「割り込みキーが離されるまで」
+// 判定を待つことで、同じ手の中の高速ロール（タイプ時のオーバーラップ）を
+// より確実にタップ扱いにしている。
+// サムキー列（4段目/親指列）はどちらの手でも使われるため、
+// hold-trigger-key-positionsには含めていない
+// （＝親指キーとの組み合わせはタイミングベースの判定にフォールバックする）。
+/ {
+    behaviors {
+        // 左手のホームロウmod。tap=通常の文字、hold=渡された修飾キー。
+        // hold-trigger-key-positionsは「右手（列8-13）の1〜4段目」の位置番号。
+        hml: home_row_mod_left {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <7 8 9 10 11 12 20 21 22 23 24 25 33 34 35 36 37 38 46 47 48 49 50 51>;
+            hold-trigger-on-release;
+        };
+
+        // 右手のホームロウmod。hold-trigger-key-positionsは
+        // 「左手（列0-5）の1〜4段目」の位置番号（hmlの左右反転）。
+        hmr: home_row_mod_right {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <0 1 2 3 4 5 13 14 15 16 17 18 26 27 28 29 30 31 39 40 41 42 43 44>;
+            hold-trigger-on-release;
+        };
+    };
+};
+
 // SPACEだけは別ビヘイビア（lt_thumb_space）に分離。
 // ENTER/BSPCのホールドは基本「単独で長押しして連続削除」等、単独タップの
 // 連打が中心だが、SPACEのホールドは「記号レイヤーに入って“次に押す”記号
@@ -651,25 +705,22 @@
         compatible = "zmk,keymap";
 
         layer0 {
-            // 【重要】row5col1は他の全レイヤーでは&tog 11（L11 ENCODER PUSH MARKER）
-            // だが、L0（デフォルトレイヤー＝レイヤー0）だけは&tog 12
-            // （専用のL12 ENCODER PUSH MARKER (L0 ONLY)）を使う。
-            // 理由：conditional_layersのif-layersにレイヤー0（デフォルトレイヤー）を
-            // 含めた組み合わせ（if-layers = <0 11>）は、ZMKの実装上、正しく
-            // 判定されないことがある（デフォルトレイヤーは常時アクティブという
-            // 特別扱いのため、他の非デフォルトレイヤーと同列に判定されない場合がある）。
-            // 実際に「L0でエンコーダー押し込み→矢印左右（Layer9）にならない。
-            // L1（ONISHI、レイヤー1）では正常動作する」という非対称な不具合が発生した。
-            // これを回避するため、L0専用の別マーカー（L12）を新設し、
-            // 「L12単体がアクティブならLayer9」という、デフォルトレイヤーの
-            // 判定に依存しないシンプルな条件に変更している
-            // （下のconditional_layersの cl_l12 を参照）。
+            // 【重要】row5col1は他の全レイヤーと同じく&tog 11
+            // （L11 ENCODER PUSH MARKER）を使う。
+            // 以前はL0専用に&tog 12（L12）を新設して切り分けていたが、
+            // L12がONのままレイヤーを移動すると、移動先レイヤーでL9が
+            // 強制的にONのまま残ってしまい、押し込みによる切り替えが
+            // 効かなくなる不具合が発生した（&togはレイヤー移動をまたいでも
+            // 自動でOFFに戻らないため）。
+            // 下のconditional_layersを「ベースレイヤー番号を条件に含めない、
+            // L11単体がONかどうかだけを見る単一ルール」に設計し直したことで、
+            // L0だけ特別扱いする必要がなくなったため、L11に統一した。
             bindings = <
 &kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp MINUS
 &kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
-&kp LCTRL   &kp A      &kp S         &kp D         &kp F         &kp G        &kp LEFT_ARROW   &kp H      &kp J         &kp K         &kp L      &kp SEMI    &kp SQT
+&kp LCTRL   &kp A      &hml LCTRL S   &kp D         &hml LSHFT F   &kp G        &kp LEFT_ARROW   &kp H      &hmr RSHFT J   &kp K         &hmr RCTRL L   &kp SEMI    &kp SQT
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &mm_row_comma     &mm_dot    &kp LS(FSLH)     &kp RSHFT
-&tog 12  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 2 0  &td_joystick_click        &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
+&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 2 0  &td_joystick_click        &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -682,7 +733,7 @@
             bindings = <
 &kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp LG(SPACE)
 &kp TAB     &kp Q      &kp L         &kp U         &kp F         &kp LEFT_ARROW    &kp DOWN_ARROW   &kp RIGHT_ARROW  &kp W         &kp R         &kp Y      &kp P       &kp UP_ARROW
-&kp LCTRL   &kp E      &kp I         &kp A         &kp O         &kp MINUS    &kp LEFT_ARROW   &kp K      &kp T         &kp N         &kp S      &kp H       &kp DOWN_ARROW
+&kp LCTRL   &kp E      &hml LCTRL I   &kp A         &hml LSHFT O   &kp MINUS    &kp LEFT_ARROW   &kp K      &hmr RSHFT T   &kp N         &hmr RCTRL S   &kp H       &kp DOWN_ARROW
 &kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp LS(FSLH)    &kp RIGHT_ARROW  &kp G      &kp D         &kp M         &kp J      &kp B       &kp RSHFT
 &tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 3 0  &td_joystick_click        &lt_thumb 3 ENTER &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
@@ -840,55 +891,30 @@
 
             display-name = "L11 ENCODER PUSH MARKER";
         };
-
-        layer_12 {
-            // L0（デフォルトレイヤー）専用のエンコーダー押し込みマーカー。
-            // L11と同じく単体では何もしない（全キー透過・センサーも透過）。
-            // L0のrow5col1だけがこのレイヤーを&tog 12でON/OFFする
-            // （他の全レイヤーは引き続き&tog 11＋L11を使う）。
-            // 【なぜL0だけ別マーカーにしたか】
-            // conditional_layersのif-layersにレイヤー0（デフォルトレイヤー）を
-            // 含めると（if-layers = <0 11>）、正しく判定されない不具合が確認された
-            // （L0では矢印左右レイヤーに切り替わらないが、同じ仕組みのL1では
-            // 正常動作する、という非対称な症状として現れた）。
-            // L12は「単体でアクティブかどうか」だけを見るシンプルな条件
-            // （下のcl_l12）にすることで、デフォルトレイヤー特有の
-            // 判定不具合を回避している。
-            bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
-            >;
-
-            display-name = "L12 ENCODER PUSH MARKER (L0 ONLY)";
-        };
     };
 
     conditional_layers {
         compatible = "zmk,conditional-layers";
 
-        // ベースレイヤー0(L0 BASE)専用：L12単体がアクティブ → Layer9（矢印左右モード）
-        // （以前はcl_l0_l11 { if-layers = <0 11>; ... } だったが、レイヤー0を
-        // if-layersに含めると正しく判定されない不具合があったため、
-        // L0専用マーカー(L12)を使う単一条件に置き換えた）
-        cl_l12 { if-layers = <12>; then-layer = <9>; };
-        // ベースレイヤー1(L1 ONISHI)＋マーカー(L11) → Layer9
-        cl_l1_l11 { if-layers = <1 11>; then-layer = <9>; };
-        // ベースレイヤー2(L2 SYMBOL)＋マーカー(L11) → Layer9
-        cl_l2_l11 { if-layers = <2 11>; then-layer = <9>; };
-        // ベースレイヤー3(L3 ONISHI SYM)＋マーカー(L11) → Layer9
-        cl_l3_l11 { if-layers = <3 11>; then-layer = <9>; };
-        // ベースレイヤー4(L4 CURSOR)＋マーカー(L11) → Layer9
-        cl_l4_l11 { if-layers = <4 11>; then-layer = <9>; };
-        // ベースレイヤー5(L5 WINDOW)＋マーカー(L11) → Layer9
-        cl_l5_l11 { if-layers = <5 11>; then-layer = <9>; };
-        // ベースレイヤー6(L6 MOUSE)＋マーカー(L11) → Layer10（マウス上下モード。L6だけ例外）
+        // 【設計変更】以前はベースレイヤーごとに cl_l0_l11, cl_l1_l11, ... と
+        // 「特定のベースレイヤー番号＋L11」という組み合わせを個別に定義していたが、
+        // 2つの問題が判明したため、L11単体のみを見る単一ルールに統一した。
+        //   ① if-layersにレイヤー0（デフォルトレイヤー）を含めると
+        //      正しく判定されないことがある（L0だけ矢印モードに切り替わらない不具合）。
+        //   ② ①の対策としてL0専用の別マーカー（L12）を作ったところ、
+        //      L12をOFFに戻さないまま別レイヤーへ移動すると、移動先レイヤーで
+        //      L9が強制的にONのまま残ってしまい、押し込みによる切り替えが
+        //      効かなくなる不具合が新たに発生した（&togはレイヤー移動をまたいでも
+        //      自動ではOFFに戻らないため）。
+        // 「L11単体がONかどうか」だけを見る単一ルールにすれば、そもそも
+        // ベースレイヤー番号（0を含む）を条件に含める必要がなくなり、
+        // ①も②も原理的に起こらなくなる。
+        // L11がONの間は、どのベースレイヤーにいてもLayer9（矢印左右モード）になる。
+        cl_l11 { if-layers = <11>; then-layer = <9>; };
+        // L6（マウス）だけは例外：L6+L11のときはLayer10（マウス上下モード）を使いたいため、
+        // 個別のルールを維持する。L10（index10）はL9（index9）より数字が大きいため、
+        // 両方の条件が同時に満たされた場合（L6上でL11がON）でも、キー/センサーの
+        // 解決では上位レイヤーであるL10が優先され、意図通りマウス上下になる。
         cl_l6_l11 { if-layers = <6 11>; then-layer = <10>; };
-        // ベースレイヤー7(L7 FKEYS)＋マーカー(L11) → Layer9
-        cl_l7_l11 { if-layers = <7 11>; then-layer = <9>; };
-        // ベースレイヤー8(L8 BLUETOOTH)＋マーカー(L11) → Layer9
-        cl_l8_l11 { if-layers = <8 11>; then-layer = <9>; };
     };
 };
