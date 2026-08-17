@@ -603,11 +603,58 @@
     };
 
     combos {
-        /* ---- ③ Colemak / 薙刀式 切替コンボ ---- */
-        combo_colemak_toggle {
-            timeout-ms = <50>;
-            key-positions = <54 55 61 62>;
-            bindings = <&tog 16>;
+        /* ---- システム直接切替コンボ (System A / B / C) ----
+         * 左親指 L3+L4 (54 55) または 右親指 R3+R4 (61 62) と 数字キー(1/2/3) の組み合わせ
+         */
+        // 左手トリガー (L3+L4: 54 55) + 1/2/3
+        combo_sys_a_left {
+            timeout-ms = <60>;
+            key-positions = <1 54 55>;
+            bindings = <&to 0>;
+        };
+        combo_sys_b_left {
+            timeout-ms = <60>;
+            key-positions = <2 54 55>;
+            bindings = <&to 1>;
+        };
+        combo_sys_c_left {
+            timeout-ms = <60>;
+            key-positions = <3 54 55>;
+            bindings = <&to 16>;
+        };
+
+        // 右手トリガー (R3+R4: 61 62) + 1/2/3
+        combo_sys_a_right {
+            timeout-ms = <60>;
+            key-positions = <1 61 62>;
+            bindings = <&to 0>;
+        };
+        combo_sys_b_right {
+            timeout-ms = <60>;
+            key-positions = <2 61 62>;
+            bindings = <&to 1>;
+        };
+        combo_sys_c_right {
+            timeout-ms = <60>;
+            key-positions = <3 61 62>;
+            bindings = <&to 16>;
+        };
+
+        // 右手片手用 (R3+R4: 61 62) + 右手側数字キー 6/7/8 (7 8 9)
+        combo_sys_a_rh {
+            timeout-ms = <60>;
+            key-positions = <7 61 62>;
+            bindings = <&to 0>;
+        };
+        combo_sys_b_rh {
+            timeout-ms = <60>;
+            key-positions = <8 61 62>;
+            bindings = <&to 1>;
+        };
+        combo_sys_c_rh {
+            timeout-ms = <60>;
+            key-positions = <9 61 62>;
+            bindings = <&to 16>;
         };
 
         // IME連動 (LANG1で薙刀式Layer17へ、LANG2でColemak Layer16へ)
@@ -930,13 +977,7 @@
             bindings = <&mo 8>;
         };
 
-        /* ---- System B（大西配列）切替コンボ ---- */
 
-        combo_onishi_toggle {
-            timeout-ms = <50>;
-            key-positions = <53 54 62 63>;
-            bindings = <&tog 1>;
-        };
 
         /* ---- Layer1（大西配列）専用コンボ ---- */
 
@@ -1374,7 +1415,7 @@
 &kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5              &kp LC(C)       &kp N6         &kp N7        &kp N8        &kp N9      &kp N0      &none
 &kp TAB   &none      &kp DLLR  &kp HASH   &kp GRAVE  &kp UP_ARROW        &kp LC(V)       &kp DOWN_ARROW &none         &kp PLUS      &kp ASTRK   &none       &none
 &kp LT    &kp PRCNT  &kp LBKT  &kp AMPS   &kp LS(N2) &kp LS(EQUAL)       &kp LC(Z)       &kp LS(INT1)   &kp EQUAL     &kp MINUS     &kp FSLH    &kp INT3    &kp GT
-&kp LS(RBKT) &none   &none     &none      &none      &none               &kp LC(LS(Z))   &none          &kp SQT       &kp SEMI      &kp LS(INT3) &kp EXCL &kp LS(BSLH)
+&kp LS(RBKT) &none   &none     &none      &none      &none               &kp LC(LS(Z))   &none          &kp SQT       &kp SEMI      &kp LS(INT3) &kp EXCL    &kp LS(BSLH)
 &tog 11  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_comma 5 0  &lt_thumb_dot2 18 0      &kp LC(A)   &lt_thumb 18 ENTER  &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
