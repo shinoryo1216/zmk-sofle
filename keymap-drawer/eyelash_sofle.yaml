@@ -1335,14 +1335,17 @@ combos:
   k: '&macro_to_colemak'
   l: [L3 NAGINATA]
 - p: [4, 5]
-  k: {t: '`', s: '~'}
+  k: '&ng_lang_on'
   l: [L0 BASE, L1 ONISHI]
 - p: [7, 8]
-  k: {t: '`', s: '~'}
+  k: '&ng_lang_off'
   l: [L0 BASE, L1 ONISHI]
 - p: [4, 5]
   k: '&macro_to_naginata'
   l: [L2 COLEMAK]
+- p: [4, 5]
+  k: '&macro_to_naginata'
+  l: [L3 NAGINATA]
 - p: [21, 22]
   k: '&macro_to_naginata'
   l: [L2 COLEMAK]
@@ -1352,6 +1355,9 @@ combos:
 - p: [7, 8]
   k: '&macro_to_colemak'
   l: [L3 NAGINATA]
+- p: [7, 8]
+  k: '&macro_to_colemak'
+  l: [L2 COLEMAK]
 - p: [21, 22]
   k: '&macro_to_colemak'
   l: [L3 NAGINATA]
