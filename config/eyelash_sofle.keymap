@@ -395,29 +395,56 @@
         };
 
         // IME連動マクロ（OS切替キー送信＋キーボードレイヤー移動）
-        // 【再訂正】無変換/変換キー（INT_MUHENKAN/INT_HENKAN）は、Mozcが
-        // 既にアクティブな状態だとMozc自身がそのキーを「かなモード巡回」用に
-        // 消費してしまい、fcitx5レベルの「入力メソッド無効化」まで届かないことが
-        // 実機検証で判明した（無変換を押しても英語入力に戻れない）。
-        // 一方、GRAVE（半角/全角。JISキーボードではUSB HID Usage 0x35が
-        // 半角/全角として解釈される）は、fcitx5の「次の入力メソッドに切り替える」
-        // トリガーとして既に確実に動作することが確認できているため、
-        // IME関連のコンボ・マクロは全てGRAVEに統一する。
-        // 薙刀式⇔Colemakの切替では、「切り替える前のレイヤーに対応するIME状態は
-        // 必ず正しい状態になっている」という不変条件（Colemak側は常に英語、
-        // 薙刀式側は常に日本語）を切替のたびに保つことで、単純なトグルでも
-        // 正しい状態に収束する設計にしている。
+        // 【再々訂正】単一のキーコードに絞る方式（LANG1のみ／無変換のみ／GRAVEのみ）は
+        // どれも一長一短で、環境によって効いたり効かなかったりすることが実機検証で
+        // 判明した。eswai/zmk-naginata本家（README参照）も、1つに絞らず複数の
+        // キーコードをまとめて送る方式（LANGUAGE_1+INTERNATIONAL_4+&to等）を
+        // 採用しており、これに倣う。
+        // また、GRAVE（半角/全角）はfcitx5の「次の入力メソッドに切り替える」を
+        // 使ったトグルであり、2台目の通常キーボード等でOS側のIME状態が
+        // ファームウェアの想定と無関係にズレると誤動作する。そこで新たに、
+        // Mozc自身が横取りしない未使用キー(F13/F14)をfcitx5の「入力メソッドの
+        // オン/オフ」という絶対指定リストに登録してもらうことを前提に追加。
+        // F13/F14は、Mozc側に個別のキーマップ登録が無いため、Mozcがアクティブな
+        // 状態でも素通りしてfcitx5のグローバル設定まで届く（無変換/変換が
+        // Mozcに横取りされたのと同じ問題が起きない）。
+        //   GRAVE     : Linux（fcitx5の「次の入力メソッドに切り替える」＝半角/全角。
+        //                 実機で動作確認済みのトグル。F13/F14の絶対指定が未設定でも
+        //                 最低限これで動くようにするためのフォールバックとして残す）
+        //   LANG1     : iPadOS等、LANGUAGE_1で切り替わる環境向け
+        //   INT_HENKAN/INT_MUHENKAN : Windows Microsoft IME（キーとタッチの
+        //                 カスタマイズで無変換/変換に個別のオン/オフを設定できる）向け
+        //   F13/F14   : Linux（fcitx5の「入力メソッドのオン/オフ」に絶対指定登録。
+        //                 設定済みならGRAVEのトグルより優先して確実に動く）
+        // 対応していない環境ではそれぞれのキーコードは単に無視されるだけなので、
+        // まとめて送っても害はない（eswai方式と同じ考え方）。
+        ng_lang_on: ng_lang_on {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            // 順序が重要：GRAVE（トグル、暴発の可能性あり）を先に送り、
+            // 絶対指定のF13を最後に送ることで、F13が設定済みの環境では
+            // F13の結果が必ず最終的に勝つようにする。
+            bindings = <&kp GRAVE &kp LANG1 &kp INT_HENKAN &kp F13>;
+            label = "NG_LANG_ON";
+        };
+        ng_lang_off: ng_lang_off {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp GRAVE &kp LANG2 &kp INT_MUHENKAN &kp F14>;
+            label = "NG_LANG_OFF";
+        };
+
         macro_to_naginata: macro_to_naginata {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp GRAVE>, <&to 3>;
+            bindings = <&ng_lang_on>, <&to 3>;
             label = "MACRO_TO_NAGINATA";
         };
 
         macro_to_colemak: macro_to_colemak {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp GRAVE>, <&to 2>;
+            bindings = <&ng_lang_off>, <&to 2>;
             label = "MACRO_TO_COLEMAK";
         };
 
@@ -593,31 +620,40 @@
         };
 
         /* ---- IME連動切替（Layer 0, 1 では標準キー、Layer 2, 3 ではColemak/薙刀式自動切替） ----
-         * 【再訂正】無変換/変換は実機検証でMozcアクティブ時に機能しないことが
-         * 判明したため撤回。U+I・E+R（combo_hankaku_uio/wer）と同じGRAVE
-         * （半角/全角）に統一し、全システム・全コンボで同じ「単純なトグル」に
-         * 挙動を揃える。
+         * 【再々訂正】GRAVE単独ではなく、ng_lang_on/ng_lang_off（複数キーコードを
+         * まとめて送るマクロ）に統一。理由は上のIME連動マクロのコメント参照。
          */
         combo_ime_japanese {
             timeout-ms = <50>;
             key-positions = <4 5>;
-            bindings = <&kp GRAVE>;
+            bindings = <&ng_lang_on>;
             layers = <0 1>;
         };
 
         combo_ime_english {
             timeout-ms = <50>;
             key-positions = <7 8>;
-            bindings = <&kp GRAVE>;
+            bindings = <&ng_lang_off>;
             layers = <0 1>;
         };
 
         // System C：4+5 および U+I / E+R で 薙刀式 (Layer 3) へ遷移
+        // 【バグ修正】以前は4+5がLayer2にしか、6+7がLayer3にしかなく、
+        // 逆側のレイヤーでは「45」「67」という数字がそのまま入力されていた。
+        // U+I・E+Rと同じく、4+5・6+7も両レイヤーに定義し、押した瞬間の
+        // レイヤーに関わらず「4+5→必ず薙刀式・日本語」「6+7→必ずColemak・英語」
+        // という対称な挙動にする。
         combo_ime_naginata_45 {
             timeout-ms = <50>;
             key-positions = <4 5>;
             bindings = <&macro_to_naginata>;
             layers = <2>;
+        };
+        combo_ime_naginata_45_self {
+            timeout-ms = <50>;
+            key-positions = <4 5>;
+            bindings = <&macro_to_naginata>;
+            layers = <3>;
         };
         combo_ime_naginata_ui {
             timeout-ms = <50>;
@@ -638,6 +674,12 @@
             key-positions = <7 8>;
             bindings = <&macro_to_colemak>;
             layers = <3>;
+        };
+        combo_ime_colemak_67_self {
+            timeout-ms = <50>;
+            key-positions = <7 8>;
+            bindings = <&macro_to_colemak>;
+            layers = <2>;
         };
         combo_ime_colemak_ui {
             timeout-ms = <50>;
