@@ -53,18 +53,18 @@ layers:
   - {t: ., s: 'Sft+$$mdi:arrow-right-bold$$'}
   - {t: Sft+/, s: 'Sft+?'}
   - $$mdi:apple-keyboard-shift$$
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: ., h: L4 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$'}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L19 NAGINATA CS, s: 'Sft+$$mdi:arrow-right-bold$$'}
   - '&td_joystick_click'
-  - {t: '$$mdi:keyboard-return$$', h: L4 SYMBOL}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L19 NAGINATA CS}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
   L1 ONISHI:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
@@ -118,18 +118,18 @@ layers:
   - J
   - B
   - $$mdi:apple-keyboard-shift$$
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: ., h: L5 ONISHI SYM, s: 'Sft+$$mdi:arrow-right-bold$$'}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L4 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$'}
   - '&td_joystick_click'
-  - {t: '$$mdi:keyboard-return$$', h: L5 ONISHI SYM}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L4 SYMBOL}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
   L2 COLEMAK:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
@@ -183,18 +183,18 @@ layers:
   - J
   - {t: Sft+/, s: 'Sft+?'}
   - {t: \, h: '$$mdi:apple-keyboard-shift$$', s: '|'}
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: ., h: L6 SYM3, s: 'Sft+$$mdi:arrow-right-bold$$'}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L5 ONISHI SYM, s: 'Sft+$$mdi:arrow-right-bold$$'}
   - '&td_joystick_click'
-  - {t: '$$mdi:keyboard-return$$', h: L6 SYM3}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L5 ONISHI SYM}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
   L3 NAGINATA:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
@@ -248,18 +248,83 @@ layers:
   - '&macro_ra'
   - {t: Sft+/, s: 'Sft+?'}
   - {t: \, h: '$$mdi:apple-keyboard-shift$$', s: '|'}
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: ., h: L6 SYM3, s: 'Sft+$$mdi:arrow-right-bold$$'}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L18 PUSH PASSTHRU, s: 'Sft+$$mdi:arrow-right-bold$$'}
   - '&td_joystick_click'
-  - {t: '$$mdi:keyboard-return$$', h: L6 SYM3}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L18 PUSH PASSTHRU}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
+  L19 NAGINATA CS:
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - '&macro_ne'
+  - '&macro_ri'
+  - '&macro_me'
+  - Sft+$$mdi:arrow-left-bold$$
+  - {t: '$$mdi:transfer$$', type: trans}
+  - Sft+$$mdi:arrow-right-bold$$
+  - '&macro_sa'
+  - '&macro_yo'
+  - E
+  - '&macro_yu'
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: 'Sft+,', s: Sft+<}
+  - '&macro_se'
+  - '&macro_mi'
+  - '&macro_ni'
+  - '&macro_ma'
+  - '&macro_ti'
+  - {t: '$$mdi:transfer$$', type: trans}
+  - '&macro_ya'
+  - '&macro_no'
+  - '&macro_mo'
+  - '&macro_tsu'
+  - '&macro_fu'
+  - {t: Sft+., s: Sft+>}
+  - '&macro_bracket_double_open'
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - '&macro_wo'
+  - '&macro_nu'
+  - '&macro_nakaguro'
+  - {t: '$$mdi:transfer$$', type: trans}
+  - '&macro_dash_double'
+  - O
+  - '&macro_mu'
+  - '&macro_wa'
+  - '&macro_excl'
+  - '&macro_bracket_double_close'
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held alternate}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
   L4 SYMBOL:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
@@ -313,18 +378,18 @@ layers:
   - {t: Sft+., s: Sft+>}
   - {t: /, s: '?'}
   - INT1
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: ., h: L4 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L19 NAGINATA CS, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
   - Ctl+A
-  - {t: '$$mdi:keyboard-return$$', h: L4 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L19 NAGINATA CS, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
   L5 ONISHI SYM:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
@@ -378,18 +443,18 @@ layers:
   - '%'
   - {t: '[', s: '{'}
   - $$mdi:apple-keyboard-shift$$
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: ., h: L5 ONISHI SYM, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L4 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
   - Ctl+A
-  - {t: '$$mdi:keyboard-return$$', h: L5 ONISHI SYM, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L4 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
   L6 SYM3:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
@@ -443,18 +508,18 @@ layers:
   - Sft+INT3
   - '!'
   - {t: Sft+\, s: Sft+|}
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: ., h: L6 SYM3, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3, type: held}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L5 ONISHI SYM, s: 'Sft+$$mdi:arrow-right-bold$$', type: held alternate}
   - Ctl+A
-  - {t: '$$mdi:keyboard-return$$', h: L6 SYM3, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L5 ONISHI SYM, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3, type: held alternate}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
   L7 CURSOR:
   - $$mdi:keyboard-esc$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -508,18 +573,18 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:apple-keyboard-shift$$
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR, type: held}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
-  - {t: ., h: L4 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$', type: held alternate}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3, type: held alternate}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$', type: held}
+  - {t: ., h: L19 NAGINATA CS, s: 'Sft+$$mdi:arrow-right-bold$$', type: held alternate}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L4 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR, type: held alternate}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L19 NAGINATA CS, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3, type: held alternate}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
   L8 WINDOW:
   - {t: Gui+/, s: 'Gui+?'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -573,18 +638,18 @@ layers:
   - Gui+B
   - Gui+R
   - Gui+M
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR, type: held alternate}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$', type: held}
-  - {t: ., h: L4 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$', type: held alternate}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW, type: held}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3, type: held alternate}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$', type: held alternate}
+  - {t: ., h: L19 NAGINATA CS, s: 'Sft+$$mdi:arrow-right-bold$$', type: held alternate}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L4 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR, type: held alternate}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L19 NAGINATA CS, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3, type: held alternate}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW, type: held alternate}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW, type: held alternate}
   L9 MOUSE:
   - $$mdi:keyboard-esc$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -638,18 +703,18 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: L14 PUSH MARKER, h: toggle}
+  - {t: L13 MOUSE ENC UD, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE, type: held}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR, type: held alternate}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$', type: held alternate}
-  - {t: ., h: L4 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$', type: held alternate}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$', type: held}
+  - {t: ., h: L19 NAGINATA CS, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L4 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR, type: held alternate}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE, type: held alternate}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L19 NAGINATA CS, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
   L10 FKEYS:
   - $$mdi:keyboard-esc$$
   - F1
@@ -703,18 +768,18 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: L14 PUSH MARKER, h: toggle}
-  - $$mdi:apple-keyboard-option$$
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$', type: held}
-  - {t: ., h: L4 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
+  - {t: L13 MOUSE ENC UD, h: toggle}
+  - {t: '$$mdi:apple-keyboard-option$$', type: held}
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW, type: held}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3, type: held}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$', type: held}
+  - {t: ., h: L19 NAGINATA CS, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L4 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L19 NAGINATA CS, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3, type: held alternate}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW, type: held alternate}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW, type: held alternate}
   L11 BLUETOOTH:
   - $$mdi:bluetooth-off$$
   - {h: '1', s: '$$mdi:bluetooth-connect$$'}
@@ -768,18 +833,18 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: L14 PUSH MARKER, h: toggle}
-  - {t: '$$mdi:apple-keyboard-option$$', type: held}
-  - {t: '$$mdi:printer-outline$$', h: L9 MOUSE, type: held}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR, type: held}
-  - {t: ',', h: L8 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$', type: held}
-  - {t: ., h: L4 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
+  - {t: L13 MOUSE ENC UD, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: ',', h: L7 CURSOR, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L19 NAGINATA CS, s: 'Sft+$$mdi:arrow-right-bold$$'}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L4 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L8 WINDOW, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L7 CURSOR, type: held alternate}
-  - {t: '$$mdi:backspace-reverse-outline$$', h: L9 MOUSE, type: held alternate}
-  - {t: '$$mdi:keyboard-esc$$', h: L9 MOUSE, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L19 NAGINATA CS}
+  - {t: '$$mdi:keyboard-space$$', h: L7 CURSOR}
+  - {t: '$$mdi:backspace$$', h: L6 SYM3}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L8 WINDOW}
+  - {t: '$$mdi:keyboard-esc$$', h: L8 WINDOW}
   L12 ENCODER LR:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -968,9 +1033,9 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -1031,13 +1096,13 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
   - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
   - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   L16 PUSH PASSTHRU:
@@ -1097,11 +1162,11 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {type: held}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
   - {type: held}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -1159,17 +1224,17 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
   - {type: held}
   - {type: held}
-  - {type: held}
-  - {t: '$$mdi:transfer$$', type: trans}
   - {type: held}
   - {type: held}
   - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
+  - {type: held}
+  - {type: held}
+  - {type: held}
+  - {type: held}
   L18 PUSH PASSTHRU:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -1224,17 +1289,17 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {type: held}
-  - {type: held}
-  - {type: held}
-  - {type: held}
-  - {type: held}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {type: held}
-  - {type: held}
-  - {type: held}
-  - {type: held}
-  - {type: held}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held alternate}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
 combos:
 - p: [34, 35]
   k: $$mdi:keyboard-space$$
@@ -1270,10 +1335,10 @@ combos:
   k: '&macro_to_colemak'
   l: [L3 NAGINATA]
 - p: [4, 5]
-  k: LANG1
+  k: INT HENKAN
   l: [L0 BASE, L1 ONISHI]
 - p: [7, 8]
-  k: LANG2
+  k: INT MUHENKAN
   l: [L0 BASE, L1 ONISHI]
 - p: [4, 5]
   k: '&macro_to_naginata'
@@ -1325,72 +1390,72 @@ combos:
   l: [L1 ONISHI]
 - p: [47, 48]
   k: '&mkp MB4'
-  l: [L8 WINDOW]
+  l: [L7 CURSOR]
 - p: [41, 42]
   k: '&mkp MB4'
-  l: [L8 WINDOW]
+  l: [L7 CURSOR]
 - p: [48, 49]
   k: '&mkp MB5'
-  l: [L8 WINDOW]
+  l: [L7 CURSOR]
 - p: [42, 43]
   k: '&mkp MB5'
-  l: [L8 WINDOW]
+  l: [L7 CURSOR]
 - p: [21, 22]
   k: Gui+W
-  l: [L7 CURSOR, L8 WINDOW]
+  l: [L6 SYM3, L7 CURSOR]
 - p: [16, 17]
   k: Gui+W
-  l: [L7 CURSOR, L8 WINDOW]
+  l: [L6 SYM3, L7 CURSOR]
 - p: [22, 23]
   k: {t: C, h: '$$mdi:apple-keyboard-command$$'}
-  l: [L7 CURSOR, L8 WINDOW]
+  l: [L6 SYM3, L7 CURSOR]
 - p: [15, 16]
   k: {t: C, h: '$$mdi:apple-keyboard-command$$'}
-  l: [L7 CURSOR, L8 WINDOW]
+  l: [L6 SYM3, L7 CURSOR]
 - p: [34, 35, 36]
   k: Gui+$$mdi:keyboard-tab$$
-  l: [L8 WINDOW]
+  l: [L7 CURSOR]
 - p: [28, 29, 30]
   k: Gui+$$mdi:keyboard-tab$$
-  l: [L8 WINDOW]
+  l: [L7 CURSOR]
 - p: [21, 22]
   k: $$mdi:mouse-left-click-outline$$
-  l: [L9 MOUSE]
+  l: [L8 WINDOW]
 - p: [16, 17]
   k: $$mdi:mouse-left-click-outline$$
-  l: [L9 MOUSE]
+  l: [L8 WINDOW]
 - p: [21, 22, 23]
   k: $$mdi:mouse-scroll-wheel$$
-  l: [L9 MOUSE]
+  l: [L8 WINDOW]
 - p: [15, 16, 17]
   k: $$mdi:mouse-scroll-wheel$$
-  l: [L9 MOUSE]
+  l: [L8 WINDOW]
 - p: [22, 23]
   k: $$mdi:mouse-right-click-outline$$
-  l: [L9 MOUSE]
+  l: [L8 WINDOW]
 - p: [15, 16]
   k: $$mdi:mouse-right-click-outline$$
-  l: [L9 MOUSE]
+  l: [L8 WINDOW]
 - p: [56, 57]
-  k: L10 FKEYS
+  k: L9 MOUSE
 - p: [59, 60]
-  k: L10 FKEYS
+  k: L9 MOUSE
 - p: [53, 54, 55, 56, 57]
-  k: L11 BLUETOOTH
+  k: L10 FKEYS
 - p: [59, 60, 61, 62, 63]
-  k: L11 BLUETOOTH
+  k: L10 FKEYS
 - p: [26, 57]
   k: Sft+,
-  l: [L2 COLEMAK, L3 NAGINATA]
+  l: [L2 COLEMAK]
 - p: [38, 59]
   k: Sft+.
-  l: [L2 COLEMAK, L3 NAGINATA]
+  l: [L2 COLEMAK]
 - p: [39, 57]
   k: '&macro_bracket_double_open'
-  l: [L2 COLEMAK, L3 NAGINATA]
+  l: [L2 COLEMAK]
 - p: [51, 59]
   k: '&macro_bracket_double_close'
-  l: [L2 COLEMAK, L3 NAGINATA]
+  l: [L2 COLEMAK]
 - p: [30, 34]
   k: '&macro_ga'
   l: [L3 NAGINATA]
@@ -1423,6 +1488,9 @@ combos:
   l: [L3 NAGINATA]
 - p: [30, 46]
   k: '&macro_da'
+  l: [L3 NAGINATA]
+- p: [30, 36]
+  k: '&macro_du'
   l: [L3 NAGINATA]
 - p: [31, 34]
   k: '&macro_di'
@@ -1462,79 +1530,4 @@ combos:
   l: [L3 NAGINATA]
 - p: [40, 47]
   k: '&macro_po'
-  l: [L3 NAGINATA]
-- p: [21, 57]
-  k: '&macro_sa'
-  l: [L3 NAGINATA]
-- p: [22, 57]
-  k: '&macro_yo'
-  l: [L3 NAGINATA]
-- p: [23, 57]
-  k: E
-  l: [L3 NAGINATA]
-- p: [24, 57]
-  k: '&macro_yu'
-  l: [L3 NAGINATA]
-- p: [33, 57]
-  k: '&macro_ya'
-  l: [L3 NAGINATA]
-- p: [34, 57]
-  k: '&macro_no'
-  l: [L3 NAGINATA]
-- p: [35, 57]
-  k: '&macro_mo'
-  l: [L3 NAGINATA]
-- p: [36, 57]
-  k: '&macro_tsu'
-  l: [L3 NAGINATA]
-- p: [37, 57]
-  k: '&macro_fu'
-  l: [L3 NAGINATA]
-- p: [47, 57]
-  k: O
-  l: [L3 NAGINATA]
-- p: [48, 57]
-  k: '&macro_mu'
-  l: [L3 NAGINATA]
-- p: [49, 57]
-  k: '&macro_wa'
-  l: [L3 NAGINATA]
-- p: [50, 57]
-  k: '&macro_excl'
-  l: [L3 NAGINATA]
-- p: [46, 57]
-  k: '&macro_dash_double'
-  l: [L3 NAGINATA]
-- p: [15, 59]
-  k: '&macro_ne'
-  l: [L3 NAGINATA]
-- p: [16, 59]
-  k: '&macro_ri'
-  l: [L3 NAGINATA]
-- p: [17, 59]
-  k: '&macro_me'
-  l: [L3 NAGINATA]
-- p: [27, 59]
-  k: '&macro_se'
-  l: [L3 NAGINATA]
-- p: [28, 59]
-  k: '&macro_mi'
-  l: [L3 NAGINATA]
-- p: [29, 59]
-  k: '&macro_ni'
-  l: [L3 NAGINATA]
-- p: [30, 59]
-  k: '&macro_ma'
-  l: [L3 NAGINATA]
-- p: [31, 59]
-  k: '&macro_ti'
-  l: [L3 NAGINATA]
-- p: [42, 59]
-  k: '&macro_wo'
-  l: [L3 NAGINATA]
-- p: [43, 59]
-  k: '&macro_nu'
-  l: [L3 NAGINATA]
-- p: [44, 59]
-  k: '&macro_nakaguro'
   l: [L3 NAGINATA]
