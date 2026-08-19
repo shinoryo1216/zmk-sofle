@@ -1,0 +1,9 @@
+# 新規カスタムビヘイビア zmk,behavior-velocity-mouse-move 用のKconfig。
+# ZMKの他のビヘイビア同様、devicetree側でこのcompatibleのノードが
+# 実際に使われていれば(DT_HAS_..._ENABLED)自動的に有効になる。
+
+config ZMK_BEHAVIOR_VELOCITY_MOUSE_MOVE
+    bool "Velocity-sensitive rotary encoder mouse movement behavior"
+    default y
+    depends on DT_HAS_ZMK_BEHAVIOR_VELOCITY_MOUSE_MOVE_ENABLED
+    select INPUT
