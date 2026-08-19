@@ -395,17 +395,23 @@
         };
 
         // IME連動マクロ（OS切替キー送信＋キーボードレイヤー移動）
+        // 【変更】LANG1/LANG2は環境（特にWindows/Microsoft IME最新版）によって
+        // 任意のキーとして再割り当てできない・OS/IME側で既に別の用途に使われて
+        // いる等の問題があったため、JIS配列の「無変換」「変換」キー
+        // （INT_MUHENKAN/INT_HENKAN）に変更。Google日本語入力・mozc・
+        // Microsoft IME（最新版含む）のいずれも、これらのキーへの
+        // IMEオン/オフの割り当てを標準機能でサポートしている。
         macro_to_naginata: macro_to_naginata {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp LANG1>, <&to 3>;
+            bindings = <&kp INT_HENKAN>, <&to 3>;
             label = "MACRO_TO_NAGINATA";
         };
 
         macro_to_colemak: macro_to_colemak {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp LANG2>, <&to 2>;
+            bindings = <&kp INT_MUHENKAN>, <&to 2>;
             label = "MACRO_TO_COLEMAK";
         };
 
@@ -444,6 +450,7 @@
         macro_ze: macro_ze { compatible = "zmk,behavior-macro"; #binding-cells = <0>; bindings = <&kp Z &kp E>; label = "NG_ZE"; };
         macro_zo: macro_zo { compatible = "zmk,behavior-macro"; #binding-cells = <0>; bindings = <&kp Z &kp O>; label = "NG_ZO"; };
         macro_da: macro_da { compatible = "zmk,behavior-macro"; #binding-cells = <0>; bindings = <&kp D &kp A>; label = "NG_DA"; };
+        macro_du: macro_du { compatible = "zmk,behavior-macro"; #binding-cells = <0>; bindings = <&kp D &kp U>; label = "NG_DU"; };
         macro_di: macro_di { compatible = "zmk,behavior-macro"; #binding-cells = <0>; bindings = <&kp D &kp I>; label = "NG_DI"; };
         macro_de: macro_de { compatible = "zmk,behavior-macro"; #binding-cells = <0>; bindings = <&kp D &kp E>; label = "NG_DE"; };
         macro_do: macro_do { compatible = "zmk,behavior-macro"; #binding-cells = <0>; bindings = <&kp D &kp O>; label = "NG_DO"; };
@@ -579,18 +586,22 @@
             layers = <3>;
         };
 
-        /* ---- IME連動切替（Layer 0, 1 では標準キー、Layer 2, 3 ではColemak/薙刀式自動切替） ---- */
+        /* ---- IME連動切替（Layer 0, 1 では標準キー、Layer 2, 3 ではColemak/薙刀式自動切替） ----
+         * 【変更】LANG1/LANG2 → INT_HENKAN（変換）/INT_MUHENKAN（無変換）に変更。
+         * 理由はmacro_to_naginata/macro_to_colemakと同様（Windows/Microsoft IME
+         * 最新版でLANG1/LANG2に対する自由なキー割り当てができないため）。
+         */
         combo_ime_japanese {
             timeout-ms = <50>;
             key-positions = <4 5>;
-            bindings = <&kp LANG1>;
+            bindings = <&kp INT_HENKAN>;
             layers = <0 1>;
         };
 
         combo_ime_english {
             timeout-ms = <50>;
             key-positions = <7 8>;
-            bindings = <&kp LANG2>;
+            bindings = <&kp INT_MUHENKAN>;
             layers = <0 1>;
         };
 
@@ -742,11 +753,14 @@
         combo_layer_bt_left  { timeout-ms = <150>; key-positions = <53 54 55 56 57>; bindings = <&mo 11>; };
         combo_layer_bt_right { timeout-ms = <150>; key-positions = <59 60 61 62 63>; bindings = <&mo 11>; };
 
-        /* ---- System C：3機能キー センターシフト同時押しコンボ (Layer 2, 3) ---- */
-        combo_cs_l1_row3 { timeout-ms = <60>; key-positions = <26 57>; bindings = <&kp LS(COMMA)>; layers = <2 3>; };
-        combo_cs_r6_row3 { timeout-ms = <60>; key-positions = <38 59>; bindings = <&kp LS(DOT)>; layers = <2 3>; };
-        combo_cs_l1_row4 { timeout-ms = <60>; key-positions = <39 57>; bindings = <&macro_bracket_double_open>; layers = <2 3>; };
-        combo_cs_r6_row4 { timeout-ms = <60>; key-positions = <51 59>; bindings = <&macro_bracket_double_close>; layers = <2 3>; };
+        /* ---- System C：3機能キー センターシフト同時押しコンボ ----
+         * 薙刀式（Layer3）側は、下のLayer19（薙刀式センターシフト専用レイヤー）に
+         * 統合したため、ここではColemak（Layer2）専用として残す。
+         */
+        combo_cs_l1_row3 { timeout-ms = <60>; key-positions = <26 57>; bindings = <&kp LS(COMMA)>; layers = <2>; };
+        combo_cs_r6_row3 { timeout-ms = <60>; key-positions = <38 59>; bindings = <&kp LS(DOT)>; layers = <2>; };
+        combo_cs_l1_row4 { timeout-ms = <60>; key-positions = <39 57>; bindings = <&macro_bracket_double_open>; layers = <2>; };
+        combo_cs_r6_row4 { timeout-ms = <60>; key-positions = <51 59>; bindings = <&macro_bracket_double_close>; layers = <2>; };
 
         /* ---- System C：薙刀式 濁音・半濁音コンボ (Layer 3) ---- */
         combo_ng_ga { timeout-ms = <60>; key-positions = <30 34>; bindings = <&macro_ga>; layers = <3>; };
@@ -760,6 +774,7 @@
         combo_ng_ze { timeout-ms = <60>; key-positions = <27 34>; bindings = <&macro_ze>; layers = <3>; };
         combo_ng_zo { timeout-ms = <60>; key-positions = <34 44>; bindings = <&macro_zo>; layers = <3>; };
         combo_ng_da { timeout-ms = <60>; key-positions = <30 46>; bindings = <&macro_da>; layers = <3>; };
+        combo_ng_du { timeout-ms = <60>; key-positions = <30 36>; bindings = <&macro_du>; layers = <3>; };
         combo_ng_di { timeout-ms = <60>; key-positions = <31 34>; bindings = <&macro_di>; layers = <3>; };
         combo_ng_de { timeout-ms = <60>; key-positions = <16 34>; bindings = <&macro_de>; layers = <3>; };
         combo_ng_do { timeout-ms = <60>; key-positions = <29 34>; bindings = <&macro_do>; layers = <3>; };
@@ -774,33 +789,13 @@
         combo_ng_pe { timeout-ms = <60>; key-positions = <24 43>; bindings = <&macro_pe>; layers = <3>; };
         combo_ng_po { timeout-ms = <60>; key-positions = <40 47>; bindings = <&macro_po>; layers = <3>; };
 
-        /* ---- System C：薙刀式 センターシフトコンボ (Layer 3) ---- */
-        combo_cs_su_sa { timeout-ms = <60>; key-positions = <21 57>; bindings = <&macro_sa>; layers = <3>; };
-        combo_cs_ru_yo { timeout-ms = <60>; key-positions = <22 57>; bindings = <&macro_yo>; layers = <3>; };
-        combo_cs_re_e  { timeout-ms = <60>; key-positions = <23 57>; bindings = <&kp E>; layers = <3>; };
-        combo_cs_he_yu { timeout-ms = <60>; key-positions = <24 57>; bindings = <&macro_yu>; layers = <3>; };
-        combo_cs_ku_ya { timeout-ms = <60>; key-positions = <33 57>; bindings = <&macro_ya>; layers = <3>; };
-        combo_cs_ta_no { timeout-ms = <60>; key-positions = <34 57>; bindings = <&macro_no>; layers = <3>; };
-        combo_cs_i_mo  { timeout-ms = <60>; key-positions = <35 57>; bindings = <&macro_mo>; layers = <3>; };
-        combo_cs_u_tsu { timeout-ms = <60>; key-positions = <36 57>; bindings = <&macro_tsu>; layers = <3>; };
-        combo_cs_a_fu  { timeout-ms = <60>; key-positions = <37 57>; bindings = <&macro_fu>; layers = <3>; };
-        combo_cs_na_o  { timeout-ms = <60>; key-positions = <47 57>; bindings = <&kp O>; layers = <3>; };
-        combo_cs_n_mu  { timeout-ms = <60>; key-positions = <48 57>; bindings = <&macro_mu>; layers = <3>; };
-        combo_cs_ra_wa { timeout-ms = <60>; key-positions = <49 57>; bindings = <&macro_wa>; layers = <3>; };
-        combo_cs_q_excl { timeout-ms = <60>; key-positions = <50 57>; bindings = <&macro_excl>; layers = <3>; };
-        combo_cs_dash_db { timeout-ms = <60>; key-positions = <46 57>; bindings = <&macro_dash_double>; layers = <3>; };
-
-        combo_cs_ki_ne { timeout-ms = <60>; key-positions = <15 59>; bindings = <&macro_ne>; layers = <3>; };
-        combo_cs_te_ri { timeout-ms = <60>; key-positions = <16 59>; bindings = <&macro_ri>; layers = <3>; };
-        combo_cs_shi_me{ timeout-ms = <60>; key-positions = <17 59>; bindings = <&macro_me>; layers = <3>; };
-        combo_cs_ro_se { timeout-ms = <60>; key-positions = <27 59>; bindings = <&macro_se>; layers = <3>; };
-        combo_cs_ke_mi { timeout-ms = <60>; key-positions = <28 59>; bindings = <&macro_mi>; layers = <3>; };
-        combo_cs_to_ni { timeout-ms = <60>; key-positions = <29 59>; bindings = <&macro_ni>; layers = <3>; };
-        combo_cs_ka_ma { timeout-ms = <60>; key-positions = <30 59>; bindings = <&macro_ma>; layers = <3>; };
-        combo_cs_xtu_chi{ timeout-ms = <60>; key-positions = <31 59>; bindings = <&macro_ti>; layers = <3>; };
-        combo_cs_ha_wo { timeout-ms = <60>; key-positions = <42 59>; bindings = <&macro_wo>; layers = <3>; };
-        combo_cs_ko_nu { timeout-ms = <60>; key-positions = <43 59>; bindings = <&macro_nu>; layers = <3>; };
-        combo_cs_so_nakaguro{ timeout-ms = <60>; key-positions = <44 59>; bindings = <&macro_nakaguro>; layers = <3>; };
+        /* ---- System C：薙刀式 センターシフト ----
+         * 【変更】以前は位置57/59+文字キーのタイムアウト付きコンボだったが、
+         * 「長押し中いつでも有効」という本来のSandS的な挙動を実現するため、
+         * Layer19（薙刀式センターシフト専用レイヤー）に置き換えた。
+         * 位置57/59のホールド先はlayer_3_naginata側で個別に19へ変更している
+         * （Colemak・QWERTY・大西配列では引き続きLayer6＝共通記号レイヤーのまま）。
+         */
     };
 
     keymap {
@@ -852,10 +847,29 @@
 &kp TAB                 &kp X      &macro_ki     &macro_te     &macro_shi    &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &macro_su &macro_ru    &macro_re  &macro_he   &kp FSLH
 &mt_l1_r3_sym LCTRL LS(N8) &macro_ro &macro_ke  &macro_to     &macro_ka     &macro_xtu   &kp LEFT_ARROW   &macro_ku  &macro_ta     &kp I         &kp U      &kp A       &mt_r6_r3_sym RCTRL RBKT
 &mt_l1_r4_sym LSHFT RBKT   &macro_ho &macro_hi  &macro_ha     &macro_ko     &macro_so    &kp RIGHT_ARROW  &kp MINUS  &macro_na     &macro_nn     &macro_ra  &kp LS(FSLH) &mt_r6_r4_sym RSHFT BSLH
-&tog 14     &kp LALT   &lt 9 PSCRN   &lt_thumb 7 BSPC &lt_thumb_comma 8 0 &lt_thumb_dot2 6 0 &td_joystick_click &lt_thumb 6 ENTER &lt_thumb_space 8 SPACE &lt_thumb 7 BSPC &lt 9 DEL &lt 9 ESC
+&tog 14     &kp LALT   &lt 9 PSCRN   &lt_thumb 7 BSPC &lt_thumb_comma 8 0 &lt_thumb_dot2 19 0 &td_joystick_click &lt_thumb 19 ENTER &lt_thumb_space 8 SPACE &lt_thumb 7 BSPC &lt 9 DEL &lt 9 ESC
             >;
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
             display-name = "L3 NAGINATA";
+        };
+
+        // 薙刀式センターシフト専用レイヤー（Layer19）。
+        // layer_3_naginataの位置57(L6)・59(R1)をホールドしている間だけ有効になる
+        // 一時的な上乗せレイヤー。ホールド中は本来のSandS（Space同時押し）と同じ感覚で
+        // 何度でも別のかなキーをタップできる（タイムアウトに縛られない）。
+        // 清音でセンターシフト値が無い位置（Q＝小書き修飾、ほ・ひ＝清音と同値）は
+        // &transにして、下のLayer3自身の値をそのまま使う。
+        // 数字行・矢印/ジョイスティック・親指行は変更しないため全て&trans。
+        // T(pos18)/Y(pos20)のShift+←/→は元のコンボには無かった新規追加。
+        layer_19_naginata_centershift {
+            bindings = <
+&trans      &trans     &trans        &trans        &trans        &trans       &trans           &trans     &trans        &trans        &trans     &trans      &trans
+&trans      &trans     &macro_ne     &macro_ri     &macro_me     &kp LS(LEFT) &trans           &kp LS(RIGHT) &macro_sa  &macro_yo     &kp E      &macro_yu   &trans
+&kp LS(COMMA) &macro_se &macro_mi    &macro_ni     &macro_ma     &macro_ti    &trans           &macro_ya  &macro_no     &macro_mo     &macro_tsu &macro_fu   &kp LS(DOT)
+&macro_bracket_double_open &trans &trans &macro_wo &macro_nu     &macro_nakaguro &trans        &macro_dash_double &kp O  &macro_mu   &macro_wa  &macro_excl &macro_bracket_double_close
+&trans      &trans     &trans        &trans        &trans        &trans       &trans           &trans     &trans        &trans        &trans     &trans
+            >;
+            display-name = "L19 NAGINATA CS";
         };
 
         // ==========================================
