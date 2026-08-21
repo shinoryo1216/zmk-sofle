@@ -1325,6 +1325,12 @@ combos:
 - p: [7, 8]
   k: LANG2
   l: [L0 BASE, L1 ONISHI]
+- p: [4, 5]
+  k: '&sys3_to_naginata'
+  l: [L16 COLEMAK, L17 NAGINATA]
+- p: [7, 8]
+  k: '&sys3_to_colemak'
+  l: [L16 COLEMAK, L17 NAGINATA]
 - p: [47, 48]
   k: '&mkp MB4'
   l: [L5 WINDOW]
