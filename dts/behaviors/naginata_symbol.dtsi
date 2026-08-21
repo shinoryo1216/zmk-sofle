@@ -1,0 +1,14 @@
+/*
+ * システム③（Colemak+薙刀式）追加分。
+ * L1・R6の記号A/記号B出力、およびIME force-set用の軽量ビヘイビア。
+ */
+
+/ {
+    behaviors {
+        /omit-if-no-ref/ ng_sym: naginata_symbol {
+            compatible = "zmk,behavior-naginata-symbol";
+            label = "NAGINATA_SYMBOL";
+            #binding-cells = <1>;
+        };
+    };
+};

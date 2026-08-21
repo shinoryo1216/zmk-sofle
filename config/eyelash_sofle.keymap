@@ -1,4 +1,15 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // 600
+// ZMK_POINTING_DEFAULT_MOVE_VAL：調整履歴 1200→600→150→300→600。
+// 【根本原因が判明】ZMK公式ドキュメントによると、センサーローテーション系の
+// ビヘイビアは「素早く回すと発生する複数のトリガーをキューに貯めて、1つずつ
+// 順番に処理する」仕組みになっている。つまり「ぴたっと止まらない」の正体は
+// &mmvの加速の慣性ではなく、指を離した後もキューに溜まった分のクリックが
+// 順番に再生され続けていたことだった（1トリガーの処理にtap-ms分の時間がかかる
+// ため、キューにN個溜まっていればN×tap-ms分、指を離した後も動き続ける）。
+// これに基づき、tap-msはできるだけ短く（キューの消化を速くする）、
+// 移動量の絶対値はMOVE_VAL側で確保する、という方針に変更。
+// tap-msを70→35msに短縮した分、1クリックあたりの移動量を確保するため
+// MOVE_VALを300→600に引き上げる。
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 600  // 150, 300, 1200
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25   // 10
 
 #include <input/processors.dtsi>
@@ -11,9 +22,35 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
-&mmv_input_listener { input-processors = <&zip_xy_scaler 2 1>; };
+// システム③（Colemak Mod-DH + 薙刀式）用。薙刀式エンジン本体（&ng）と、
+// L1/R6の3機能・IME force-set用に追加したビヘイビア（&ng_sym）。
+// どちらもこのリポジトリ自身のsrc/naginata/・dts/behaviors/に置いてあるだけなので、
+// west.ymlの変更は不要（別リポジトリを取ってくる必要がない）。
+#include <behaviors/naginata.dtsi>
+#include <behaviors/naginata_symbol.dtsi>
+#include <dt-bindings/zmk_naginata/symbols.h>
+
+// zip_xy_scaler：1倍（スケーリングなし）のまま維持。速度調整はMOVE_VAL側で行う。
+&mmv_input_listener { input-processors = <&zip_xy_scaler 1 1>; };
 
 &msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
+
+// vel_move_x / vel_move_y（速度連動マウス移動ビヘイビア。定義は下の
+// behaviors ブロック内。zmk,behavior-velocity-mouse-move。ソースは
+// このリポジトリに追加した src/behaviors/behavior_velocity_mouse_move.c）
+// 専用の入力リスナー。mmv_encの時と同様、この手のカスタム入力デバイスは
+// 明示的にzmk,input-listenerで接続しないとHIDへ届かないため必須。
+/ {
+    vel_move_x_listener: vel_move_x_listener {
+        compatible = "zmk,input-listener";
+        device = <&vel_move_x>;
+    };
+    vel_move_y_listener: vel_move_y_listener {
+        compatible = "zmk,input-listener";
+        device = <&vel_move_y>;
+    };
+};
+
 
 &msc {
     acceleration-exponent = <1>;      // 0
@@ -22,29 +59,300 @@
 };
 
 &mmv {
-    time-to-max-speed-ms = <500>;
+    // time-to-max-speed-ms：調整履歴 500→80→300→80。
+    // 300msへの変更は誤りだった。当初「短いタップでは低速域しか使われないので
+    // 移動量が小さくなるはず」と考えたが、実際には逆に惰性が著しく悪化した。
+    // 原因：加速カーブが長いほど、素早く回した時に複数クリックの
+    // 「まだ加速途中」の状態が重なり合う時間も長くなり、重なった分だけ
+    // 速度が積み上がってしまう。加速カーブが短いほど各クリックが速やかに
+    // 収束するため、重なりによる惰性は起きにくい（実際80msの時は
+    // 「許容範囲内」の停止のキレだった）。
+    // 移動量の大小は本来この値ではなくMOVE_VAL側で調整すべきだったため、
+    // 80msに戻し、移動量はMOVE_VAL=300で調整する。
+    time-to-max-speed-ms = <80>;
     acceleration-exponent = <1>;
     trigger-period-ms = <16>;
 };
 
 &soft_off { hold-time-ms = <2000>; };
 
+// 親指行の&lt（レイヤータップ）挙動を調整。
+// balancedでも改善しなかったため、tap-preferredに変更。
+// tap-preferredは「そのキー自体をtapping-term-ms以上押し続けたか」だけで判定するため、
+// 別のキーが割り込んでもホールド誤判定が起きにくい。
+&lt {
+    flavor = "tap-preferred";
+    tapping-term-ms = <200>;
+    quick-tap-ms = <175>;
+};
+
+// 親指行のENTER/SPACE/BSPCは特にタップ頻度が高く、200msだと
+// 通常のタイピング速度でもホールドと誤判定されやすいため、
+// 専用のlt_thumbビヘイビアを用意してtapping-term-msを280msに緩和。
+// ※require-prior-idle-msは一度試したが撤去。「直前のキー入力からの
+// 経過時間」だけで判定するため、タイピング直後に意図的に長押しして
+// 記号レイヤーへ切り替えようとした場合まで強制的にタップ扱いになり、
+// レイヤー切替に引っかかりが出る副作用があったため。
+// 同一キーの「連打」対策はquick-tap-msで対応（直前に同じキーがタップ
+// 確定した直後の再押下は、押している時間に関わらずタップ扱いになる）。
+// 200ms→175msでは連打時に弾かれるケースがあったため200msに緩和。
+//
+// ※flavorはtap-preferred→balancedに変更。
+// tap-preferredは「割り込みキーが来てもホールドキー自身がtapping-term-ms
+// (280ms)を超えるまでホールド確定しない」ため、記号レイヤーを親指キーで
+// ホールドしたまま記号キーを押しても、その記号キーの入力自体が最大280ms
+// 遅延して送信され、これが「記号入力時の引っかかり」の原因だった。
+// balancedは「割り込みキーが押されて、かつそのキーが離された時点」で
+// ホールドを確定するため、記号キーをタップした瞬間（通常100ms未満）で
+// ホールドが確定し、レイヤー切替の体感遅延がほぼ無くなる。
+// 一方、割り込みキーが無い単独タップ（＝連打）はflavorに関係なく
+// tapping-term-ms/quick-tap-msだけで判定されるため、この変更で連打の
+// 誤ホールド対策が後退することはない。
+// PSCRN/DEL/ESC（&ltのまま）は使用頻度が低くレイヤーホールド用途が
+// 主なので200ms・tap-preferredのまま据え置き。
 / {
-    scroll_encoder: scroll_encoder {
-        compatible = "zmk,behavior-sensor-rotate";
-        #sensor-binding-cells = <0>;
-        bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
-
-        tap-ms = <100>;
-    };
-
     behaviors {
-        rsr_vol: rsr_vol {
+        lt_thumb: lt_thumb {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&kp>;
+        };
+    };
+};
+
+// Home row mods（L0/L1の人差し指=Shift、薬指=Ctrl）。
+// 【物理配置】キーマトリクスは5行×13列（列6はジョイスティック用の
+// 中央列でスキップ）、位置は0〜63の通し番号。ホームロウ（3段目）は
+// 左手 pos26-31、ジョイスティック pos32、右手 pos33-38。
+// L0とL1でホームロウの文字は異なる（例：左人差し指ホームキーは
+// L0=F、L1=O）が、位置ベースでビヘイビアを割り当てているため、
+// どちらのレイヤーでも同じ指に同じmodが乗る。
+//
+// 【同じ手内の誤発火対策（位置ベース制限）】
+// 通常のhold-tapは「タイマー内に別のキーが押されたらホールド」と
+// 単純に判定するため、Shiftを持つ指と同じ手で別の文字を連続して
+// 打つと（単語の先頭を大文字にする、等）、誤ってホールド（mod）と
+// 判定されやすい。これを防ぐため、hold-trigger-key-positionsで
+// 「反対の手のキーが押された時だけホールド候補にする」よう制限する。
+// 同じ手の中の組み合わせは、位置的にホールドの引き金にならないため、
+// 常にタップ（文字）優先で安全側に倒れる。
+// さらにhold-trigger-on-releaseを付け、「割り込みキーが離されるまで」
+// 判定を待つことで、同じ手の中の高速ロール（タイプ時のオーバーラップ）を
+// より確実にタップ扱いにしている。
+// サムキー列（4段目/親指列）はどちらの手でも使われるため、
+// hold-trigger-key-positionsには含めていない
+// （＝親指キーとの組み合わせはタイミングベースの判定にフォールバックする）。
+/ {
+    behaviors {
+        // 左手のホームロウmod。tap=通常の文字、hold=渡された修飾キー。
+        // hold-trigger-key-positionsは「右手（列8-13）の1〜4段目」の位置番号。
+        hml: home_row_mod_left {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <7 8 9 10 11 12 20 21 22 23 24 25 33 34 35 36 37 38 46 47 48 49 50 51>;
+            hold-trigger-on-release;
+        };
+
+        // 右手のホームロウmod。hold-trigger-key-positionsは
+        // 「左手（列0-5）の1〜4段目」の位置番号（hmlの左右反転）。
+        hmr: home_row_mod_right {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <0 1 2 3 4 5 13 14 15 16 17 18 26 27 28 29 30 31 39 40 41 42 43 44>;
+            hold-trigger-on-release;
+        };
+    };
+};
+
+// SPACEだけは別ビヘイビア（lt_thumb_space）に分離。
+// ENTER/BSPCのホールドは基本「単独で長押しして連続削除」等、単独タップの
+// 連打が中心だが、SPACEのホールドは「記号レイヤーに入って“次に押す”記号
+// キーと組み合わせる」というチョード（同時押し）利用が主目的。
+// balanced/tap-preferredは「割り込みキーが押されてから離されるまで」を
+// 待ってからホールド確定するため、記号キー自体の押下時間ぶんの遅延が
+// 残ってしまう。SPACEに関してはこの遅延そのものが「引っかかり」として
+// 一番体感されやすいため、flavor=hold-preferredにして「割り込みキーが
+// “押された”瞬間」に即ホールド確定させ、遅延をほぼゼロにする。
+// トレードオフ：単語間でSPACEを打ってすぐ次の文字を打つ際、指が
+// わずかに重なる（ロールオーバー）と誤ホールドする可能性が
+// ENTER/BSPCより上がる。体感で気になる場合は次の一手として
+// tapping-term-msを下げる（220ms程度）か、balancedに戻すことを検討。
+/ {
+    behaviors {
+        lt_thumb_space: lt_thumb_space {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&kp>;
+        };
+    };
+};
+
+// 親指行L5（旧SPACE→カンマ）・L6（旧ENTER→ピリオド）専用。
+// タップ側をShift対応モーフ（mm_thumb_comma/mm_thumb_dot）に固定した専用ビヘイビア。
+// 注：zmk,behavior-hold-tapは#binding-cellsが必ず2固定という制約があるため、
+// タップ側の値は実質無視されるが呼び出し時は2つ引数を渡す必要がある
+// （例: &lt_thumb_comma 5 0）。
+/ {
+    behaviors {
+        lt_thumb_comma: lt_thumb_comma {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&mm_thumb_comma>;
+        };
+
+        lt_thumb_dot2: lt_thumb_dot2 {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&mm_thumb_dot>;
+        };
+    };
+};
+
+/ {
+    behaviors {
+        rsr_cursor_ud: rsr_cursor_ud {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
             tap-ms = <5>;
-            cw-binding = <&kp C_VOL_UP>;
-            ccw-binding = <&kp C_VOL_DN>;
+            cw-binding = <&kp DOWN_ARROW>;
+            ccw-binding = <&kp UP_ARROW>;
+        };
+
+        rsr_cursor_lr: rsr_cursor_lr {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp RIGHT_ARROW>;
+            ccw-binding = <&kp LEFT_ARROW>;
+        };
+
+        // Layer2（記号）・Layer3（大西配列専用記号）のジョイスティック/エンコーダー
+        // 左右操作用。CW（右）=やり直し(Ctrl+Shift+Z)、CCW（左）=元に戻す(Ctrl+Z)。
+        rsr_undo_redo: rsr_undo_redo {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp LC(LS(Z))>;
+            ccw-binding = <&kp LC(Z)>;
+        };
+
+        // Layer4（カーソル移動）のジョイスティック/エンコーダー左右操作用。
+        // CW（右）=進む(Alt+→)、CCW（左）=戻る(Alt+←)。
+        rsr_browser_nav: rsr_browser_nav {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp LA(RIGHT)>;
+            ccw-binding = <&kp LA(LEFT)>;
+        };
+
+        // Layer5（ウィンドウ管理）のジョイスティック/エンコーダー左右操作用。
+        // CW（右）=次のタブ(Ctrl+Tab)、CCW（左）=前のタブ(Ctrl+Shift+Tab)。
+        rsr_tab_nav: rsr_tab_nav {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp LC(TAB)>;
+            ccw-binding = <&kp LC(LS(TAB))>;
+        };
+
+        // Layer6（マウス操作）のロータリーエンコーダー用。
+        // CW（右回転）=マウスポインタ右移動、CCW（左回転）=マウスポインタ左移動。
+        // tap-msの調整履歴：5ms→動かない／100ms→動くが惰性で暴走／30ms→短すぎて再び動かない
+        // ／60ms→動くが移動量が小さく惰性も残る／70ms→動くが移動量が大きすぎて微調整困難
+        // ／120ms→惰性が著しく悪化＋遅すぎる、失敗／35ms（MOVE_VAL=600と組み合わせ）
+        // →ジョイスティック・キー操作は完璧になったが、エンコーダーの移動量が小さすぎた。
+        // 【根本原因】ZMKのセンサーローテーション系ビヘイビアは、素早く回すと発生する
+        // 複数のトリガーをキューに貯めて1つずつ順番に処理する仕組みになっている。
+        // 「ぴたっと止まらない」の正体は&mmvの加速の慣性ではなく、指を離した後もキューに
+        // 溜まった分（N個）が N×tap-ms 分の時間をかけて順番に再生され続けていたこと。
+        // つまりtap-msを短くするほど惰性（キュー消化時間）は減るが、1クリックの移動量も
+        // 減る。ZMK_POINTING_DEFAULT_MOVE_VALはジョイスティックの最高速度にも共通で
+        // 効く値のため、ジョイスティックが完璧になった今、これ以上は上げられない。
+        // →エンコーダー固有の調整レバーであるtap-msだけを35→55msに引き上げ、
+        // MOVE_VAL（現在600）はジョイスティックの体感を維持するため変更しない。
+        // 【2025-XX 追記：速度連動の加速に変更】
+        // MOVE_X(2400)のような固定値では「1detentあたりの移動量」が常に
+        // 一定になってしまい、「大きく動かすには何度も回す必要がある」ことと
+        // 「1detentが微調整に使えるくらい小さい」ことが同時に成立しない、
+        // という指摘を受けた。これは単一の速度パラメータでは原理的に
+        // 解決できないトレードオフ（本物のマウスホイールが両立できて
+        // いるのは、回転速度に応じて移動量を動的に変える「加速」機能が
+        // あるため）。
+        //
+        // そこで、新規にカスタムビヘイビア zmk,behavior-velocity-mouse-move
+        // （このリポジトリに src/behaviors/behavior_velocity_mouse_move.c
+        // として追加。詳細はリポジトリ直下の実装解説ドキュメント参照）を
+        // 作成した。これは直前のトリガーからの経過時間を実測し、
+        //   - ゆっくり回す（間隔が長い）→ min-move（小さく動く。微調整向き）
+        //   - 素早く回す（間隔が短い）→ max-move（大きく動く。大移動向き）
+        // という形で、1トリガーあたりの移動量を動的に変える。
+        // 押しっぱなし時間に依存する&mmvとは違い、トリガーされた瞬間に
+        // 計算済みの移動量を即座にHIDへ送るだけなので、キューの消化待ちに
+        // よる惰性の問題も生じない。
+        //
+        // 【チューニングの考え方】
+        //   min-move / max-move      : 一番遅い時／一番速い時の移動量(px相当)
+        //   min-interval-ms          : この間隔以下は「最速」扱い(max-moveを適用)
+        //   max-interval-ms          : この間隔以上は「最遅」扱い(min-moveを適用)
+        // 微調整がしにくいと感じたら min-move を下げる、大きく動かすのに
+        // まだ物足りなければ max-move を上げる、というように独立に調整できる。
+        vel_move_x: vel_move_x {
+            compatible = "zmk,behavior-velocity-mouse-move";
+            #binding-cells = <1>;
+            input-code = <INPUT_REL_X>;
+            min-move = <8>;
+            max-move = <28>;
+            min-interval-ms = <8>;
+            max-interval-ms = <120>;
+        };
+
+        vel_move_y: vel_move_y {
+            compatible = "zmk,behavior-velocity-mouse-move";
+            #binding-cells = <1>;
+            input-code = <INPUT_REL_Y>;
+            min-move = <8>;
+            max-move = <28>;
+            min-interval-ms = <8>;
+            max-interval-ms = <120>;
+        };
+
+        // vel_move_x/yはCW/CCWの区別を持たないので、公式のzmk,behavior-sensor-rotate
+        // （追加のwestモジュール不要。ZMK本体組み込み）でCW→param1=1、CCW→param1=-1
+        // を割り当てる。tap-msの概念はここには存在しない（瞬時に移動量を送るだけ
+        // のビヘイビアのため、押しっぱなし時間に依存しない）。
+        mouse_rot_lr: mouse_rot_lr {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&vel_move_x 1>, <&vel_move_x (-1)>;
+        };
+
+        mouse_rot_ud: mouse_rot_ud {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&vel_move_y 1>, <&vel_move_y (-1)>;
         };
 
         rsr_trans: rsr_trans {
@@ -52,14 +360,405 @@
             #sensor-binding-cells = <0>;
             tap-ms = <0>;
         };
+
+
+        // Layer0の行4 R3(,)/R4(.) にShift+←/→を配置。
+        // mm_row_comma: 通常タップ=カンマ／Shift併用タップ=Shift+←
+        mm_row_comma: mm_row_comma {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp COMMA>, <&kp LS(LEFT)>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // mm_dot: 通常タップ=ピリオド／Shift併用タップ=Shift+→
+        // （以前はShift+←だったが、mm_row_commaをR3に新設したことに伴いR4はShift+→に変更）
+        mm_dot: mm_dot {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp DOT>, <&kp LS(RIGHT)>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // 親指行L5/R2（カンマ）・L6/R1（ピリオド）用。row版と同じくShift併用でShift+←/→。
+        mm_thumb_comma: mm_thumb_comma {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp COMMA>, <&kp LS(LEFT)>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        mm_thumb_dot: mm_thumb_dot {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp DOT>, <&kp LS(RIGHT)>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // ジョイスティック押し込み：単発タップ=左クリック、素早く2回タップ=右クリック
+        // tapping-term-msを大きめにして「判定がシビアすぎる」問題を緩和
+        td_joystick_click: td_joystick_click {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&mkp LCLK>, <&mkp RCLK>;
+        };
+
+        // ================= システム③ 追加分 =================
+        //
+        // 【設計方針】zmk-naginata本体（&ng）のpressed_keysはuint32_t(32bit)で、
+        // 既に31キー分（A-Z, SEMI/COMMA/DOT/SLASH, SPACE=ENTER共有）が
+        // 埋まっており、L1・R6を薙刀式エンジンの内部に新しい"文字キー"として
+        // 追加する余地がない。そのためL1・R6の3機能／センターシフトのトリガーは
+        // すべてエンジンの外側（ZMKの通常のhold-tap/レイヤー機構＋新規追加した
+        // &ng_symビヘイビア）で完結させる。
+
+        // L6・R1（親指行）：センターシフトのトリガー。
+        // hold = ng_cs_hold_l6/r1マクロ（&ng ENTER/&ng SPACEでB_SPACEビットを
+        //        ONにしつつ、同時にL18(センターシフト・オーバーレイ)を起動）
+        // tap  = 通常のドット相当（L6）／ENTER（R1）
+        // 既存のlt_thumb_dot2/lt_thumbと同じtapping-term/quick-tapを踏襲。
+        ng_centershift_l6: ng_centershift_l6 {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            bindings = <&ng_cs_hold_l6>, <&mm_thumb_dot>;
+        };
+
+        ng_centershift_r1: ng_centershift_r1 {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            bindings = <&ng_cs_hold_r1>, <&kp>;
+        };
+
+        // L1・R6（薙刀式レイヤー行3・行4の両端外側キー）：3機能キー共通ビヘイビア。
+        // tap  = &ng_sym <記号A>（（「『等。centershift併用時はL18オーバーレイに
+        //        より別の記号Bへ自動的に差し替わるので、ここでは常に記号Aのみでよい）
+        // hold = &kp <Ctrl/Shift>（単独長押し。L18が有効な間はこのhold-tap自体が
+        //        レイヤーの下に隠れるため、センターシフト同時押しと衝突しない）
+        // 4箇所（行3L1・行3R6・行4L1・行4R6）で共有し、呼び出し時に
+        // param1=modifier、param2=記号定数を渡す（例：&ng_l1r6_ht LCTRL NG_SYM_PAREN_OPEN）。
+        ng_l1r6_ht: ng_l1r6_ht {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <220>;
+            quick-tap-ms = <175>;
+            bindings = <&kp>, <&ng_sym>;
+        };
     };
 
     combos {
         compatible = "zmk,combos";
 
-        softoff {
-            bindings = <&soft_off>;
-            key-positions = <14 28 40>;
+        /* ---- Layer0・Layer1(大西配列)共通コンボ ----
+         * require-prior-idle-msを追加：直前の（コンボと無関係な）キー入力から
+         * 150ms以内にコンボのキーが押された場合は発火しない。高速タイピング中に
+         * D+F/C+V/E+R（特に左手側）が意図せず同時押し判定されてしまう問題への対策。
+         * 同じ理由で右手側（J+K/M+,/U+I）にも念のため統一して適用。
+         * ※150→125msに緩和。Backspace（M+,/C+V）等は「誤字を打った直後」に
+         * 押すことが多く、まさにその状況が「直前のキー入力から間もない」に
+         * 該当してコンボ自体が抑制され、稀に発動しない原因になっていたため。
+         */
+
+        combo_space_jkl {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <125>;
+            key-positions = <34 35>;
+            bindings = <&kp SPACE>;
+            layers = <0 1>;
+        };
+
+        combo_space_sdf {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <125>;
+            key-positions = <29 30>;
+            bindings = <&kp SPACE>;
+            layers = <0 1>;
+        };
+
+        combo_bspc_mcommadot {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <125>;
+            key-positions = <47 48>;
+            bindings = <&kp BSPC>;
+            layers = <0 1>;
+        };
+
+        combo_bspc_xcv {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <125>;
+            key-positions = <42 43>;
+            bindings = <&kp BSPC>;
+            layers = <0 1>;
+        };
+
+        combo_hankaku_uio {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <125>;
+            key-positions = <21 22>;
+            bindings = <&kp GRAVE>;
+            layers = <0 1>;
+        };
+
+        combo_hankaku_wer {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <125>;
+            key-positions = <16 17>;
+            bindings = <&kp GRAVE>;
+            layers = <0 1>;
+        };
+
+        /* macOS/iPadOSの日本語⇔英語入力切り替え。
+         * LANG1=かな(日本語IMEをON)、LANG2=英数(IMEをOFF=英語入力)。
+         * Gboard向けのShift+Spaceは実機で機能しなかったため撤回し、
+         * LANG1/LANG2方式に戻した。 */
+        combo_ime_japanese {
+            timeout-ms = <50>;
+            key-positions = <4 5>;
+            bindings = <&kp LANG1>;
+            layers = <0 1>;
+        };
+
+        combo_ime_english {
+            timeout-ms = <50>;
+            key-positions = <7 8>;
+            bindings = <&kp LANG2>;
+            layers = <0 1>;
+        };
+
+        /* ---- システム③専用：Colemak⇔薙刀式切替 ----
+         * 物理位置はR+U（既存のE+R/U+Iと同じ「物理キー」基準の命名で統一。
+         * 4+5/7+8はiPadOS用に予約されているため使わない）。
+         * L16(COLEMAK)/L17(NAGINATA)限定。
+         * Rの物理位置=17、Uの物理位置=21（combo_hankaku_wer/uioと同じ基準）。
+         * レイヤー切替＋IME force-set（LANG1/LANG2）を同一macroに束ねている。
+         * Linux(fcitx5)側の設定は下記参照。 */
+        combo_sys3_to_naginata {
+            timeout-ms = <50>;
+            key-positions = <17 21>;
+            bindings = <&sys3_to_naginata>;
+            layers = <16>;
+        };
+
+        combo_sys3_to_colemak {
+            timeout-ms = <50>;
+            key-positions = <17 21>;
+            bindings = <&sys3_to_colemak>;
+            layers = <17>;
+        };
+
+        /* ---- ウィンドウ管理コンボ（新Layer5=ウィンドウ管理レイヤー） ---- */
+
+        combo_l2_mb4_mcomma {
+            timeout-ms = <50>;
+            key-positions = <47 48>;
+            bindings = <&mkp MB4>;
+            layers = <5>;
+        };
+
+        combo_l2_mb4_cx {
+            timeout-ms = <50>;
+            key-positions = <41 42>;
+            bindings = <&mkp MB4>;
+            layers = <5>;
+        };
+
+        combo_l2_mb5_commadot {
+            timeout-ms = <50>;
+            key-positions = <48 49>;
+            bindings = <&mkp MB5>;
+            layers = <5>;
+        };
+
+        combo_l2_mb5_cv {
+            timeout-ms = <50>;
+            key-positions = <42 43>;
+            bindings = <&mkp MB5>;
+            layers = <5>;
+        };
+
+        combo_l2_maximize_ui {
+            timeout-ms = <50>;
+            key-positions = <21 22>;
+            bindings = <&kp LG(W)>;
+            layers = <4 5>;
+        };
+
+        combo_l2_maximize_er {
+            timeout-ms = <50>;
+            key-positions = <16 17>;
+            bindings = <&kp LG(W)>;
+            layers = <4 5>;
+        };
+
+        combo_l2_close_io {
+            timeout-ms = <50>;
+            key-positions = <22 23>;
+            bindings = <&kp LG(C)>;
+            layers = <4 5>;
+        };
+
+        combo_l2_close_we {
+            timeout-ms = <50>;
+            key-positions = <15 16>;
+            bindings = <&kp LG(C)>;
+            layers = <4 5>;
+        };
+
+        combo_l2_mission_jkl {
+            timeout-ms = <50>;
+            key-positions = <34 35 36>;
+            bindings = <&kp LG(TAB)>;
+            layers = <5>;
+        };
+
+        combo_l2_mission_sdf {
+            timeout-ms = <50>;
+            key-positions = <28 29 30>;
+            bindings = <&kp LG(TAB)>;
+            layers = <5>;
+        };
+
+        /* ---- Layer6専用コンボ（マウスレイヤー） ---- */
+
+        combo_l4_lclk_ui {
+            timeout-ms = <50>;
+            key-positions = <21 22>;
+            bindings = <&mkp LCLK>;
+            layers = <6>;
+        };
+
+        combo_l4_lclk_er {
+            timeout-ms = <50>;
+            key-positions = <16 17>;
+            bindings = <&mkp LCLK>;
+            layers = <6>;
+        };
+
+        combo_l4_mclk_uio {
+            timeout-ms = <50>;
+            key-positions = <21 22 23>;
+            bindings = <&mkp MCLK>;
+            layers = <6>;
+        };
+
+        combo_l4_mclk_wer {
+            timeout-ms = <50>;
+            key-positions = <15 16 17>;
+            bindings = <&mkp MCLK>;
+            layers = <6>;
+        };
+
+        combo_l4_rclk_io {
+            timeout-ms = <50>;
+            key-positions = <22 23>;
+            bindings = <&mkp RCLK>;
+            layers = <6>;
+        };
+
+        combo_l4_rclk_we {
+            timeout-ms = <50>;
+            key-positions = <15 16>;
+            bindings = <&mkp RCLK>;
+            layers = <6>;
+        };
+
+        /* ---- レイヤー切替用コンボ（全レイヤー共通） ---- */
+
+        combo_mo5_left {
+            timeout-ms = <50>;
+            key-positions = <56 57>;
+            bindings = <&mo 7>;
+        };
+
+        combo_mo5_right {
+            timeout-ms = <50>;
+            key-positions = <59 60>;
+            bindings = <&mo 7>;
+        };
+
+        combo_layer6_left {
+            timeout-ms = <150>;
+            key-positions = <53 54 55 56 57>;
+            bindings = <&mo 8>;
+        };
+
+        combo_layer6_right {
+            timeout-ms = <150>;
+            key-positions = <59 60 61 62 63>;
+            bindings = <&mo 8>;
+        };
+
+        /* ---- システム①②③ 切替コンボ（追記事項で置き換え） ----
+         * 旧combo_onishi_toggle（L2+L3+R4+R5の4キー同時押しでトグル）は撤去。
+         * 親指L2+L3+(1/2/3) または R4+R5+(1/2/3) で、システム①②③へ直接ジャンプする
+         * （絶対指定。現在どのシステムにいてもよい）。番号キーは最上段の1/2/3(pos1/2/3)。
+         * レイヤー切替とIME force-setを必ず同一macroに束ねているので、
+         * 「レイヤーだけ動く／IMEだけ動く」というズレが起きない（設計ガイド3章参照）。
+         */
+        combo_sys1_left {
+            timeout-ms = <60>;
+            key-positions = <53 54 1>;
+            bindings = <&sys1_activate>;
+        };
+
+        combo_sys2_left {
+            timeout-ms = <60>;
+            key-positions = <53 54 2>;
+            bindings = <&sys2_activate>;
+        };
+
+        combo_sys3_left {
+            timeout-ms = <60>;
+            key-positions = <53 54 3>;
+            bindings = <&sys3_to_colemak>;
+        };
+
+        combo_sys1_right {
+            timeout-ms = <60>;
+            key-positions = <62 63 1>;
+            bindings = <&sys1_activate>;
+        };
+
+        combo_sys2_right {
+            timeout-ms = <60>;
+            key-positions = <62 63 2>;
+            bindings = <&sys2_activate>;
+        };
+
+        combo_sys3_right {
+            timeout-ms = <60>;
+            key-positions = <62 63 3>;
+            bindings = <&sys3_to_colemak>;
+        };
+
+        /* ---- Layer1（大西配列）専用コンボ ---- */
+
+        // N+S同時押しで「ん」を単体確定（n連打の代わり）。
+        // 大西配列Layer1のrow3では position35=N, position36=S。
+        // Layer1専用（Layer0では同じ位置がK/Lになるため他レイヤーでは発火させない）。
+        combo_onishi_nn {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <125>;
+            key-positions = <35 36>;
+            bindings = <&macro_nn>;
+            layers = <1>;
+        };
+
+        // row3 L6+R1（Layer0基準でいうG+H の物理位置）で半角/全角。
+        // Layer1のrow2から半角/全角キーを撤去した代替アクセス手段。Layer1専用。
+        combo_onishi_hankaku {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <125>;
+            key-positions = <31 33>;
+            bindings = <&kp GRAVE>;
+            layers = <1>;
         };
     };
 
@@ -78,64 +777,251 @@
 
             label = "SHIFT_MCLK";
         };
+
+        // 「ん」を単体確定させるマクロ。ローマ字入力で「n」を2回連打する代わりに
+        // 「n」+「'」（アポストロフィ）を送信する。多くのIME（Google日本語入力・
+        // MS-IME・ATOK等）でromaji入力の「n'」は単体で「ん」に確定する標準的な
+        // 記法として認識される。
+        // 「ん」を単体確定させるマクロ。ローマ字入力で「n」を2回連打する代わりに
+        // 「x」+「n」（xn）を送信する。「xn」はxtu/xya等と同じ「x始まりの直接かな
+        // 変換」パターンの一つとしてMS-IME等の標準ローマ字表に含まれており、変換
+        // 操作なしで単体の「ん」に確定する。
+        // ※当初はN+SQT（n'方式）で実装していたが、JIS配列では&kp SQTが実際には
+        // "："（コロン）を出力するため「ん：」になってしまう不具合があった
+        // （JISでアポストロフィを出すにはShift+7が必要）。xn方式はこの問題を
+        // 回避できるため、こちらに変更した。
+        macro_nn: macro_nn {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp X>, <&kp N>;
+            label = "MACRO_NN";
+        };
+
+        // 「・」（中黒）を変換なしで直接確定させるマクロ。多くのIMEのローマ字
+        // テーブルには「z」から始まる記号ショートカットが用意されており、
+        // 「z/」で「・」が変換不要で入力される（例：Google日本語入力の標準
+        // ローマ字テーブル）。英語入力時（IMEオフ時）はこのキーを押すと
+        // そのまま「z/」の2文字が入力される。
+        macro_nakaguro: macro_nakaguro {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp Z>, <&kp FSLH>;
+            label = "MACRO_NAKAGURO";
+        };
+
+        // 半角/全角キーはGRAVE単体（Windows/Linuxで動作確認済み）。
+        // macOS/iPadOSではLANG2を使う必要があるが、LANG2は「英数固定」でトグルにならないため見送り。
+
+        // ================= システム③ 追加分 =================
+
+        // L6/R1ホールド中、既存のSHIFT_MCLKと全く同じ「押しっぱなし束ね」パターンで、
+        // ①薙刀式エンジンのB_SPACEビット（&ng ENTER/&ng SPACE）と
+        // ②センターシフト・オーバーレイレイヤー(L18)
+        // を同時に起動・維持し、離したら両方まとめて解除する。
+        ng_cs_hold_l6: ng_cs_hold_l6 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press>,
+                <&mo 18>,
+                <&ng ENTER>,
+                <&macro_pause_for_release>,
+                <&macro_release>,
+                <&mo 18 &ng ENTER>;
+            label = "NG_CS_HOLD_L6";
+        };
+
+        ng_cs_hold_r1: ng_cs_hold_r1 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press>,
+                <&mo 18>,
+                <&ng SPACE>,
+                <&macro_pause_for_release>,
+                <&macro_release>,
+                <&mo 18 &ng SPACE>;
+            label = "NG_CS_HOLD_R1";
+        };
+
+        // システム①②③間の切替（親指L2+L3+1/2/3、R4+R5+1/2/3コンボから使用）。
+        // 「レイヤー切替」と「IME force-set」を必ず同一macroに束ねることで、
+        // 「レイヤーだけ動く／IMEだけ動く」というズレの発生源を構造的に無くす。
+        sys1_activate: sys1_activate {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0>, <&ng_sym NG_SYM_IME_ENGLISH>;
+            label = "SYS1_ACTIVATE";
+        };
+
+        sys2_activate: sys2_activate {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 1>, <&ng_sym NG_SYM_IME_JAPANESE>;
+            label = "SYS2_ACTIVATE";
+        };
+
+        // システム③の入口は常にColemak側に固定する（薙刀式側に戻すかは
+        // sys3_to_naginataで別途切替。詳細は設計ガイド3-3参照）。
+        sys3_to_colemak: sys3_to_colemak {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 16>, <&ng_sym NG_SYM_IME_ENGLISH>;
+            label = "SYS3_TO_COLEMAK";
+        };
+
+        sys3_to_naginata: sys3_to_naginata {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 17>, <&ng_sym NG_SYM_IME_JAPANESE>;
+            label = "SYS3_TO_NAGINATA";
+        };
     };
 
     keymap {
         compatible = "zmk,keymap";
 
         layer0 {
+            // row5col1は他の全レイヤーと同じく&tog 11（トグル式。押したら
+            // ロックされ、もう一度押すまで戻らない）を使う。
+            // 【設計】L0を含む全レイヤーで「if-layersにレイヤー番号を
+            // 直接指定する」方式そのものをやめ、下のconditional_layersを
+            // 「L11単体がONならデフォルトでLayer9（矢印）」という
+            // “フォールバック”＋「特定のベースレイヤー＋L11のときだけ、
+            // そのレイヤー自身の機能を保つ上書きレイヤーで“フォールバックを
+            // 覆す”」という2段構成に変更した。L0はこのフォールバックだけで
+            // 完結するため、L0をif-layersに登場させる必要が一切ない。
+            // 詳しい理由は下のconditional_layersのコメントを参照。
             bindings = <
-&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4  &kp N5       &kp UP_ARROW     &kp N6     &kp N7     &kp N8     &kp N9           &kp N0      &kp BACKSPACE
-&kp TAB     &kp Q      &kp W         &kp E         &kp R   &kp T        &kp DOWN_ARROW   &kp Y      &kp U      &kp I      &kp O            &kp P       &kp BSLH
-&kp CAPS    &kp A      &kp S         &kp D         &kp F   &kp G        &kp LEFT_ARROW   &kp H      &kp J      &kp K      &kp L            &kp SEMI    &kp APOS
-&kp LSHFT   &kp Z      &kp X         &kp C         &kp V   &kp B        &kp RIGHT_ARROW  &kp N      &kp M      &kp COMMA  &kp DOT          &kp FSLH    &kp ENTER
-&kp C_MUTE  &kp LCTRL  &kp LEFT_GUI  &kp LEFT_ALT  &mo 1   &kp SPACE    &kp ENTER        &kp SPACE  &kp ENTER  &mo 2      &kp RIGHT_SHIFT  &kp DELETE
+&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp MINUS
+&kp TAB     &kp Q      &kp W         &kp E         &kp R         &kp T        &kp DOWN_ARROW   &kp Y      &kp U         &kp I         &kp O      &kp P       &kp LBKT
+&kp LCTRL   &kp A      &hml LCTRL S   &kp D         &hml LSHFT F   &kp G        &kp LEFT_ARROW   &kp H      &hmr RSHFT J   &kp K         &hmr RCTRL L   &kp SEMI    &kp SQT
+&kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &mm_row_comma     &mm_dot    &kp LS(FSLH)     &kp RSHFT
+&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 2 0  &td_joystick_click        &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
-            display-name = "LAYER0";
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "L0 BASE";
+        };
+
+        layer_8_onishi {
+            // System B：大西配列 新Layer0（レイヤー番号1）
+            // SPACE/L1のみ Layer3（大西配列専用の記号レイヤー）を指す。他はLayer0と全く同じ共有レイヤーを指す
+            bindings = <
+&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp LG(SPACE)
+&kp TAB     &kp Q      &kp L         &kp U         &kp F         &kp LEFT_ARROW    &kp DOWN_ARROW   &kp RIGHT_ARROW  &kp W         &kp R         &kp Y      &kp P       &kp UP_ARROW
+&kp LCTRL   &kp E      &hml LCTRL I   &kp A         &hml LSHFT O   &kp MINUS    &kp LEFT_ARROW   &kp K      &hmr RSHFT T   &kp N         &hmr RCTRL S   &kp H       &kp DOWN_ARROW
+&kp LSHFT   &kp Z      &kp X         &kp C         &kp V         &kp LS(FSLH)    &kp RIGHT_ARROW  &kp G      &kp D         &kp M         &kp J      &kp B       &kp RSHFT
+&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 3 0  &td_joystick_click        &lt_thumb 3 ENTER &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL  &lt 6 ESC
+            >;
+
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "L1 ONISHI";
         };
 
         layer_1 {
             bindings = <
-&kp GRAVE   &kp F1           &kp F2          &kp F3           &kp F4           &kp F5             &mmv MOVE_UP     &kp F6           &kp F7           &kp F8      &kp F9     &kp F10           &trans
-&trans      &kp GRAVE        &mkp LCLK       &mkp MCLK        &mkp RCLK        &mkp MB4           &mmv MOVE_DOWN   &kp PG_UP        &kp END          &kp UP      &kp HOME   &kp MINUS         &kp EQUAL
-&trans      &kp TILDE        &trans          &trans           &trans           &mkp MB5           &mmv MOVE_LEFT   &kp PG_DN        &kp LEFT         &kp DOWN    &kp RIGHT  &kp LEFT_BRACKET  &kp RIGHT_BRACKET
-&trans      &rgb_ug RGB_OFF  &rgb_ug RGB_ON  &rgb_ug RGB_EFF  &rgb_ug RGB_EFR  &rgb_ug RGB_SPI    &mmv MOVE_RIGHT  &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &kp INSERT  &kp F11    &kp F12           &trans
-&kp C_MUTE  &trans           &trans          &trans           &trans           &trans             &mkp LCLK        &trans           &trans           &trans      &trans     &trans
+&kp ESC     &kp N1           &kp N2          &kp N3           &kp N4           &kp N5             &kp LC(C)        &kp N6           &kp N7           &kp N8      &kp N9     &kp N0            &kp MINUS
+&kp TAB     &none            &none           &none            &none            &none              &kp LC(V)        &kp LS(RBKT)     &kp LS(BSLH)     &kp RBKT    &kp BSLH   &kp LS(LBKT)      &kp LS(INT3)
+&kp LCTRL   &kp LS(N1)       &kp LS(N2)      &kp LS(N3)       &kp LS(N4)       &kp LS(N5)         &kp LC(Z)        &kp LS(N6)       &kp LS(N7)       &kp LS(N8)  &kp LS(N9) &kp EQUAL         &kp LS(EQUAL)
+&kp LSHFT   &kp LS(SQT)      &kp LS(SEMI)    &kp MINUS        &kp FSLH         &kp LS(MINUS)      &kp LC(LS(Z))        &kp LS(INT1)     &kp INT3         &kp LS(COMMA) &kp LS(DOT) &kp FSLH      &kp INT1
+&tog 11  &kp LALT         &lt 6 PSCRN     &lt_thumb 4 BSPC       &lt_thumb_comma 5 0      &lt_thumb_dot2 2 0        &kp LC(A)        &lt_thumb 2 ENTER      &lt_thumb_space 5 SPACE      &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
-            display-name = "LAYER1";
+            sensor-bindings = <&rsr_undo_redo &rsr_trans>;
+            display-name = "L2 SYMBOL";
+        };
+
+        layer_9_onishi_symbol {
+            // System B：大西配列 新Layer1（記号）※Layer1(ONISHI)のSPACE/L3ホールドでアクセス
+            // 透過(&trans)ではなく、ONISHIレイヤーで実際に出力される値を明示的に指定
+            // ※JISキーボード配列を前提に、Layer2（正確に入力できることを確認済み）と
+            // 同じ「JIS対応キーコード」方式に全面的に書き換え済み。以前はDQT/LBRC/TILDE等の
+            // 素朴なキーコードを使っていたが、これらはJIS環境では意図と異なる文字になったり
+            // （例：LBKTは意図"["のはずが実際は"@"）、無変換扱いで何も入力されない
+            // （TILDE）等の問題があった。
+            bindings = <
+&kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5              &kp LC(C)       &kp N6         &kp N7        &kp N8        &kp N9      &kp N0      &none
+&kp TAB   &macro_nakaguro  &kp RBKT  &kp LS(N2) &kp BSLH   &kp UP_ARROW               &kp LC(V)       &kp DOWN_ARROW          &kp LT        &kp LS(MINUS) &kp GT      &kp LS(INT3) &none
+&kp EQUAL &kp HASH &kp LS(N8) &kp LS(N7) &kp LS(N9) &kp LS(EQUAL)       &kp LC(Z)       &kp LS(N6)      &kp LS(SEMI)  &kp MINUS     &kp LS(SQT) &kp FSLH    &kp INT1
+&kp LSHFT &kp DLLR   &kp LS(RBKT) &kp LS(LBKT) &kp LS(BSLH) &kp EXCL      &kp LC(LS(Z))       &kp LS(INT1)   &kp SQT      &kp SEMI     &kp PRCNT     &kp LBKT       &kp RSHFT
+&tog 11  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_comma 5 0  &lt_thumb_dot2 3 0      &kp LC(A)   &lt_thumb 3 ENTER  &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
+            >;
+
+            sensor-bindings = <&rsr_undo_redo &rsr_trans>;
+            display-name = "L3 ONISHI SYM";
         };
 
         layer_2 {
             bindings = <
-&kp TILDE  &bt BT_SEL 0  &bt BT_SEL 1    &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &mmv MOVE_UP     &kp F6  &kp F7  &kp F8      &kp F9     &kp F10      &trans
-&trans     &bt BT_CLR    &bt BT_CLR_ALL  &trans        &trans        &trans          &mmv MOVE_DOWN   &trans  &trans  &kp F11     &kp F12    &kp UNDER    &kp PLUS
-&trans     &out OUT_USB  &out OUT_BLE    &trans        &trans        &trans          &mmv MOVE_LEFT   &trans  &trans  &trans      &trans     &kp LBRC     &kp RBRC
-&trans     &sys_reset    &trans          &bootloader   &trans        &trans          &mmv MOVE_RIGHT  &trans  &trans  &sys_reset  &soft_off  &bootloader  &trans
-&trans     &trans        &trans          &trans        &trans        &trans          &mkp LCLK        &trans  &trans  &trans      &trans     &trans
+&kp ESC  &none    &none      &none      &none      &none      &none     &none      &none           &none           &none           &none    &none
+&kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &none   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
+&kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &kp LA(LEFT)   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
+&kp LSHFT &none   &none      &none      &none      &none      &kp LA(RIGHT)  &none      &none           &none           &none           &none    &kp RSHFT
+&tog 11         &kp LALT           &lt 6 PSCRN    &lt_thumb 4 BSPC     &lt_thumb_comma 5 0    &lt_thumb_dot2 2 0        &mkp MCLK        &lt_thumb 2 ENTER        &lt_thumb_space 5 SPACE    &lt_thumb 4 BSPC     &lt 6 DEL      &lt 6 ESC
             >;
 
-            display-name = "LAYER2";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            display-name = "L4 CURSOR";
+            sensor-bindings = <&rsr_browser_nav &rsr_trans>;
         };
 
         layer_3 {
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+&kp LG(FSLH)       &none              &none          &none          &none          &none              &none     &none              &none          &none          &none          &none          &kp LG(FSLH)
+&kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &none   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
+&kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &kp LC(LS(TAB))   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
+&kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &kp LC(TAB)  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
+&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_comma 5 0 &lt_thumb_dot2 2 0 &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
             >;
 
-            display-name = "LAYER3";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            display-name = "L5 WINDOW";
+            sensor-bindings = <&rsr_tab_nav &rsr_trans>;
         };
 
         layer_4 {
+            bindings = <
+&kp ESC  &none    &none      &none      &none      &none      &mmv MOVE_UP     &none      &none           &none           &none           &none    &none
+&kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
+&kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
+&kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
+&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_comma 5 0 &lt_thumb_dot2 2 0 &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE    &lt_thumb 4 BSPC      &lt 6 DEL         &lt 6 ESC
+            >;
+
+            display-name = "L6 MOUSE";
+            sensor-bindings = <&mouse_rot_lr &rsr_trans>;
+        };
+
+        layer_5 {
+            bindings = <
+&kp ESC  &kp F1  &kp F2  &kp F3  &kp F4  &kp F5    &kp UP_ARROW  &kp F6  &kp F7  &kp F8  &kp F9  &kp F10 &none
+&kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
+&kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
+&kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
+&tog 11 &kp LALT &lt 6 PSCRN &lt_thumb 4 BSPC &lt_thumb_comma 5 0 &lt_thumb_dot2 2 0 &mkp MCLK &lt_thumb 2 ENTER &lt_thumb_space 5 SPACE &lt_thumb 4 BSPC &lt 6 DEL &lt 6 ESC
+            >;
+ 
+            display-name = "L7 FKEYS";
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+        };
+
+        layer_6 {
+            bindings = <
+&bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &kp UP_ARROW  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &bt BT_CLR
+&bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
+&none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
+&none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
+&tog 11  &kp LALT      &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 2 0   &mkp MCLK     &lt_thumb 2 ENTER   &lt_thumb_space 5 SPACE   &lt_thumb 4 BSPC    &lt 6 DEL     &lt 6 ESC
+            >;
+
+            display-name = "L8 BLUETOOTH";
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+        };
+
+        layer_7 {
+            // 矢印左右モードのオーバーライドレイヤー。
+            // 直接トグルするのではなく、下のconditional_layersによって
+            // 「Layer0〜5・7・8のいずれか＋Layer11（エンコーダー押し込みマーカー）が両方アクティブな時だけ」
+            // 自動的に有効化される（Layer6の時だけLayer10が有効化されるので対象外）。
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
@@ -144,8 +1030,246 @@
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
             >;
 
-            display-name = "LAYER4";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            display-name = "L9 ENCODER LR";
+            sensor-bindings = <&rsr_cursor_lr &rsr_trans>;
         };
+
+        layer_10 {
+            // Layer6（マウス操作）用のオーバーライドレイヤー。
+            // 直接トグルするのではなく、下のconditional_layersによって
+            // 「Layer6とLayer11（エンコーダー押し込みマーカー）が両方アクティブな時だけ」自動的に有効化される。
+            // エンコーダーの回転をマウス左右（mouse_rot_lr）からマウス上下（mouse_rot_ud）に切り替える。
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            display-name = "L10 MOUSE ENC UD";
+            sensor-bindings = <&mouse_rot_ud &rsr_trans>;
+        };
+
+        layer_11 {
+            // エンコーダー押し込みマーカーレイヤー。単体では何もしない（全キー透過・センサーも透過）。
+            // 全レイヤーの親指行L1（&tog 11）でこのレイヤーをON/OFFする。
+            // 実際の効果は下のconditional_layersが「このレイヤー＋現在のベースレイヤー」の組み合わせを見て、
+            // Layer9（多くのベースレイヤー用：矢印左右）またはLayer10（Layer6用：マウス上下）を自動的に有効化することで発生する。
+            // ベースレイヤーを切り替えると、この組み合わせ判定も自動的に更新されるため、
+            // マーカーをONにしたまま別レイヤーへ移動しても、移動先レイヤーに応じたオーバーライドへ自動で切り替わる。
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            display-name = "L11 ENCODER PUSH MARKER";
+        };
+
+        // 【追加】L2/L3, L4, L5, L7/L8 それぞれの「押し込み中でも自分自身の
+        // エンコーダー機能を維持する」ための、専用の上書き専用レイヤー。
+        // 中身は全キー&trans（ベースレイヤー自身のキー配置をそのまま透過）で、
+        // sensor-bindingsだけ、そのグループ本来の機能を明示的に再指定している。
+        // L6→L10のときと全く同じ仕組み（L9(index9)より大きいindexのレイヤーを
+        // 用意し、そちらを優先させる）を、L2〜L8にも展開したもの。
+        // L2とL3、L7とL8はそれぞれ同じ機能（undo/redo, cursor_ud）なので
+        // 1枚のレイヤーを共有している。
+        layer_ov_undo_redo {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_undo_redo &rsr_trans>;
+            display-name = "L2/L3 PUSH PASSTHRU";
+        };
+
+        layer_ov_browser_nav {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_browser_nav &rsr_trans>;
+            display-name = "L4 PUSH PASSTHRU";
+        };
+
+        layer_ov_tab_nav {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_tab_nav &rsr_trans>;
+            display-name = "L5 PUSH PASSTHRU";
+        };
+
+        layer_ov_cursor_ud {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "L7/L8 PUSH PASSTHRU";
+        };
+
+        // ============================================================
+        // システム③（Colemak Mod-DH + 薙刀式）追加分。L16〜L19。
+        // 既存L0〜L15のconditional_layers（フォールバック＋上書きの
+        // 2段構成）には一切手を触れず、末尾に素直に追加する。
+        // ============================================================
+
+        layer_16_colemak {
+            // システム③-A：Colemak Mod-DHベース。
+            // L6/R1ホールドでL19（③記号レイヤー）へ。
+            bindings = <
+&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp LG(SPACE)
+&kp TAB     &kp Q      &kp W         &kp F         &kp P         &kp LEFT     &kp DOWN_ARROW   &kp RIGHT  &kp L         &kp U         &kp Y      &kp SQT     &kp MINUS
+&mt LCTRL LS(N8)  &kp A      &hml LCTRL R   &kp S         &hml LSHFT T   &kp G        &kp LEFT_ARROW   &kp M      &hmr RSHFT N   &kp E         &hmr RCTRL I   &kp O      &mt RCTRL LS(N9)
+&mt LSHFT LBKT    &kp Z      &kp X         &kp C         &kp D         &kp V        &kp RIGHT_ARROW  &kp K      &kp H         &kp B         &kp J      &kp LS(FSLH) &mt RSHFT RBKT
+&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &lt_thumb_dot2 19 0  &td_joystick_click        &lt_thumb 19 ENTER   &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL     &lt 6 ESC
+            >;
+
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "L16 COLEMAK";
+        };
+
+        layer_17_naginata {
+            // システム③-B：薙刀式ベース。
+            // L6/R1ホールド＝センターシフト・トリガー（B_SPACEビット共有＋L18起動）。
+            // L1/R6＝3機能キー（タップ＝記号A、センターシフト同時押し＝記号B[L18側]、
+            //        単独長押し＝Ctrl/Shift）。
+            //
+            // 【要確認】以下のセルはODS案の記載と、zmk-naginataエンジン既定の
+            // シフト対応表が食い違っていたため、エンジン側の実際の出力で実装した。
+            // 詳細は納品ドキュメントの「要確認」一覧を参照：
+            //   ・R2(pos34) た/の  → エンジンでは「た」のシフトは「お」（「の」はJキー側）
+            //   ・R5(pos37) あ/ふ  → エンジンでは「あ」のシフトは「の」（「ふ」はSEMIキー側）
+            //   ・L3(pos15) き/ね  → エンジンでは「き」のシフトは「め」（v17→v18でめ・ねが交換された影響と推測）
+            //   ・L5(pos17) し/め  → エンジンでは「し」のシフトは「ね」（↑と対で入れ替わっている可能性）
+            //   ・R2(pos21) す/さ  → エンジンでは「す」のシフトは「え」（「さ」はUキー側＝BSと共有）
+            //   ・R4(pos23) れ/え  → エンジンでは「れ」はシフトも「れ」（変化なし。「え」はOキー側）
+            //   ・L5(pos43) こ/ぬ+半濁音 → エンジンでは「こ」のシフトは句読点「、確定」（「ぬ」はBキー側）
+            //   ・R1(pos46) ー/――  → エンジンでは「ー」のシフトは「ふ」（「――」は別途macro化が必要）
+            //   ・R2(pos47) な/お+半濁音 → エンジンでは「な」のシフトは句読点「。確定」（「お」はNキー側）
+            //   ・L6(pos44) そ/・  → エンジンでは「そ」のシフトは「ぬ」（「・」は今回センターシフトに未接続）
+            bindings = <
+&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp LG(SPACE)
+&kp TAB     &ng Q      &ng W         &ng E         &ng R         &kp LEFT     &kp DOWN_ARROW   &kp RIGHT  &ng O         &ng I         &ng SLASH  &ng P       &ng_sym NG_SYM_SLASH_FULL
+&ng_l1r6_ht LCTRL NG_SYM_PAREN_OPEN   &ng A   &ng S   &ng D   &ng F   &ng G   &kp LEFT_ARROW   &ng H   &ng N   &ng K   &ng L   &ng J   &ng_l1r6_ht RCTRL NG_SYM_KAGI_OPEN
+&ng_l1r6_ht LSHFT NG_SYM_KAGI_OPEN    &ng Z   &ng X   &ng C   &ng V   &ng B   &kp RIGHT_ARROW  &ng SEMI &ng M  &ng COMMA &ng DOT &ng_sym NG_SYM_QUESTION   &ng_l1r6_ht RSHFT NG_SYM_KAGI_CLOSE
+&tog 11  &kp LALT   &lt 6 PSCRN   &lt_thumb 4 BSPC    &lt_thumb_comma 5 0   &ng_centershift_l6 0 0  &td_joystick_click        &ng_centershift_r1 0 ENTER   &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC    &lt 6 DEL     &lt 6 ESC
+            >;
+
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "L17 NAGINATA";
+        };
+
+        layer_18_centershift_ov {
+            // センターシフト・オーバーレイ。L17(NAGINATA)のL6/R1ホールド中だけ、
+            // ng_cs_hold_l6/r1マクロによって自動的に有効化される（&mo 18）。
+            // L1・R6（記号B）、および？/！の！側（センターシフト時＝！）だけを
+            // 上書きし、それ以外は全て&transで薙刀式エンジン自身のB_SPACEビット
+            // によるシフト処理に任せる。
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&ng_sym NG_SYM_LT  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &ng_sym NG_SYM_GT
+&ng_sym NG_SYM_NIKAGI_OPEN  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &ng_sym NG_SYM_EXCLAIM  &ng_sym NG_SYM_NIKAGI_CLOSE
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            display-name = "L18 CENTERSHIFT OV";
+        };
+
+        layer_19_sys3_symbol {
+            // システム③専用記号レイヤー。L16(COLEMAK)のL6/R1ホールドでアクセス。
+            // 【要確認】このレイヤーはODS案の記号をおおよそ対応するキーコードに
+            // 割り当てた素案です。既存のL1(SYMBOL)/L3(ONISHI SYM)実装時と同様、
+            // JIS実機での見え方は個体差・OS差が出やすい部分なので、実機で
+            // 一通り打鍵確認の上、必要に応じて個別のキーコードを調整してください。
+            bindings = <
+&kp ESC   &kp N1     &kp N2    &kp N3     &kp N4     &kp N5              &kp LC(C)       &kp N6         &kp N7        &kp N8        &kp N9      &kp N0      &none
+&kp TAB   &none      &kp LS(N4) &kp LS(N3) &kp GRAVE  &kp UP_ARROW               &kp LC(V)       &kp DOWN_ARROW          &none        &kp LS(SEMI) &kp LS(EQUAL) &none &none
+&kp LS(COMMA) &kp LS(N5) &kp LS(N2) &kp LS(N6) &kp LS(N7) &kp EQUAL      &kp LC(Z)       &kp LS(FSLH)      &kp LS(MINUS)  &kp MINUS     &kp FSLH &kp BSLH    &kp LS(DOT)
+&kp LBKT  &none      &none     &none      &none      &none              &kp LC(LS(Z))       &none      &kp SEMI     &kp SEMI     &kp BSLH     &kp LS(N1)  &kp RBKT
+&tog 11  &kp LALT  &lt 6 PSCRN  &lt_thumb 4 BSPC  &lt_thumb_comma 5 0  &lt_thumb_dot2 19 0      &kp LC(A)   &lt_thumb 19 ENTER  &lt_thumb_space 5 SPACE  &lt_thumb 4 BSPC  &lt 6 DEL  &lt 6 ESC
+            >;
+
+            sensor-bindings = <&rsr_undo_redo &rsr_trans>;
+            display-name = "L19 SYS3 SYMBOL";
+        };
+    };
+
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        // 【根本的な再設計】
+        // これまで何度か「L0（デフォルトレイヤー）をif-layersに直接指定する」
+        // 方式（if-layers = <0 11>）を試みたが、期待通りに動作しなかった。
+        // ZMK公式ドキュメント・ソースコード（issue #699等）を調査したところ、
+        // デフォルトレイヤーの扱いにはバージョンによる差異・既知の癖が
+        // 複数報告されており、確実に安全と言い切れる保証がなかった。
+        // そこで今回は「L0をif-layersの条件式に一切登場させない」設計に
+        // 変更し、この不確実性ごと回避することにした。
+        //
+        // 【新しい仕組み：フォールバック＋上書きの2段構成】
+        // ① フォールバック：ベースレイヤーを問わず、L11単体がONなら
+        //    常にLayer9（矢印左右）にする。
+        //      cl_l11 { if-layers = <11>; then-layer = <9>; };
+        //    L0はこのフォールバック“だけ”で完結する（L0を条件に一切
+        //    登場させる必要がないため、L0固有の不確実性を踏まない）。
+        //    L1（矢印でよい）も、あえて個別ルールを作らずこのフォールバック
+        //    に任せている（結果は同じなので、ルールを増やさない）。
+        // ② 上書き：L2〜L8のように「押し込み中も自分自身の機能を維持したい」
+        //    レイヤーには、そのレイヤー専用の、Layer9（index9）より
+        //    indexの大きい上書きレイヤーを個別に用意する。
+        //    ZMK公式ドキュメント通り「同じベースレイヤーの間で複数の
+        //    then-layerが同時に成立してもよく、インデックスが大きい方が
+        //    優先される」という仕様に則り、これらの上書きレイヤーが
+        //    ①のフォールバックより優先されるようにしている。
+        //    if-layersには2,3,4,5,6,7,8という非デフォルトレイヤー番号
+        //    しか登場しないため、L0固有の癖を踏む心配がない。
+        //
+        // 【L0の操作感について】
+        // L0の押し込みキーは&tog 11（トグル式）に戻した。上のフォールバック
+        // ①がL0を無条件でカバーするため、L0専用の特別な仕組み
+        // （ホールド式の&mo等）はもう一切不要。押し込みは全レイヤーで
+        // 統一して「押す→ロック→もう一度押すまで維持」というトグル式になる。
+
+        // ①フォールバック：L11単体がONなら常にLayer9（矢印左右）。
+        // L0・L1はこれだけで正しく動作する。
+        cl_l11 { if-layers = <11>; then-layer = <9>; };
+
+        // ②上書き：L2(SYMBOL)＋L11 → L2自身の機能（undo/redo）を維持（index12）
+        cl_l2_l11 { if-layers = <2 11>; then-layer = <12>; };
+        // L3(ONISHI SYM)＋L11 → L3自身の機能（undo/redo）を維持（同じくindex12を共有）
+        cl_l3_l11 { if-layers = <3 11>; then-layer = <12>; };
+        // L4(CURSOR)＋L11 → L4自身の機能（browser-nav）を維持（index13）
+        cl_l4_l11 { if-layers = <4 11>; then-layer = <13>; };
+        // L5(WINDOW)＋L11 → L5自身の機能（tab-nav）を維持（index14）
+        cl_l5_l11 { if-layers = <5 11>; then-layer = <14>; };
+        // L6(MOUSE)＋L11 → Layer10（マウス上下）
+        cl_l6_l11 { if-layers = <6 11>; then-layer = <10>; };
+        // L7(FKEYS)＋L11 → L7自身の機能（cursor_ud）を維持（index15）
+        cl_l7_l11 { if-layers = <7 11>; then-layer = <15>; };
+        // L8(BLUETOOTH)＋L11 → L8自身の機能（cursor_ud）を維持（同じくindex15を共有）
+        cl_l8_l11 { if-layers = <8 11>; then-layer = <15>; };
     };
 };

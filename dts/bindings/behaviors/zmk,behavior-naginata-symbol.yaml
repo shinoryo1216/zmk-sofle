@@ -1,0 +1,13 @@
+# システム③（Colemak+薙刀式）追加分。
+# L1・R6（薙刀式レイヤーの行3・行4、両端の外側キー）の
+# 「単独タップ＝記号A」「センターシフト同時押し＝記号B」用。
+# 既存のzmk,behavior-naginataの31キー・32bitビットマスク体系とは
+# 完全に独立した、単発出力専用の軽量ビヘイビア。
+# param1にsymbols.hで定義したNG_SYM_*定数を渡して使う。
+# 例: &ng_sym NG_SYM_PAREN_OPEN
+
+description: Naginata-shiki extra symbol / IME force-set behavior (for System3 L1/R6 keys)
+
+compatible: "zmk,behavior-naginata-symbol"
+
+include: one_param.yaml
