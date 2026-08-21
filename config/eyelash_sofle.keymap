@@ -532,6 +532,28 @@
             layers = <0 1>;
         };
 
+        /* ---- システム③専用：Colemak⇔薙刀式切替 ----
+         * 上のcombo_ime_japanese/englishと全く同じ物理位置（4+5、7+8）だが、
+         * L16(COLEMAK)/L17(NAGINATA)限定の別コンボとして、レイヤー切替＋IME
+         * force-setを同一macroに束ねたsys3_to_naginata/sys3_to_colemakを割り当てる。
+         * layersが重ならない（0,1 対 16,17）ので同じキー位置でも共存できる。
+         * ※実装漏れの修正：以前のバージョンではsys3_to_naginata/colemakを
+         * どのキーにも割り当てていなかったため、Colemak→薙刀式への切替が
+         * 一切反応しなかった。 */
+        combo_sys3_to_naginata {
+            timeout-ms = <50>;
+            key-positions = <4 5>;
+            bindings = <&sys3_to_naginata>;
+            layers = <16 17>;
+        };
+
+        combo_sys3_to_colemak {
+            timeout-ms = <50>;
+            key-positions = <7 8>;
+            bindings = <&sys3_to_colemak>;
+            layers = <16 17>;
+        };
+
         /* ---- ウィンドウ管理コンボ（新Layer5=ウィンドウ管理レイヤー） ---- */
 
         combo_l2_mb4_mcomma {
