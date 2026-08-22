@@ -240,23 +240,42 @@
             label = "MACRO_NAKAGURO";
         };
 
-        // システム③（Colemak ⇔ 薙刀式）双方向切替＆IME同期マクロ
-        macro_to_naginata: macro_to_naginata {
+        // システム③（Colemak ⇔ 薙刀式）切替マクロ：Windows/Linux用（半角/全角 GRAVE）
+        macro_to_ng_winlin: macro_to_ng_winlin {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <15>;
             tap-ms = <15>;
-            bindings = <&macro_tap &kp LANG1 &kp INT4>, <&macro_tap &to 3>;
-            label = "MACRO_TO_NAGINATA";
+            bindings = <&macro_tap &kp GRAVE>, <&macro_tap &to 3>;
+            label = "MACRO_TO_NG_WINLIN";
         };
 
-        macro_to_colemak: macro_to_colemak {
+        macro_to_colemak_winlin: macro_to_colemak_winlin {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <15>;
             tap-ms = <15>;
-            bindings = <&macro_tap &kp LANG2 &kp INT5>, <&macro_tap &to 2>;
-            label = "MACRO_TO_COLEMAK";
+            bindings = <&macro_tap &kp GRAVE>, <&macro_tap &to 2>;
+            label = "MACRO_TO_COLEMAK_WINLIN";
+        };
+
+        // システム③（Colemak ⇔ 薙刀式）切替マクロ：iPadOS/macOS用（LANG1/LANG2）
+        macro_to_ng_ipad: macro_to_ng_ipad {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <15>;
+            tap-ms = <15>;
+            bindings = <&macro_tap &kp LANG1>, <&macro_tap &to 3>;
+            label = "MACRO_TO_NG_IPAD";
+        };
+
+        macro_to_colemak_ipad: macro_to_colemak_ipad {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <15>;
+            tap-ms = <15>;
+            bindings = <&macro_tap &kp LANG2>, <&macro_tap &to 2>;
+            label = "MACRO_TO_COLEMAK_IPAD";
         };
 
         // システム直接切替マクロ
@@ -311,58 +330,58 @@
         combo_sys3_left {
             timeout-ms = <60>;
             key-positions = <53 54 3>; // L2+L3+3
-            bindings = <&macro_to_colemak>;
+            bindings = <&macro_to_colemak_winlin>;
             layers = <0 1 2 3>;
         };
         combo_sys3_right {
             timeout-ms = <60>;
             key-positions = <62 63 3>; // R4+R5+3
-            bindings = <&macro_to_colemak>;
+            bindings = <&macro_to_colemak_winlin>;
             layers = <0 1 2 3>;
         };
 
         /* ---- システム③（Colemak ⇔ 薙刀式）言語・レイヤー切替コンボ ---- */
-        // Colemak(L2)上で日本語（薙刀式）へ
+        // Windows/Linux用: U+I / E+R (GRAVE + レイヤー切替)
         combo_colemak_to_ng_ui {
             timeout-ms = <50>;
             require-prior-idle-ms = <125>;
-            key-positions = <21 22>;
-            bindings = <&macro_to_naginata>;
+            key-positions = <21 22>; // U+I
+            bindings = <&macro_to_ng_winlin>;
             layers = <2>;
         };
         combo_colemak_to_ng_er {
             timeout-ms = <50>;
             require-prior-idle-ms = <125>;
-            key-positions = <16 17>;
-            bindings = <&macro_to_naginata>;
+            key-positions = <16 17>; // E+R
+            bindings = <&macro_to_ng_winlin>;
             layers = <2>;
         };
-        combo_colemak_to_ng_ipad {
-            timeout-ms = <50>;
-            key-positions = <4 5>;
-            bindings = <&macro_to_naginata>;
-            layers = <2>;
-        };
-
-        // 薙刀式(L3)上で英語（Colemak）へ
         combo_ng_to_colemak_ui {
             timeout-ms = <50>;
             require-prior-idle-ms = <125>;
-            key-positions = <21 22>;
-            bindings = <&macro_to_colemak>;
+            key-positions = <21 22>; // U+I
+            bindings = <&macro_to_colemak_winlin>;
             layers = <3>;
         };
         combo_ng_to_colemak_er {
             timeout-ms = <50>;
             require-prior-idle-ms = <125>;
-            key-positions = <16 17>;
-            bindings = <&macro_to_colemak>;
+            key-positions = <16 17>; // E+R
+            bindings = <&macro_to_colemak_winlin>;
             layers = <3>;
+        };
+
+        // iPadOS/macOS用: 4+5 / 6+7 (LANG1/LANG2 + レイヤー切替)
+        combo_colemak_to_ng_ipad {
+            timeout-ms = <50>;
+            key-positions = <4 5>; // 4+5
+            bindings = <&macro_to_ng_ipad>;
+            layers = <2>;
         };
         combo_ng_to_colemak_ipad {
             timeout-ms = <50>;
-            key-positions = <7 8>;
-            bindings = <&macro_to_colemak>;
+            key-positions = <7 8>; // 6+7
+            bindings = <&macro_to_colemak_ipad>;
             layers = <3>;
         };
 
