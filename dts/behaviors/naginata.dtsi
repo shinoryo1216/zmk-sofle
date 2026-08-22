@@ -1,8 +1,7 @@
-/*
- * Copyright (c) 2020 The ZMK Contributors
- *
- * SPDX-License-Identifier: MIT
- */
+#define NG_L1_R3 0xF001
+#define NG_L1_R4 0xF002
+#define NG_R6_R3 0xF003
+#define NG_R6_R4 0xF004
 
 / {
     behaviors {

@@ -8,9 +8,6 @@ config ZMK_BEHAVIOR_VELOCITY_MOUSE_MOVE
     depends on DT_HAS_ZMK_BEHAVIOR_VELOCITY_MOUSE_MOVE_ENABLED
     select INPUT
 
-# ここから下：システム③（Colemak Mod-DH + 薙刀式）用に追加。
-# 元eswai/zmk-naginataのKconfig内容をそのまま統合。
-
 config NAGINATA
     bool "Enable Naginata"
     default y
@@ -19,7 +16,7 @@ if NAGINATA
 
 choice
     prompt "Naginata default OS"
-    default NAGINATA_DEFAULT_OS_WINDOWS
+    default NAGINATA_DEFAULT_OS_LINUX
     help
       薙刀式が起動時に想定するOS。実行時にF15(Windows)/F16(macOS)/F17(Linux)で切り替え可能。
 
@@ -40,6 +37,5 @@ config NAGINATA_PERSISTENT_STATE
     select SETTINGS
     help
       Enable persistent storage of Naginata state across reboots.
-      This feature requires CONFIG_SETTINGS to be enabled.
 
 endif # NAGINATA

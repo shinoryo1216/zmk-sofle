@@ -96,20 +96,3 @@ void ng_redo(void);
 void ng_undo(void);
 void ng_saihenkan(void);
 void ng_eof(void);
-
-// ここから下：システム③（Colemak+薙刀式）のL1・R6用に追加。
-// ＜＞はngh_JK*系に既存の実装が無かったため新規追加。
-// （）「」『』はngh_JKG/JKB/JKF/JKV/JKS/JKXを再利用するのでここでの追加は不要。
-void ng_lt(void);  // ＜ U+FF1C
-void ng_gt(void);  // ＞ U+FF1E
-void ng_colon_full(void);   // ： U+FF1A
-void ng_slash_full(void);   // ／ U+FF0F（ngh_JKWと同一内容。層③記号レイヤーから単独で呼べるように別名で追加）
-void ng_question_noenter(void); // ？（確定改行なし版。ngh_JKDは末尾に確定改行が入るため、
-                                 // 文中でも使えるようこちらは改行なしにした）
-void ng_exclaim_noenter(void);  // ！（同上、改行なし版）
-
-// L6/R1ホールド中に見せかけのIME force-set（絶対指定）を送る。
-// OSごとの分岐はnaginata_config.osを流用。iPadOSでの絶対指定挙動は
-// 実機未検証のためLANG1/LANG2をそのまま送るのみ（システム③設計ガイド4-3参照）。
-void ng_os_ime_japanese(void);
-void ng_os_ime_english(void);
