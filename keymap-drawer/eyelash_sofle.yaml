@@ -1040,6 +1040,266 @@ layers:
   - {type: held}
   - {type: held}
   - {type: held}
+  L16 COLEMAK:
+  - $$mdi:keyboard-esc$$
+  - {t: '1', s: '!'}
+  - {t: '2', s: '@'}
+  - {t: '3', s: '#'}
+  - {t: '4', s: $}
+  - {t: '5', s: '%'}
+  - $$mdi:arrow-up-bold$$
+  - {t: '6', s: ^}
+  - {t: '7', s: '&'}
+  - {t: '8', s: '*'}
+  - {t: '9', s: (}
+  - {t: '0', s: )}
+  - Gui+$$mdi:keyboard-space$$
+  - $$mdi:keyboard-tab$$
+  - Q
+  - W
+  - F
+  - P
+  - $$mdi:arrow-left-bold$$
+  - $$mdi:arrow-down-bold$$
+  - $$mdi:arrow-right-bold$$
+  - L
+  - U
+  - Y
+  - {t: '''', s: '"'}
+  - {t: '-', s: _}
+  - {t: Sft+8, h: '$$mdi:apple-keyboard-control$$', s: Sft+*}
+  - A
+  - {t: R, h: '$$mdi:apple-keyboard-control$$'}
+  - S
+  - {t: T, h: '$$mdi:apple-keyboard-shift$$'}
+  - G
+  - $$mdi:arrow-left-bold$$
+  - M
+  - {t: N, h: '$$mdi:apple-keyboard-shift$$'}
+  - E
+  - {t: I, h: '$$mdi:apple-keyboard-control$$'}
+  - O
+  - {t: Sft+9, h: '$$mdi:apple-keyboard-control$$', s: Sft+(}
+  - {t: '[', h: '$$mdi:apple-keyboard-shift$$', s: '{'}
+  - Z
+  - X
+  - C
+  - D
+  - V
+  - $$mdi:arrow-right-bold$$
+  - K
+  - H
+  - B
+  - J
+  - {t: Sft+/, s: 'Sft+?'}
+  - {t: ']', h: '$$mdi:apple-keyboard-shift$$', s: '}'}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
+  - {t: '$$mdi:backspace$$', h: L4 CURSOR}
+  - {t: ',', h: L5 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L19 SYS3 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$'}
+  - '&td_joystick_click'
+  - {t: '$$mdi:keyboard-return$$', h: L19 SYS3 SYMBOL}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L4 CURSOR}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
+  - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
+  L17 NAGINATA:
+  - $$mdi:keyboard-esc$$
+  - {t: '1', s: '!'}
+  - {t: '2', s: '@'}
+  - {t: '3', s: '#'}
+  - {t: '4', s: $}
+  - {t: '5', s: '%'}
+  - $$mdi:arrow-up-bold$$
+  - {t: '6', s: ^}
+  - {t: '7', s: '&'}
+  - {t: '8', s: '*'}
+  - {t: '9', s: (}
+  - {t: '0', s: )}
+  - Gui+$$mdi:keyboard-space$$
+  - $$mdi:keyboard-tab$$
+  - '&ng Q'
+  - '&ng W'
+  - '&ng E'
+  - '&ng R'
+  - $$mdi:arrow-left-bold$$
+  - $$mdi:arrow-down-bold$$
+  - $$mdi:arrow-right-bold$$
+  - '&ng O'
+  - '&ng I'
+  - '&ng SLASH'
+  - '&ng P'
+  - '&ng_sym NG_SYM_SLASH_FULL'
+  - {t: '&ng_sym NG_SYM_PAREN_OPEN', h: '$$mdi:apple-keyboard-control$$'}
+  - '&ng A'
+  - '&ng S'
+  - '&ng D'
+  - '&ng F'
+  - '&ng G'
+  - $$mdi:arrow-left-bold$$
+  - '&ng H'
+  - '&ng N'
+  - '&ng K'
+  - '&ng L'
+  - '&ng J'
+  - {t: '&ng_sym NG_SYM_KAGI_OPEN', h: '$$mdi:apple-keyboard-control$$'}
+  - {t: '&ng_sym NG_SYM_KAGI_OPEN', h: '$$mdi:apple-keyboard-shift$$'}
+  - '&ng Z'
+  - '&ng X'
+  - '&ng C'
+  - '&ng V'
+  - '&ng B'
+  - $$mdi:arrow-right-bold$$
+  - '&ng SEMI'
+  - '&ng M'
+  - '&ng COMMA'
+  - '&ng DOT'
+  - '&ng_sym NG_SYM_QUESTION'
+  - {t: '&ng_sym NG_SYM_KAGI_CLOSE', h: '$$mdi:apple-keyboard-shift$$'}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
+  - {t: '$$mdi:backspace$$', h: L4 CURSOR}
+  - {t: ',', h: L5 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: '&ng_cs_hold_l6', s: 'Sft+$$mdi:arrow-right-bold$$'}
+  - '&td_joystick_click'
+  - {t: '$$mdi:keyboard-return$$', h: '&ng_cs_hold_r1'}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L4 CURSOR}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
+  - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
+  L18 CENTERSHIFT OV:
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - '&ng_sym NG_SYM_LT'
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - '&ng_sym NG_SYM_GT'
+  - '&ng_sym NG_SYM_NIKAGI_OPEN'
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - '&ng_sym NG_SYM_EXCLAIM'
+  - '&ng_sym NG_SYM_NIKAGI_CLOSE'
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  L19 SYS3 SYMBOL:
+  - $$mdi:keyboard-esc$$
+  - {t: '1', s: '!'}
+  - {t: '2', s: '@'}
+  - {t: '3', s: '#'}
+  - {t: '4', s: $}
+  - {t: '5', s: '%'}
+  - Ctl+C
+  - {t: '6', s: ^}
+  - {t: '7', s: '&'}
+  - {t: '8', s: '*'}
+  - {t: '9', s: (}
+  - {t: '0', s: )}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:keyboard-tab$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: Sft+4, s: Sft+$}
+  - {t: Sft+3, s: Sft+#}
+  - {t: '`', s: '~'}
+  - $$mdi:arrow-up-bold$$
+  - Ctl+V
+  - $$mdi:arrow-down-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: Sft+;, s: 'Sft+:'}
+  - {t: Sft+=, s: Sft++}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: 'Sft+,', s: Sft+<}
+  - {t: Sft+5, s: Sft+%}
+  - {t: Sft+2, s: Sft+@}
+  - {t: Sft+6, s: Sft+^}
+  - {t: Sft+7, s: Sft+&}
+  - {t: '=', s: +}
+  - Ctl+Z
+  - {t: Sft+/, s: 'Sft+?'}
+  - {t: Sft+-, s: Sft+_}
+  - {t: '-', s: _}
+  - {t: /, s: '?'}
+  - {t: \, s: '|'}
+  - {t: Sft+., s: Sft+>}
+  - {t: '[', s: '{'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - Ctl+Sft+Z
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: ;, s: ':'}
+  - {t: ;, s: ':'}
+  - {t: \, s: '|'}
+  - {t: Sft+1, s: Sft+!}
+  - {t: ']', s: '}'}
+  - {t: L11 ENCODER PUSH MARKER, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L6 MOUSE}
+  - {t: '$$mdi:backspace$$', h: L4 CURSOR}
+  - {t: ',', h: L5 WINDOW, s: 'Sft+$$mdi:arrow-left-bold$$'}
+  - {t: ., h: L19 SYS3 SYMBOL, s: 'Sft+$$mdi:arrow-right-bold$$', type: held}
+  - Ctl+A
+  - {t: '$$mdi:keyboard-return$$', h: L19 SYS3 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L5 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L4 CURSOR}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L6 MOUSE}
+  - {t: '$$mdi:keyboard-esc$$', h: L6 MOUSE}
 combos:
 - p: [34, 35]
   k: $$mdi:keyboard-space$$
@@ -1065,6 +1325,12 @@ combos:
 - p: [7, 8]
   k: LANG2
   l: [L0 BASE, L1 ONISHI]
+- p: [17, 21]
+  k: '&sys3_to_naginata'
+  l: [L16 COLEMAK]
+- p: [17, 21]
+  k: '&sys3_to_colemak'
+  l: [L17 NAGINATA]
 - p: [47, 48]
   k: '&mkp MB4'
   l: [L5 WINDOW]
@@ -1121,8 +1387,18 @@ combos:
   k: L8 BLUETOOTH
 - p: [59, 60, 61, 62, 63]
   k: L8 BLUETOOTH
-- p: [53, 54, 62, 63]
-  k: {t: L1 ONISHI, h: toggle}
+- p: [53, 54, 1]
+  k: '&sys1_activate'
+- p: [53, 54, 2]
+  k: '&sys2_activate'
+- p: [53, 54, 3]
+  k: '&sys3_to_colemak'
+- p: [62, 63, 1]
+  k: '&sys1_activate'
+- p: [62, 63, 2]
+  k: '&sys2_activate'
+- p: [62, 63, 3]
+  k: '&sys3_to_colemak'
 - p: [35, 36]
   k: '&macro_nn'
   l: [L1 ONISHI]
