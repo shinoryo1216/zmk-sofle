@@ -1249,28 +1249,28 @@ combos:
   k: '&macro_to_system2'
   l: [L0 BASE, L1 ONISHI, L2 COLEMAK, L3 NAGINATA]
 - p: [53, 54, 3]
-  k: '&macro_to_colemak'
+  k: '&macro_to_colemak_winlin'
   l: [L0 BASE, L1 ONISHI, L2 COLEMAK, L3 NAGINATA]
 - p: [62, 63, 3]
-  k: '&macro_to_colemak'
+  k: '&macro_to_colemak_winlin'
   l: [L0 BASE, L1 ONISHI, L2 COLEMAK, L3 NAGINATA]
 - p: [21, 22]
-  k: '&macro_to_naginata'
+  k: '&macro_to_ng_winlin'
   l: [L2 COLEMAK]
 - p: [16, 17]
-  k: '&macro_to_naginata'
-  l: [L2 COLEMAK]
-- p: [4, 5]
-  k: '&macro_to_naginata'
+  k: '&macro_to_ng_winlin'
   l: [L2 COLEMAK]
 - p: [21, 22]
-  k: '&macro_to_colemak'
+  k: '&macro_to_colemak_winlin'
   l: [L3 NAGINATA]
 - p: [16, 17]
-  k: '&macro_to_colemak'
+  k: '&macro_to_colemak_winlin'
   l: [L3 NAGINATA]
+- p: [4, 5]
+  k: '&macro_to_ng_ipad'
+  l: [L2 COLEMAK]
 - p: [7, 8]
-  k: '&macro_to_colemak'
+  k: '&macro_to_colemak_ipad'
   l: [L3 NAGINATA]
 - p: [34, 35]
   k: $$mdi:keyboard-space$$
