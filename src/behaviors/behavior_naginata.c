@@ -98,10 +98,13 @@ SETTINGS_STATIC_HANDLER_DEFINE(naginata, "naginata", NULL, naginata_settings_loa
 #endif // IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
 
 #ifndef NG_L1_R3
-#define NG_L1_R3 0xF001
-#define NG_L1_R4 0xF002
-#define NG_R6_R3 0xF003
-#define NG_R6_R4 0xF004
+#define NG_L1_R3 0x01
+#define NG_L1_R4 0x02
+#define NG_R6_R3 0x03
+#define NG_R6_R4 0x04
+#define NG_THUMB_DOT 0x05
+#define NG_THUMB_ENTER 0x06
+#define NG_R6_R2 0x07
 #endif
 
 enum ng_special_state {
