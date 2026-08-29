@@ -1,14 +1,14 @@
-#define NG_L1_R3 0xF001
-#define NG_L1_R4 0xF002
-#define NG_R6_R3 0xF003
-#define NG_R6_R4 0xF004
+#define NG_L1_R3 0x01
+#define NG_L1_R4 0x02
+#define NG_R6_R3 0x03
+#define NG_R6_R4 0x04
+#define NG_THUMB_DOT 0x05
+#define NG_THUMB_ENTER 0x06
+#define NG_R6_R2 0x07
 
 / {
-    behaviors {
-        /omit-if-no-ref/ ng: naginata {
-            compatible = "zmk,behavior-naginata";
-            label = "NAGINATA";
-            #binding-cells = <1>;
-        };
+    ng: naginata {
+        compatible = "zmk,behavior-naginata";
+        #binding-cells = <1>;
     };
 };

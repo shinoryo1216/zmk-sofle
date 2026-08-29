@@ -290,7 +290,7 @@ static const naginata_kanamap ngdickana[] = {
     {.shift = B_SPACE , .douji = B_K            , .kana = {M, O, NONE, NONE, NONE, NONE   }, .func = nofunc }, // も
     {.shift = B_SPACE , .douji = B_L            , .kana = {T, U, NONE, NONE, NONE, NONE   }, .func = nofunc }, // つ
     {.shift = B_SPACE , .douji = B_SEMI         , .kana = {S, A, NONE, NONE, NONE, NONE   }, .func = nofunc }, // さ
-    {.shift = B_SPACE , .douji = B_N            , .kana = {EQUAL, NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // ＝
+    {.shift = B_SPACE , .douji = B_N            , .kana = {LS(MINUS), NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // ＝ (JISではShift + -)
     {.shift = B_SPACE , .douji = B_M            , .kana = {A, NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // あ
     {.shift = B_SPACE , .douji = B_COMMA        , .kana = {M, U, NONE, NONE, NONE, NONE   }, .func = nofunc }, // む
     {.shift = B_SPACE , .douji = B_DOT          , .kana = {N, U, NONE, NONE, NONE, NONE   }, .func = nofunc }, // ぬ
@@ -661,9 +661,45 @@ static int behavior_naginata_init(const struct device *dev) {
     return 0;
 };
 
+static bool thumb_dot_held = false;
+static bool thumb_dot_used_as_shift = false;
+static bool thumb_enter_held = false;
+static bool thumb_enter_used_as_shift = false;
+
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
     LOG_DBG("position %d keycode 0x%02X", event.position, binding->param1);
+
+    // Row 2 R6 key (plain = slash / shift = colon)
+    if (binding->param1 == NG_R6_R2) {
+        naginata_set_timestamp(event.timestamp);
+        if (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held) {
+            // JIS colon key is SQT (0x34)
+            raise_zmk_keycode_state_changed_from_encoded(SQT, true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(SQT, false, event.timestamp);
+        } else {
+            // Slash key
+            raise_zmk_keycode_state_changed_from_encoded(FSLH, true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(FSLH, false, event.timestamp);
+        }
+        return ZMK_BEHAVIOR_OPAQUE;
+    }
+
+    // Thumb center-shift keys (L6 = DOT / shift, R1 = ENTER / shift)
+    if (binding->param1 == NG_THUMB_DOT) {
+        thumb_dot_held = true;
+        thumb_dot_used_as_shift = false;
+        pressed_keys |= B_SPACE;
+        return ZMK_BEHAVIOR_OPAQUE;
+    } else if (binding->param1 == NG_THUMB_ENTER) {
+        thumb_enter_held = true;
+        thumb_enter_used_as_shift = false;
+        pressed_keys |= B_SPACE;
+        return ZMK_BEHAVIOR_OPAQUE;
+    } else {
+        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_enter_held) thumb_enter_used_as_shift = true;
+    }
 
     // Special key handling (L1/R6 3-function hold-tap)
     switch (binding->param1) {
@@ -760,6 +796,28 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
 
     // Special key handling (L1/R6 3-function hold-tap)
     switch (binding->param1) {
+        case NG_THUMB_DOT:
+            naginata_set_timestamp(event.timestamp);
+            thumb_dot_held = false;
+            if (!thumb_enter_held) {
+                pressed_keys &= ~B_SPACE;
+            }
+            if (!thumb_dot_used_as_shift) {
+                raise_zmk_keycode_state_changed_from_encoded(DOT, true, event.timestamp);
+                raise_zmk_keycode_state_changed_from_encoded(DOT, false, event.timestamp);
+            }
+            return ZMK_BEHAVIOR_OPAQUE;
+        case NG_THUMB_ENTER:
+            naginata_set_timestamp(event.timestamp);
+            thumb_enter_held = false;
+            if (!thumb_dot_held) {
+                pressed_keys &= ~B_SPACE;
+            }
+            if (!thumb_enter_used_as_shift) {
+                raise_zmk_keycode_state_changed_from_encoded(ENTER, true, event.timestamp);
+                raise_zmk_keycode_state_changed_from_encoded(ENTER, false, event.timestamp);
+            }
+            return ZMK_BEHAVIOR_OPAQUE;
         case NG_L1_R3:
         case NG_L1_R4:
         case NG_R6_R3:

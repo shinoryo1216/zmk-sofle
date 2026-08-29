@@ -654,10 +654,10 @@
         layer_3_naginata {
             bindings = <
 &kp ESC        &kp N1     &kp N2        &kp N3        &kp N4        &kp N5       &kp UP_ARROW     &kp N6     &kp N7        &kp N8        &kp N9     &kp N0      &kp BSPC
-&kp TAB        &ng Q      &ng W         &ng E         &ng R         &kp LEFT     &kp DOWN_ARROW   &kp RIGHT  &ng U         &ng I         &ng O      &ng P       &kp FSLH
+&kp TAB        &ng Q      &ng W         &ng E         &ng R         &kp LEFT     &kp DOWN_ARROW   &kp RIGHT  &ng U         &ng I         &ng O      &ng P       &ng NG_R6_R2
 &ng NG_L1_R3   &ng A      &ng S         &ng D         &ng F         &ng G        &kp LEFT_ARROW   &ng H      &ng J         &ng K         &ng L      &ng SEMI    &ng NG_R6_R3
-&ng NG_L1_R4   &ng Z      &ng X         &ng C         &ng V         &ng B        &kp RIGHT_ARROW  &ng N      &ng M         &ng COMMA     &ng DOT    &kp LS(FSLH) &ng NG_R6_R4
-&tog 14        &kp LALT   &lt 9 PSCRN   &lt_thumb 7 BSPC &lt_thumb_comma 8 0 &ng SPACE &td_joystick_click &ng SPACE &lt_thumb_space 8 SPACE &lt_thumb 7 BSPC &lt 9 DEL &lt 9 ESC
+&ng NG_L1_R4   &ng Z      &ng X         &ng C         &ng V         &ng B        &kp RIGHT_ARROW  &ng N      &ng M         &ng COMMA     &ng DOT    &ng FSLH    &ng NG_R6_R4
+&tog 14        &kp LALT   &lt 9 PSCRN   &lt_thumb 7 BSPC &lt_thumb_comma 8 0 &ng NG_THUMB_DOT &td_joystick_click &ng NG_THUMB_ENTER &lt_thumb_space 8 SPACE &lt_thumb 7 BSPC &lt 9 DEL &lt 9 ESC
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
