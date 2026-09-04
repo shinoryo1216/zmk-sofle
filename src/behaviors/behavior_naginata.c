@@ -688,11 +688,9 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
             raise_zmk_keycode_state_changed_from_encoded(SQT, true, event.timestamp);
             raise_zmk_keycode_state_changed_from_encoded(SQT, false, event.timestamp);
         } else {
-            // In Mozc/Kana mode, "z" + "?" (LS(FSLH)) outputs fullwidth slash "／"
-            raise_zmk_keycode_state_changed_from_encoded(Z, true, event.timestamp);
-            raise_zmk_keycode_state_changed_from_encoded(Z, false, event.timestamp);
-            raise_zmk_keycode_state_changed_from_encoded(LS(FSLH), true, event.timestamp);
-            raise_zmk_keycode_state_changed_from_encoded(LS(FSLH), false, event.timestamp);
+            // Slash key FSLH
+            raise_zmk_keycode_state_changed_from_encoded(FSLH, true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(FSLH, false, event.timestamp);
         }
         return ZMK_BEHAVIOR_OPAQUE;
     }
