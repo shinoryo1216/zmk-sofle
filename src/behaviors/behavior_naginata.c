@@ -673,17 +673,26 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
     LOG_DBG("position %d keycode 0x%02X", event.position, binding->param1);
 
-    // Row 2 R6 key (plain = slash / shift = colon)
+    // Row 2 R6 key (plain = slash "／" / shift = colon "：")
     if (binding->param1 == NG_R6_R2) {
         naginata_set_timestamp(event.timestamp);
+        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_enter_held) thumb_enter_used_as_shift = true;
+        if (special_key.state == NG_SPECIAL_PENDING) {
+            k_work_cancel_delayable(&special_key.work);
+            special_key.state = NG_SPECIAL_HELD;
+            raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
+        }
         if (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held) {
             // JIS colon key is SQT (0x34)
             raise_zmk_keycode_state_changed_from_encoded(SQT, true, event.timestamp);
             raise_zmk_keycode_state_changed_from_encoded(SQT, false, event.timestamp);
         } else {
-            // Slash key
-            raise_zmk_keycode_state_changed_from_encoded(FSLH, true, event.timestamp);
-            raise_zmk_keycode_state_changed_from_encoded(FSLH, false, event.timestamp);
+            // In Mozc/Kana mode, "z" + "?" (LS(FSLH)) outputs fullwidth slash "／"
+            raise_zmk_keycode_state_changed_from_encoded(Z, true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(Z, false, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(LS(FSLH), true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(LS(FSLH), false, event.timestamp);
         }
         return ZMK_BEHAVIOR_OPAQUE;
     }
@@ -832,10 +841,28 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
             } else if (special_key.state == NG_SPECIAL_PENDING) {
                 k_work_cancel_delayable(&special_key.work);
                 special_key.state = NG_SPECIAL_IDLE;
-                // Check if center shift (B_SPACE) is active
-                uint32_t output_key = (pressed_keys & B_SPACE) ? special_key.shift_tap_code : special_key.tap_code;
-                raise_zmk_keycode_state_changed_from_encoded(output_key, true, event.timestamp);
-                raise_zmk_keycode_state_changed_from_encoded(output_key, false, event.timestamp);
+                bool is_shifted = (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held);
+                if (is_shifted) {
+                    if (special_key.keycode == NG_L1_R4) {
+                        // 『 in Mozc is z + [ (Z, RBKT)
+                        raise_zmk_keycode_state_changed_from_encoded(Z, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(Z, false, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(RBKT, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(RBKT, false, event.timestamp);
+                    } else if (special_key.keycode == NG_R6_R4) {
+                        // 』 in Mozc is z + ] (Z, BSLH)
+                        raise_zmk_keycode_state_changed_from_encoded(Z, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(Z, false, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(BSLH, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(BSLH, false, event.timestamp);
+                    } else {
+                        raise_zmk_keycode_state_changed_from_encoded(special_key.shift_tap_code, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(special_key.shift_tap_code, false, event.timestamp);
+                    }
+                } else {
+                    raise_zmk_keycode_state_changed_from_encoded(special_key.tap_code, true, event.timestamp);
+                    raise_zmk_keycode_state_changed_from_encoded(special_key.tap_code, false, event.timestamp);
+                }
             }
             return ZMK_BEHAVIOR_OPAQUE;
     }
