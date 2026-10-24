@@ -1,6 +1,6 @@
 layout: {zmk_keyboard: eyelash_sofle}
 layers:
-  LAYER0:
+  L0 BASE:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
   - {t: '2', s: '@'}
@@ -13,7 +13,7 @@ layers:
   - {t: '8', s: '*'}
   - {t: '9', s: (}
   - {t: '0', s: )}
-  - {t: '$$mdi:backspace$$', type: backspace}
+  - Gui+$$mdi:keyboard-space$$
   - $$mdi:keyboard-tab$$
   - Q
   - W
@@ -26,21 +26,21 @@ layers:
   - I
   - O
   - P
-  - {t: \, s: '|'}
-  - $$mdi:apple-keyboard-caps$$
+  - {t: '[', s: '{'}
+  - {t: Sft+8, h: '$$mdi:apple-keyboard-control$$', s: Sft+*}
   - A
   - S
   - D
-  - F
+  - {t: F, h: '$$mdi:apple-keyboard-shift$$'}
   - G
   - $$mdi:arrow-left-bold$$
   - H
-  - J
+  - {t: J, h: '$$mdi:apple-keyboard-shift$$'}
   - K
   - L
-  - {t: ;, s: ':'}
   - {t: '''', s: '"'}
-  - $$mdi:apple-keyboard-shift$$
+  - {t: Sft+9, h: '$$mdi:apple-keyboard-control$$', s: Sft+(}
+  - {t: ']', h: '$$mdi:apple-keyboard-shift$$', s: '}'}
   - Z
   - X
   - C
@@ -49,139 +49,478 @@ layers:
   - $$mdi:arrow-right-bold$$
   - N
   - M
-  - {t: ',', s: <}
-  - {t: ., s: '>'}
-  - {t: /, s: '?'}
-  - {t: '$$mdi:keyboard-return$$', type: enter}
-  - $$mdi:volume-off$$
-  - $$mdi:apple-keyboard-control$$
-  - $$mdi:apple-keyboard-command$$
+  - $$mdi:arrow-left-bold$$
+  - $$mdi:arrow-right-bold$$
+  - {t: Sft+/, s: 'Sft+?'}
+  - {t: \, h: '$$mdi:apple-keyboard-shift$$', s: '|'}
+  - {t: L10 ENCODER MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
-  - LAYER1
-  - $$mdi:keyboard-space$$
-  - {t: '$$mdi:keyboard-return$$', type: enter}
-  - $$mdi:keyboard-space$$
-  - {t: '$$mdi:keyboard-return$$', type: enter}
-  - LAYER2
+  - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
+  - {t: '&macro_to_ng_winlin', h: L3 CURSOR}
+  - {t: ',', h: L4 WINDOW, s: <}
+  - {t: '$$mdi:backspace$$', h: L2 SYMBOL}
+  - '&td_joystick_click'
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL}
+  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW}
+  - {t: '&macro_to_ng_winlin', h: L3 CURSOR}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  L1 NAGINATA:
+  - $$mdi:keyboard-esc$$
+  - {t: '1', s: '!'}
+  - {t: '2', s: '@'}
+  - {t: '3', s: '#'}
+  - {t: '4', s: $}
+  - {t: '5', s: '%'}
+  - $$mdi:arrow-up-bold$$
+  - {t: '6', s: ^}
+  - {t: '7', s: '&'}
+  - {t: '8', s: '*'}
+  - {t: '9', s: (}
+  - {t: '0', s: )}
+  - Gui+$$mdi:keyboard-space$$
+  - $$mdi:keyboard-tab$$
+  - '&ng Q'
+  - '&ng W'
+  - '&ng E'
+  - '&ng R'
+  - '&ng NG_L6_R2'
+  - $$mdi:arrow-down-bold$$
+  - '&ng NG_R1_R2'
+  - '&ng U'
+  - '&ng I'
+  - '&ng O'
+  - '&ng P'
+  - '&ng NG_R6_R2'
+  - '&ng NG_L1_R3'
+  - '&ng A'
+  - '&ng S'
+  - '&ng D'
+  - '&ng F'
+  - '&ng G'
+  - $$mdi:arrow-left-bold$$
+  - '&ng H'
+  - '&ng J'
+  - '&ng K'
+  - '&ng L'
+  - '&ng SEMI'
+  - '&ng NG_R6_R3'
+  - '&ng NG_L1_R4'
+  - '&ng Z'
+  - '&ng X'
+  - '&ng C'
+  - '&ng V'
+  - '&ng B'
+  - $$mdi:arrow-right-bold$$
+  - '&ng N'
+  - '&ng M'
+  - '&ng COMMA'
+  - '&ng DOT'
+  - '&ng FSLH'
+  - '&ng NG_R6_R4'
+  - {t: L10 ENCODER MARKER, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
+  - {t: '&macro_to_qwerty_winlin', h: L3 CURSOR}
+  - {t: '&ng NG_THUMB_COMMA', h: L4 WINDOW}
+  - '&ng NG_THUMB_BS'
+  - '&td_joystick_click'
+  - '&ng NG_THUMB_ENTER'
+  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW}
+  - {t: '&macro_to_qwerty_winlin', h: L3 CURSOR}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  L2 SYMBOL:
+  - $$mdi:keyboard-esc$$
+  - {t: '1', s: '!'}
+  - {t: '2', s: '@'}
+  - {t: '3', s: '#'}
+  - {t: '4', s: $}
+  - {t: '5', s: '%'}
+  - Ctl+C
+  - {t: '6', s: ^}
+  - {t: '7', s: '&'}
+  - {t: '8', s: '*'}
+  - {t: '9', s: (}
+  - {t: '0', s: )}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:keyboard-tab$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: Sft+-, s: Sft+_}
+  - INT1
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - Ctl+V
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: 'Sft+[', s: 'Sft+{'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: 'Sft+,', s: Sft+<}
+  - {t: Sft+', s: Sft+"}
+  - {t: Sft+;, s: 'Sft+:'}
+  - {t: '-', s: _}
+  - {t: /, s: '?'}
+  - INT3
+  - Ctl+Z
+  - {t: Sft+6, s: Sft+^}
+  - {t: Sft+7, s: Sft+&}
+  - {t: Sft+=, s: Sft++}
+  - Sft+INT3
+  - {t: ;, s: ':'}
+  - {t: Sft+., s: Sft+>}
+  - {t: 'Sft+]', s: 'Sft+}'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '=', s: +}
+  - Sft+INT1
+  - {t: Sft+5, s: Sft+%}
+  - {t: Sft+4, s: Sft+$}
+  - Ctl+Sft+Z
+  - {t: Sft+3, s: Sft+#}
+  - {t: Sft+2, s: Sft+@}
+  - $$mdi:arrow-up-bold$$
+  - $$mdi:arrow-down-bold$$
+  - {t: Sft+1, s: Sft+!}
+  - {t: Sft+\, s: Sft+|}
+  - {t: L10 ENCODER MARKER, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR}
+  - {t: ., s: '>'}
+  - {t: '$$mdi:backspace$$', type: held}
+  - Ctl+A
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  L3 CURSOR:
+  - $$mdi:keyboard-esc$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:keyboard-tab$$
+  - HOME
+  - PG UP
+  - $$mdi:arrow-up-bold$$
+  - PG DN
+  - END
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - END
+  - PG DN
+  - $$mdi:arrow-up-bold$$
+  - PG UP
+  - HOME
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-control$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-left-bold$$
+  - $$mdi:arrow-down-bold$$
+  - $$mdi:arrow-right-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - Alt+$$mdi:arrow-left-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-left-bold$$
+  - $$mdi:arrow-down-bold$$
+  - $$mdi:arrow-right-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:apple-keyboard-shift$$
-  - $$mdi:backspace-reverse-outline$$
-  LAYER1:
-  - {t: '`', s: '~'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - Alt+$$mdi:arrow-right-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-shift$$
+  - {t: L10 ENCODER MARKER, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held}
+  - {t: ',', h: L4 WINDOW, s: <}
+  - {t: '$$mdi:backspace$$', type: held alternate}
+  - $$mdi:mouse-scroll-wheel$$
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  L4 WINDOW:
+  - {t: Gui+/, s: 'Gui+?'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: Gui+/, s: 'Gui+?'}
+  - {t: 'Gui+Sft+,', s: Gui+Sft+<}
+  - Gui+Sft+K
+  - {t: 'Gui+,', s: Gui+<}
+  - Gui+$$mdi:arrow-up-bold$$
+  - {t: Gui+., s: Gui+>}
+  - Gui+Sft+J
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - Gui+Sft+K
+  - {t: 'Gui+,', s: Gui+<}
+  - Gui+$$mdi:arrow-up-bold$$
+  - {t: Gui+., s: Gui+>}
+  - Gui+Sft+J
+  - {t: 'Gui+Sft+,', s: Gui+Sft+<}
+  - {t: Gui+Sft+., s: Gui+Sft+>}
+  - Gui+K
+  - Gui+$$mdi:arrow-left-bold$$
+  - Gui+$$mdi:arrow-down-bold$$
+  - Gui+$$mdi:arrow-right-bold$$
+  - Gui+J
+  - Ctl+Sft+$$mdi:keyboard-tab$$
+  - Gui+K
+  - Gui+$$mdi:arrow-left-bold$$
+  - Gui+$$mdi:arrow-down-bold$$
+  - Gui+$$mdi:arrow-right-bold$$
+  - Gui+J
+  - {t: Gui+Sft+., s: Gui+Sft+>}
+  - Gui+M
+  - Gui+R
+  - Gui+B
+  - {t: 'Gui+$$mdi:keyboard-return$$', type: enter}
+  - Gui+E
+  - Gui+$$mdi:keyboard-space$$
+  - Ctl+$$mdi:keyboard-tab$$
+  - Gui+$$mdi:keyboard-space$$
+  - Gui+E
+  - {t: 'Gui+$$mdi:keyboard-return$$', type: enter}
+  - Gui+B
+  - Gui+R
+  - Gui+M
+  - {t: L10 ENCODER MARKER, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: ',', h: L4 WINDOW, s: <, type: held}
+  - {t: '$$mdi:backspace$$', type: held alternate}
+  - $$mdi:mouse-scroll-wheel$$
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  L5 MOUSE:
+  - $$mdi:keyboard-esc$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:keyboard-tab$$
+  - HOME
+  - PG UP
+  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - PG DN
+  - END
+  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
+  - END
+  - PG DN
+  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - PG UP
+  - HOME
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-control$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-shift$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: L10 ENCODER MARKER, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L5 MOUSE, type: held}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: ',', h: L4 WINDOW, s: <, type: held alternate}
+  - {t: '$$mdi:backspace$$', type: held alternate}
+  - $$mdi:mouse-scroll-wheel$$
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE, type: held alternate}
+  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE, type: held alternate}
+  L6 FKEYS:
+  - $$mdi:keyboard-esc$$
   - F1
   - F2
   - F3
   - F4
   - F5
-  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - $$mdi:arrow-up-bold$$
   - F6
   - F7
   - F8
   - F9
   - F10
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '`', s: '~'}
-  - $$mdi:mouse-left-click-outline$$
-  - $$mdi:mouse-scroll-wheel$$
-  - $$mdi:mouse-right-click-outline$$
-  - '&mkp MB4'
-  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
-  - PG UP
-  - END
-  - $$mdi:arrow-up-bold$$
-  - HOME
-  - {t: '-', s: _}
-  - {t: '=', s: +}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - '~'
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - '&mkp MB5'
-  - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
-  - PG DN
-  - $$mdi:arrow-left-bold$$
-  - $$mdi:arrow-down-bold$$
-  - $$mdi:arrow-right-bold$$
-  - {t: '[', s: '{'}
-  - {t: ']', s: '}'}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - RGB OFF
-  - RGB ON
-  - RGB EFF
-  - RGB EFR
-  - RGB SPI
-  - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
-  - RGB BRI
-  - RGB BRD
-  - Ins
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:keyboard-tab$$
   - F11
   - F12
-  - {t: '$$mdi:transfer$$', type: trans}
-  - $$mdi:volume-off$$
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {type: held}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - $$mdi:mouse-left-click-outline$$
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  LAYER2:
-  - '~'
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-down-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-control$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-left-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:apple-keyboard-shift$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-right-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: L10 ENCODER MARKER, h: toggle}
+  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR}
+  - {t: ',', h: L4 WINDOW, s: <, type: held}
+  - {t: '$$mdi:backspace$$', type: held}
+  - $$mdi:mouse-scroll-wheel$$
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  L7 BLUETOOTH:
+  - $$mdi:bluetooth-off$$
   - {h: '1', s: '$$mdi:bluetooth-connect$$'}
   - {h: '2', s: '$$mdi:bluetooth-connect$$'}
   - {h: '3', s: '$$mdi:bluetooth-connect$$'}
   - {h: '4', s: '$$mdi:bluetooth-connect$$'}
   - {h: '5', s: '$$mdi:bluetooth-connect$$'}
-  - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
-  - F6
-  - F7
-  - F8
-  - F9
-  - F10
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - $$mdi:arrow-up-bold$$
+  - {h: '1', s: '$$mdi:bluetooth-connect$$'}
+  - {h: '2', s: '$$mdi:bluetooth-connect$$'}
+  - {h: '3', s: '$$mdi:bluetooth-connect$$'}
+  - {h: '4', s: '$$mdi:bluetooth-connect$$'}
+  - {h: '5', s: '$$mdi:bluetooth-connect$$'}
   - $$mdi:bluetooth-off$$
-  - BT CLR ALL
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - F11
-  - F12
-  - _
-  - +
-  - {t: '$$mdi:transfer$$', type: trans}
-  - OUT USB
-  - OUT BLE
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - '{'
-  - '}'
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:backup-restore$$', type: bootloader}
-  - {t: '$$mdi:transfer$$', type: trans}
   - $$mdi:progress-download$$
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:backup-restore$$', type: bootloader}
-  - '&soft_off'
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-down-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:progress-download$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-left-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:arrow-right-bold$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: L10 ENCODER MARKER, h: toggle}
+  - {t: '$$mdi:apple-keyboard-option$$', type: held}
+  - {t: '$$mdi:printer-outline$$', h: L5 MOUSE, type: held}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held}
+  - {t: ',', h: L4 WINDOW, s: <, type: held}
+  - {t: '$$mdi:backspace$$', type: held}
+  - $$mdi:mouse-scroll-wheel$$
+  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW, type: held alternate}
+  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE, type: held alternate}
+  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE, type: held alternate}
+  L8 ENCODER LR:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -189,16 +528,259 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - $$mdi:mouse-left-click-outline$$
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  L9 MOUSE ENC UD:
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  L10 ENCODER MARKER:
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  L11 SYM PASSTHRU:
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
-  LAYER3:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
+  L12 CURSOR PASSTHRU:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -254,13 +836,17 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
+  L13 WINDOW PASSTHRU:
   - {t: '$$mdi:transfer$$', type: trans}
-  LAYER4:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -315,9 +901,16 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
+  - {type: held}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
+  - {type: held}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
+  L14 FKEYS/BT PASSTHRU:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -325,6 +918,123 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
+  - {type: held}
+  - {type: held}
+  - {type: held}
+  - {type: held}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
+  - {type: held}
+  - {type: held}
+  - {type: held}
+  - {type: held}
 combos:
-- p: [14, 28, 40]
-  k: '&soft_off'
+- p: [4, 5]
+  k: '&macro_to_ng_ipad'
+  l: [L0 BASE]
+- p: [7, 8]
+  k: '&macro_to_qwerty_ipad'
+  l: [L1 NAGINATA]
+- p: [47, 48]
+  k: '&mkp MB4'
+  l: [L4 WINDOW]
+- p: [41, 42]
+  k: '&mkp MB4'
+  l: [L4 WINDOW]
+- p: [48, 49]
+  k: '&mkp MB5'
+  l: [L4 WINDOW]
+- p: [42, 43]
+  k: '&mkp MB5'
+  l: [L4 WINDOW]
+- p: [21, 22]
+  k: Gui+W
+  l: [L3 CURSOR, L4 WINDOW]
+- p: [16, 17]
+  k: Gui+W
+  l: [L3 CURSOR, L4 WINDOW]
+- p: [22, 23]
+  k: {t: C, h: '$$mdi:apple-keyboard-command$$'}
+  l: [L3 CURSOR, L4 WINDOW]
+- p: [15, 16]
+  k: {t: C, h: '$$mdi:apple-keyboard-command$$'}
+  l: [L3 CURSOR, L4 WINDOW]
+- p: [34, 35, 36]
+  k: Gui+$$mdi:keyboard-tab$$
+  l: [L4 WINDOW]
+- p: [28, 29, 30]
+  k: Gui+$$mdi:keyboard-tab$$
+  l: [L4 WINDOW]
+- p: [21, 22]
+  k: $$mdi:mouse-left-click-outline$$
+  l: [L5 MOUSE]
+- p: [16, 17]
+  k: $$mdi:mouse-left-click-outline$$
+  l: [L5 MOUSE]
+- p: [21, 22, 23]
+  k: $$mdi:mouse-scroll-wheel$$
+  l: [L5 MOUSE]
+- p: [15, 16, 17]
+  k: $$mdi:mouse-scroll-wheel$$
+  l: [L5 MOUSE]
+- p: [22, 23]
+  k: $$mdi:mouse-right-click-outline$$
+  l: [L5 MOUSE]
+- p: [15, 16]
+  k: $$mdi:mouse-right-click-outline$$
+  l: [L5 MOUSE]
+- p: [56, 57]
+  k: L6 FKEYS
+- p: [59, 60]
+  k: L6 FKEYS
+- p: [53, 54, 55, 56, 57]
+  k: L7 BLUETOOTH
+- p: [59, 60, 61, 62, 63]
+  k: L7 BLUETOOTH
