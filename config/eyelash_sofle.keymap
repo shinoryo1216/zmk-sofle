@@ -1,50 +1,231 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // 600
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 25   // 10
+// ZMK_POINTING_DEFAULT_MOVE_VAL：調整履歴 1200→600→150→300→600。
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 600
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 25
 
 #include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 #include <behaviors.dtsi>
 #include <behaviors/runtime-sensor-rotate.dtsi>
+#include <behaviors/naginata.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
-&mmv_input_listener { input-processors = <&zip_xy_scaler 2 1>; };
-
+// zip_xy_scaler
+&mmv_input_listener { input-processors = <&zip_xy_scaler 1 1>; };
 &msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
 
+/ {
+    vel_move_x_listener: vel_move_x_listener {
+        compatible = "zmk,input-listener";
+        device = <&vel_move_x>;
+    };
+    vel_move_y_listener: vel_move_y_listener {
+        compatible = "zmk,input-listener";
+        device = <&vel_move_y>;
+    };
+};
+
 &msc {
-    acceleration-exponent = <1>;      // 0
-    time-to-max-speed-ms = <100>;       // 300
-    delay-ms = <0>;                   // 0
+    acceleration-exponent = <1>;
+    time-to-max-speed-ms = <100>;
+    delay-ms = <0>;
 };
 
 &mmv {
-    time-to-max-speed-ms = <500>;
+    time-to-max-speed-ms = <80>;
     acceleration-exponent = <1>;
     trigger-period-ms = <16>;
 };
 
 &soft_off { hold-time-ms = <2000>; };
 
+&lt {
+    flavor = "tap-preferred";
+    tapping-term-ms = <200>;
+    quick-tap-ms = <175>;
+};
+
 / {
-    scroll_encoder: scroll_encoder {
-        compatible = "zmk,behavior-sensor-rotate";
-        #sensor-binding-cells = <0>;
-        bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
-
-        tap-ms = <100>;
-    };
-
     behaviors {
-        rsr_vol: rsr_vol {
+        lt_thumb: lt_thumb {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&kp>;
+        };
+
+        // Home row mods
+        hml: home_row_mod_left {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <7 8 9 10 11 12 20 21 22 23 24 25 33 34 35 36 37 38 46 47 48 49 50 51>;
+            hold-trigger-on-release;
+        };
+
+        hmr: home_row_mod_right {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <0 1 2 3 4 5 13 14 15 16 17 18 26 27 28 29 30 31 39 40 41 42 43 44>;
+            hold-trigger-on-release;
+        };
+
+        lt_thumb_space: lt_thumb_space {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&kp>;
+        };
+
+        // 親指L6（QWERTY L0）：タップ＝BackSpace、長押し＝Layer 2（記号）。
+        // quick-tap-ms：タップ直後(この時間内)に押し直して保持すると BackSpace が押しっぱなしになる（連続削除）。
+        // 値を大きくすると連続削除に入りやすいが、タップ直後の「長押しでL2」が効きにくくなる。
+        lt_thumb_bs: lt_thumb_bs {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <250>;
+            bindings = <&mo>, <&kp>;
+        };
+
+        // 親指L4/R3（QWERTY L0）：タップ＝日本語入力へ切替（半角/全角 ＋ Layer 1(薙刀式)へ）、長押し＝Layer 3（カーソル）
+        // 使い方: &lt_thumb_to_ng 3 0 （第2引数はダミー。タップ側はマクロで引数なし）
+        lt_thumb_to_ng: lt_thumb_to_ng {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <0>;
+            bindings = <&mo>, <&macro_to_ng_winlin>;
+        };
+
+        // 親指L4/R3（薙刀式 L1）：タップ＝英語入力へ切替（半角/全角 ＋ Layer 0(QWERTY)へ）、長押し＝Layer 3（カーソル）
+        lt_thumb_to_qwerty: lt_thumb_to_qwerty {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <0>;
+            bindings = <&mo>, <&macro_to_qwerty_winlin>;
+        };
+
+        lt_thumb_comma: lt_thumb_comma {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&kp>;
+        };
+
+        // 薙刀式(L1)用：親指L5。タップ＝&ng NG_THUMB_COMMA（単打「、」／センターシフト中「。」）、ホールド＝レイヤー
+        lt_thumb_comma_ng: lt_thumb_comma_ng {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <200>;
+            bindings = <&mo>, <&ng>;
+        };
+
+        // QWERTY(L0)用：3段目/4段目 L1・R6 の括弧キー（薙刀式の3機能キーと同じ挙動：200ms、他キー押下で即ホールド）
+        // タップ＝括弧、ホールド＝Ctrl/Shift（記号レイヤー側は別途 &kp で <, >, {, } を割当）
+        mt_bracket: mt_bracket {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <0>;
+            bindings = <&kp>, <&kp>;
+        };
+
+        rsr_cursor_ud: rsr_cursor_ud {
             compatible = "zmk,behavior-runtime-sensor-rotate";
             #sensor-binding-cells = <0>;
             tap-ms = <5>;
-            cw-binding = <&kp C_VOL_UP>;
-            ccw-binding = <&kp C_VOL_DN>;
+            cw-binding = <&kp DOWN_ARROW>;
+            ccw-binding = <&kp UP_ARROW>;
+        };
+
+        rsr_cursor_lr: rsr_cursor_lr {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp RIGHT_ARROW>;
+            ccw-binding = <&kp LEFT_ARROW>;
+        };
+
+        rsr_undo_redo: rsr_undo_redo {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp LC(LS(Z))>;
+            ccw-binding = <&kp LC(Z)>;
+        };
+
+        rsr_browser_nav: rsr_browser_nav {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp LA(RIGHT)>;
+            ccw-binding = <&kp LA(LEFT)>;
+        };
+
+        rsr_tab_nav: rsr_tab_nav {
+            compatible = "zmk,behavior-runtime-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            tap-ms = <5>;
+            cw-binding = <&kp LC(TAB)>;
+            ccw-binding = <&kp LC(LS(TAB))>;
+        };
+
+        vel_move_x: vel_move_x {
+            compatible = "zmk,behavior-velocity-mouse-move";
+            #binding-cells = <1>;
+            input-code = <INPUT_REL_X>;
+            min-move = <8>;
+            max-move = <28>;
+            min-interval-ms = <8>;
+            max-interval-ms = <120>;
+        };
+
+        vel_move_y: vel_move_y {
+            compatible = "zmk,behavior-velocity-mouse-move";
+            #binding-cells = <1>;
+            input-code = <INPUT_REL_Y>;
+            min-move = <8>;
+            max-move = <28>;
+            min-interval-ms = <8>;
+            max-interval-ms = <120>;
+        };
+
+        mouse_rot_lr: mouse_rot_lr {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&vel_move_x 1>, <&vel_move_x (-1)>;
+        };
+
+        mouse_rot_ud: mouse_rot_ud {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&vel_move_y 1>, <&vel_move_y (-1)>;
         };
 
         rsr_trans: rsr_trans {
@@ -52,77 +233,332 @@
             #sensor-binding-cells = <0>;
             tap-ms = <0>;
         };
+
+        td_joystick_click: td_joystick_click {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&mkp LCLK>, <&mkp RCLK>;
+        };
+    };
+
+    macros {
+        // 英語(QWERTY, L0) ⇄ 日本語(薙刀式, L1) 切替マクロ：Windows/Linux用（半角/全角 GRAVE）
+        macro_to_ng_winlin: macro_to_ng_winlin {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <15>;
+            tap-ms = <15>;
+            bindings = <&macro_tap &kp GRAVE>, <&macro_tap &to 1>;
+            label = "MACRO_TO_NG_WINLIN";
+        };
+
+        macro_to_qwerty_winlin: macro_to_qwerty_winlin {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <15>;
+            tap-ms = <15>;
+            bindings = <&macro_tap &kp GRAVE>, <&macro_tap &to 0>;
+            label = "MACRO_TO_QWERTY_WINLIN";
+        };
+
+        // 英語(QWERTY, L0) ⇄ 日本語(薙刀式, L1) 切替マクロ：iPadOS/macOS用（LANG1/LANG2）
+        macro_to_ng_ipad: macro_to_ng_ipad {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <15>;
+            tap-ms = <15>;
+            bindings = <&macro_tap &kp LANG1>, <&macro_tap &to 1>;
+            label = "MACRO_TO_NG_IPAD";
+        };
+
+        macro_to_qwerty_ipad: macro_to_qwerty_ipad {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <15>;
+            tap-ms = <15>;
+            bindings = <&macro_tap &kp LANG2>, <&macro_tap &to 0>;
+            label = "MACRO_TO_QWERTY_IPAD";
+        };
     };
 
     combos {
         compatible = "zmk,combos";
 
-        softoff {
-            bindings = <&soft_off>;
-            key-positions = <14 28 40>;
+        /* ---- 言語切替コンボ（iPadOS/macOS用のみ）：英語(QWERTY L0) ⇄ 日本語(薙刀式 L1) ----
+           Windows/Linux用は親指L4/R3のタップ（lt_thumb_to_ng / lt_thumb_to_qwerty）に移動済み */
+        // iPadOS/macOS用: 4+5 / 6+7 (LANG1/LANG2 + レイヤー切替)
+        combo_qwerty_to_ng_ipad {
+            timeout-ms = <50>;
+            key-positions = <4 5>;
+            bindings = <&macro_to_ng_ipad>;
+            layers = <0>;
         };
-    };
 
-    macros {
-        SHIFT_MCLK: SHIFT_MCLK {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings =
-                <&macro_press>,
-                <&kp LEFT_SHIFT>,
-                <&macro_press>,
-                <&mkp MB3>,
-                <&macro_pause_for_release>,
-                <&macro_release>,
-                <&kp LEFT_SHIFT &mkp MB3>;
+        combo_ng_to_qwerty_ipad {
+            timeout-ms = <50>;
+            key-positions = <7 8>;
+            bindings = <&macro_to_qwerty_ipad>;
+            layers = <1>;
+        };
 
-            label = "SHIFT_MCLK";
+        /* ---- ウィンドウ管理コンボ（Layer 4=WINDOW, Layer 3=CURSOR） ---- */
+        combo_l4_mb4_mcomma {
+            timeout-ms = <50>;
+            key-positions = <47 48>;
+            bindings = <&mkp MB4>;
+            layers = <4>;
+        };
+
+        combo_l4_mb4_cx {
+            timeout-ms = <50>;
+            key-positions = <41 42>;
+            bindings = <&mkp MB4>;
+            layers = <4>;
+        };
+
+        combo_l4_mb5_commadot {
+            timeout-ms = <50>;
+            key-positions = <48 49>;
+            bindings = <&mkp MB5>;
+            layers = <4>;
+        };
+
+        combo_l4_mb5_cv {
+            timeout-ms = <50>;
+            key-positions = <42 43>;
+            bindings = <&mkp MB5>;
+            layers = <4>;
+        };
+
+        combo_l4_maximize_ui {
+            timeout-ms = <50>;
+            key-positions = <21 22>;
+            bindings = <&kp LG(W)>;
+            layers = <3 4>;
+        };
+
+        combo_l4_maximize_er {
+            timeout-ms = <50>;
+            key-positions = <16 17>;
+            bindings = <&kp LG(W)>;
+            layers = <3 4>;
+        };
+
+        combo_l4_close_io {
+            timeout-ms = <50>;
+            key-positions = <22 23>;
+            bindings = <&kp LG(C)>;
+            layers = <3 4>;
+        };
+
+        combo_l4_close_we {
+            timeout-ms = <50>;
+            key-positions = <15 16>;
+            bindings = <&kp LG(C)>;
+            layers = <3 4>;
+        };
+
+        combo_l4_mission_jkl {
+            timeout-ms = <50>;
+            key-positions = <34 35 36>;
+            bindings = <&kp LG(TAB)>;
+            layers = <4>;
+        };
+
+        combo_l4_mission_sdf {
+            timeout-ms = <50>;
+            key-positions = <28 29 30>;
+            bindings = <&kp LG(TAB)>;
+            layers = <4>;
+        };
+
+        /* ---- Layer 5（マウスレイヤー）専用コンボ ---- */
+        combo_l5_lclk_ui {
+            timeout-ms = <50>;
+            key-positions = <21 22>;
+            bindings = <&mkp LCLK>;
+            layers = <5>;
+        };
+
+        combo_l5_lclk_er {
+            timeout-ms = <50>;
+            key-positions = <16 17>;
+            bindings = <&mkp LCLK>;
+            layers = <5>;
+        };
+
+        combo_l5_mclk_uio {
+            timeout-ms = <50>;
+            key-positions = <21 22 23>;
+            bindings = <&mkp MCLK>;
+            layers = <5>;
+        };
+
+        combo_l5_mclk_wer {
+            timeout-ms = <50>;
+            key-positions = <15 16 17>;
+            bindings = <&mkp MCLK>;
+            layers = <5>;
+        };
+
+        combo_l5_rclk_io {
+            timeout-ms = <50>;
+            key-positions = <22 23>;
+            bindings = <&mkp RCLK>;
+            layers = <5>;
+        };
+
+        combo_l5_rclk_we {
+            timeout-ms = <50>;
+            key-positions = <15 16>;
+            bindings = <&mkp RCLK>;
+            layers = <5>;
+        };
+
+        /* ---- レイヤー切替用親指コンボ（全レイヤー共通） ---- */
+        combo_mo_fkeys_left {
+            timeout-ms = <50>;
+            key-positions = <56 57>;
+            bindings = <&mo 6>;
+        };
+
+        combo_mo_fkeys_right {
+            timeout-ms = <50>;
+            key-positions = <59 60>;
+            bindings = <&mo 6>;
+        };
+
+        combo_mo_bt_left {
+            timeout-ms = <150>;
+            key-positions = <53 54 55 56 57>;
+            bindings = <&mo 7>;
+        };
+
+        combo_mo_bt_right {
+            timeout-ms = <150>;
+            key-positions = <59 60 61 62 63>;
+            bindings = <&mo 7>;
         };
     };
 
     keymap {
         compatible = "zmk,keymap";
 
-        layer0 {
+        // Layer 0: QWERTY Base（英語入力）
+        layer_0_base {
             bindings = <
-&kp ESC     &kp N1     &kp N2        &kp N3        &kp N4  &kp N5       &kp UP_ARROW     &kp N6     &kp N7     &kp N8     &kp N9           &kp N0      &kp BACKSPACE
-&kp TAB     &kp Q      &kp W         &kp E         &kp R   &kp T        &kp DOWN_ARROW   &kp Y      &kp U      &kp I      &kp O            &kp P       &kp BSLH
-&kp CAPS    &kp A      &kp S         &kp D         &kp F   &kp G        &kp LEFT_ARROW   &kp H      &kp J      &kp K      &kp L            &kp SEMI    &kp APOS
-&kp LSHFT   &kp Z      &kp X         &kp C         &kp V   &kp B        &kp RIGHT_ARROW  &kp N      &kp M      &kp COMMA  &kp DOT          &kp FSLH    &kp ENTER
-&kp C_MUTE  &kp LCTRL  &kp LEFT_GUI  &kp LEFT_ALT  &mo 1   &kp SPACE    &kp ENTER        &kp SPACE  &kp ENTER  &mo 2      &kp RIGHT_SHIFT  &kp DELETE
+&kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp UP_ARROW   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp LG(SPACE)   
+&kp TAB   &kp Q   &kp W   &kp E   &kp R   &kp T   &kp DOWN_ARROW   &kp Y   &kp U   &kp I   &kp O   &kp P   &kp LBKT   
+&mt_bracket LCTRL LS(N8)   &kp A   &kp S   &kp D   &hml LSHFT F   &kp G   &kp LEFT_ARROW   &kp H   &hmr RSHFT J   &kp K   &kp L   &kp SQT   &mt_bracket RCTRL LS(N9)   
+&mt_bracket LSHFT RBKT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &kp LEFT_ARROW     &kp RIGHT_ARROW    &kp LS(FSLH)     &mt_bracket RSHFT BSLH
+&tog 10   &kp LALT   &lt 5 PSCRN   &lt_thumb_to_ng 3 0   &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC   &td_joystick_click   &lt_thumb 2 ENTER   &lt_thumb_space 4 SPACE   &lt_thumb_to_ng 3 0   &lt 5 DEL   &lt 5 ESC   
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
-            display-name = "LAYER0";
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "L0 BASE";
         };
 
-        layer_1 {
+        // Layer 1: 薙刀式 かなBase（日本語入力）
+        layer_1_naginata {
             bindings = <
-&kp GRAVE   &kp F1           &kp F2          &kp F3           &kp F4           &kp F5             &mmv MOVE_UP     &kp F6           &kp F7           &kp F8      &kp F9     &kp F10           &trans
-&trans      &kp GRAVE        &mkp LCLK       &mkp MCLK        &mkp RCLK        &mkp MB4           &mmv MOVE_DOWN   &kp PG_UP        &kp END          &kp UP      &kp HOME   &kp MINUS         &kp EQUAL
-&trans      &kp TILDE        &trans          &trans           &trans           &mkp MB5           &mmv MOVE_LEFT   &kp PG_DN        &kp LEFT         &kp DOWN    &kp RIGHT  &kp LEFT_BRACKET  &kp RIGHT_BRACKET
-&trans      &rgb_ug RGB_OFF  &rgb_ug RGB_ON  &rgb_ug RGB_EFF  &rgb_ug RGB_EFR  &rgb_ug RGB_SPI    &mmv MOVE_RIGHT  &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &kp INSERT  &kp F11    &kp F12           &trans
-&kp C_MUTE  &trans           &trans          &trans           &trans           &trans             &mkp LCLK        &trans           &trans           &trans      &trans     &trans
+&kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp UP_ARROW   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp LG(SPACE)   
+&kp TAB   &ng Q   &ng W   &ng E   &ng R   &ng NG_L6_R2   &kp DOWN_ARROW   &ng NG_R1_R2   &ng U   &ng I   &ng O   &ng P   &ng NG_R6_R2   
+&ng NG_L1_R3   &ng A      &ng S         &ng D         &ng F         &ng G        &kp LEFT_ARROW   &ng H      &ng J         &ng K         &ng L      &ng SEMI    &ng NG_R6_R3
+&ng NG_L1_R4   &ng Z      &ng X         &ng C         &ng V         &ng B        &kp RIGHT_ARROW  &ng N      &ng M         &ng COMMA     &ng DOT    &ng FSLH    &ng NG_R6_R4
+&tog 10   &kp LALT   &lt 5 PSCRN   &lt_thumb_to_qwerty 3 0   &lt_thumb_comma_ng 4 NG_THUMB_COMMA   &ng NG_THUMB_BS   &td_joystick_click   &ng NG_THUMB_ENTER   &lt_thumb_space 4 SPACE   &lt_thumb_to_qwerty 3 0   &lt 5 DEL   &lt 5 ESC   
             >;
 
-            sensor-bindings = <&rsr_vol &rsr_trans>;
-            display-name = "LAYER1";
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "L1 NAGINATA";
         };
 
-        layer_2 {
+        // Layer 2: Symbol（QWERTY記号）
+        layer_2_symbol {
             bindings = <
-&kp TILDE  &bt BT_SEL 0  &bt BT_SEL 1    &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &mmv MOVE_UP     &kp F6  &kp F7  &kp F8      &kp F9     &kp F10      &trans
-&trans     &bt BT_CLR    &bt BT_CLR_ALL  &trans        &trans        &trans          &mmv MOVE_DOWN   &trans  &trans  &kp F11     &kp F12    &kp UNDER    &kp PLUS
-&trans     &out OUT_USB  &out OUT_BLE    &trans        &trans        &trans          &mmv MOVE_LEFT   &trans  &trans  &trans      &trans     &kp LBRC     &kp RBRC
-&trans     &sys_reset    &trans          &bootloader   &trans        &trans          &mmv MOVE_RIGHT  &trans  &trans  &sys_reset  &soft_off  &bootloader  &trans
-&trans     &trans        &trans          &trans        &trans        &trans          &mkp LCLK        &trans  &trans  &trans      &trans     &trans
+&kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp LC(C)   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &none   
+&kp TAB   &none   &none   &kp LS(MINUS)   &kp INT1   &none   &kp LC(V)   &none   &kp LS(LBKT)   &none   &none   &none   &none   
+&kp LS(COMMA)   &kp LS(SQT)   &kp LS(SEMI)   &kp MINUS   &kp FSLH   &kp INT3   &kp LC(Z)   &kp LS(N6)   &kp LS(N7)   &kp LS(EQUAL)   &kp LS(INT3)   &kp SEMI   &kp LS(DOT)   
+&kp LS(RBKT)   &none   &kp EQUAL   &kp LS(INT1)   &kp LS(N5)   &kp LS(N4)   &kp LC(LS(Z))   &kp LS(N3)   &kp LS(N2)   &kp UP_ARROW   &kp DOWN_ARROW   &kp LS(N1)   &kp LS(BSLH)   
+&tog 10  &kp LALT         &lt 5 PSCRN     &lt_thumb 3 BSPC       &kp DOT        &kp BSPC        &kp LC(A)        &lt_thumb 2 ENTER      &lt_thumb_space 4 SPACE      &lt_thumb 3 BSPC  &lt 5 DEL  &lt 5 ESC
             >;
 
-            display-name = "LAYER2";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            sensor-bindings = <&rsr_undo_redo &rsr_trans>;
+            display-name = "L2 SYMBOL";
         };
 
-        layer_3 {
+        // Layer 3: Cursor
+        layer_3_cursor {
+            bindings = <
+&kp ESC  &none    &none      &none      &none      &none      &none     &none      &none           &none           &none           &none    &none
+&kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &none   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
+&kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &kp LA(LEFT)   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
+&kp LSHFT &none   &none      &none      &none      &none      &kp LA(RIGHT)  &none      &none           &none           &none           &none    &kp RSHFT
+&tog 10         &kp LALT           &lt 5 PSCRN    &lt_thumb 3 BSPC     &lt_thumb_comma 4 COMMA   &kp BSPC        &mkp MCLK        &lt_thumb 2 ENTER        &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC     &lt 5 DEL      &lt 5 ESC
+            >;
+
+            display-name = "L3 CURSOR";
+            sensor-bindings = <&rsr_browser_nav &rsr_trans>;
+        };
+
+        // Layer 4: Window
+        layer_4_window {
+            bindings = <
+&kp LG(FSLH)       &none              &none          &none          &none          &none              &none     &none              &none          &none          &none          &none          &kp LG(FSLH)
+&kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &none   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
+&kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &kp LC(LS(TAB))   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
+&kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &kp LC(TAB)  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
+&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &kp BSPC &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC      &lt 5 DEL         &lt 5 ESC
+            >;
+
+            display-name = "L4 WINDOW";
+            sensor-bindings = <&rsr_tab_nav &rsr_trans>;
+        };
+
+        // Layer 5: Mouse
+        layer_5_mouse {
+            bindings = <
+&kp ESC  &none    &none      &none      &none      &none      &mmv MOVE_UP     &none      &none           &none           &none           &none    &none
+&kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
+&kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
+&kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
+&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &kp BSPC &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC      &lt 5 DEL         &lt 5 ESC
+            >;
+
+            display-name = "L5 MOUSE";
+            sensor-bindings = <&mouse_rot_lr &rsr_trans>;
+        };
+
+        // Layer 6: Function Keys
+        layer_6_fkeys {
+            bindings = <
+&kp ESC  &kp F1  &kp F2  &kp F3  &kp F4  &kp F5    &kp UP_ARROW  &kp F6  &kp F7  &kp F8  &kp F9  &kp F10 &none
+&kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
+&kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
+&kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
+&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &kp BSPC &mkp MCLK &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE &lt_thumb 3 BSPC &lt 5 DEL &lt 5 ESC
+            >;
+ 
+            display-name = "L6 FKEYS";
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+        };
+
+        // Layer 7: Bluetooth
+        layer_7_bluetooth {
+            bindings = <
+&bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &kp UP_ARROW  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &bt BT_CLR
+&bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
+&none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
+&none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
+&tog 10  &kp LALT      &lt 5 PSCRN   &lt_thumb 3 BSPC    &lt_thumb_comma 4 COMMA   &kp BSPC   &mkp MCLK     &lt_thumb 2 ENTER   &lt_thumb_space 4 SPACE   &lt_thumb 3 BSPC    &lt 5 DEL     &lt 5 ESC
+            >;
+
+            display-name = "L7 BLUETOOTH";
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+        };
+
+        // Layer 8: Encoder LR Override Layer
+        layer_8_encoder_lr {
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
@@ -131,11 +567,12 @@
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
             >;
 
-            display-name = "LAYER3";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            display-name = "L8 ENCODER LR";
+            sensor-bindings = <&rsr_cursor_lr &rsr_trans>;
         };
 
-        layer_4 {
+        // Layer 9: Mouse Encoder UD Override Layer
+        layer_9_mouse_enc_ud {
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
@@ -144,8 +581,100 @@
 &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
             >;
 
-            display-name = "LAYER4";
-            sensor-bindings = <&rsr_vol &rsr_trans>;
+            display-name = "L9 MOUSE ENC UD";
+            sensor-bindings = <&mouse_rot_ud &rsr_trans>;
         };
+
+        // Layer 10: Encoder Push Marker Layer
+        layer_10_encoder_push_marker {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            display-name = "L10 ENCODER MARKER";
+        };
+
+        // Layer 11: Symbol Passthrough
+        layer_11_symbol_passthru {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_undo_redo &rsr_trans>;
+            display-name = "L11 SYM PASSTHRU";
+        };
+
+        // Layer 12: Cursor Passthrough
+        layer_12_cursor_passthru {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_browser_nav &rsr_trans>;
+            display-name = "L12 CURSOR PASSTHRU";
+        };
+
+        // Layer 13: Window Passthrough
+        layer_13_window_passthru {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_tab_nav &rsr_trans>;
+            display-name = "L13 WINDOW PASSTHRU";
+        };
+
+        // Layer 14: Fkeys / Bluetooth Passthrough
+        layer_14_fkeys_bt_passthru {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+
+            sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
+            display-name = "L14 FKEYS/BT PASSTHRU";
+        };
+    };
+
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        // ①フォールバック：L10（マーカー）単体がONなら常にLayer 8（矢印左右）。
+        cl_l10 { if-layers = <10>; then-layer = <8>; };
+
+        // ②上書き：記号レイヤー（L2）＋L10 → undo/redo（index 11）
+        cl_l2_l10 { if-layers = <2 10>; then-layer = <11>; };
+
+        // カーソルレイヤー（L3）＋L10 → browser nav（index 12）
+        cl_l3_l10 { if-layers = <3 10>; then-layer = <12>; };
+
+        // ウィンドウ管理（L4）＋L10 → tab nav（index 13）
+        cl_l4_l10 { if-layers = <4 10>; then-layer = <13>; };
+
+        // マウスレイヤー（L5）＋L10 → マウス上下（index 9）
+        cl_l5_l10 { if-layers = <5 10>; then-layer = <9>; };
+
+        // ファンクションキー（L6） / Bluetooth（L7）＋L10 → cursor ud（index 14）
+        cl_l6_l10 { if-layers = <6 10>; then-layer = <14>; };
+        cl_l7_l10 { if-layers = <7 10>; then-layer = <14>; };
     };
 };

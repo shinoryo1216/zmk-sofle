@@ -1,0 +1,973 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#define DT_DRV_COMPAT zmk_behavior_naginata
+
+#include <zephyr/device.h>
+#include <zephyr/settings/settings.h>
+#include <drivers/behavior.h>
+#include <zephyr/logging/log.h>
+
+#include <zmk/event_manager.h>
+#include <zmk/events/keycode_state_changed.h>
+#include <zmk/behavior.h>
+
+#include <zmk_naginata/nglist.h>
+#include <zmk_naginata/nglistarray.h>
+#include <zmk_naginata/naginata_func.h>
+
+LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
+
+#define NONE 0
+
+// 薙刀式
+
+// 31キーを32bitの各ビットに割り当てる
+#define B_Q (1UL << 0)
+#define B_W (1UL << 1)
+#define B_E (1UL << 2)
+#define B_R (1UL << 3)
+#define B_T (1UL << 4)
+
+#define B_Y (1UL << 5)
+#define B_U (1UL << 6)
+#define B_I (1UL << 7)
+#define B_O (1UL << 8)
+#define B_P (1UL << 9)
+
+#define B_A (1UL << 10)
+#define B_S (1UL << 11)
+#define B_D (1UL << 12)
+#define B_F (1UL << 13)
+#define B_G (1UL << 14)
+
+#define B_H (1UL << 15)
+#define B_J (1UL << 16)
+#define B_K (1UL << 17)
+#define B_L (1UL << 18)
+#define B_SEMI (1UL << 19)
+
+#define B_Z (1UL << 20)
+#define B_X (1UL << 21)
+#define B_C (1UL << 22)
+#define B_V (1UL << 23)
+#define B_B (1UL << 24)
+
+#define B_N (1UL << 25)
+#define B_M (1UL << 26)
+#define B_COMMA (1UL << 27)
+#define B_DOT (1UL << 28)
+#define B_SLASH (1UL << 29)
+
+#define B_SPACE (1UL << 30)
+
+static NGListArray nginput;
+static uint32_t pressed_keys = 0UL; // 押しているキーのビットをたてる
+static int8_t n_pressed_keys = 0;   // 押しているキーの数
+
+extern user_config_t naginata_config;
+
+#if IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
+static void naginata_save_work_handler(struct k_work *work) {
+    settings_save_one("naginata/state", &naginata_config, sizeof(naginata_config));
+    LOG_DBG("Saved Naginata state: %d, %d", naginata_config.os, naginata_config.tategaki);
+}
+
+static struct k_work_delayable naginata_save_work;
+
+static int naginata_settings_load_cb(const char *name, size_t len, settings_read_cb read_cb, void *cb_arg) {
+    const char *next;
+    if (settings_name_steq(name, "state", &next) && !next) {
+        if (len != sizeof(naginata_config)) {
+            return -EINVAL;
+        }
+
+        int rc = read_cb(cb_arg, &naginata_config, sizeof(naginata_config));
+        if (rc >= 0) {
+            LOG_INF("Loaded Naginata state: %d, %d", naginata_config.os, naginata_config.tategaki);
+        }
+        return MIN(rc, 0);
+    }
+    return -ENOENT;
+}
+
+SETTINGS_STATIC_HANDLER_DEFINE(naginata, "naginata", NULL, naginata_settings_load_cb, NULL, NULL);
+#endif // IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
+
+#ifndef NG_L1_R3
+#define NG_L1_R3 0x01
+#define NG_L1_R4 0x02
+#define NG_R6_R3 0x03
+#define NG_R6_R4 0x04
+#define NG_THUMB_DOT 0x05
+#define NG_THUMB_ENTER 0x06
+#define NG_R6_R2 0x07
+#define NG_THUMB_COMMA 0x08
+#define NG_L6_R2 0x09
+#define NG_R1_R2 0x0A
+#define NG_THUMB_BS 0x0B
+#endif
+
+// Thumb L6 (NG_THUMB_BS): a re-press within this time after a tap becomes BackSpace held (key repeat).
+#ifndef NG_BS_QUICK_TAP_MS
+#define NG_BS_QUICK_TAP_MS 250
+#endif
+// Thumb L6 (NG_THUMB_BS): released within this time without being used as center-shift = tap (BackSpace).
+// Held longer without other keys = nothing (same as the QWERTY layer, where a long hold only enters Layer 2).
+#ifndef NG_BS_TAP_MS
+#define NG_BS_TAP_MS 280
+#endif
+
+enum ng_special_state {
+    NG_SPECIAL_IDLE = 0,
+    NG_SPECIAL_PENDING,
+    NG_SPECIAL_HELD,
+};
+
+static struct {
+    uint32_t keycode;
+    uint32_t mod_code;
+    uint32_t tap_code;
+    uint32_t shift_tap_code;
+    enum ng_special_state state;
+    struct k_work_delayable work;
+} special_key;
+
+static void special_key_work_handler(struct k_work *work) {
+    if (special_key.state == NG_SPECIAL_PENDING) {
+        special_key.state = NG_SPECIAL_HELD;
+        raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, naginata_get_timestamp());
+    }
+}
+
+static const uint32_t ng_key[] = {
+    [A - A] = B_A,     [B - A] = B_B,         [C - A] = B_C,         [D - A] = B_D,
+    [E - A] = B_E,     [F - A] = B_F,         [G - A] = B_G,         [H - A] = B_H,
+    [I - A] = B_I,     [J - A] = B_J,         [K - A] = B_K,         [L - A] = B_L,
+    [M - A] = B_M,     [N - A] = B_N,         [O - A] = B_O,         [P - A] = B_P,
+    [Q - A] = B_Q,     [R - A] = B_R,         [S - A] = B_S,         [T - A] = B_T,
+    [U - A] = B_U,     [V - A] = B_V,         [W - A] = B_W,         [X - A] = B_X,
+    [Y - A] = B_Y,     [Z - A] = B_Z,         [SEMI - A] = B_SEMI,   [COMMA - A] = B_COMMA,
+    [DOT - A] = B_DOT, [SLASH - A] = B_SLASH, [SPACE - A] = B_SPACE, [ENTER - A] = B_SPACE,
+};
+
+#define KANA_MAX_LEN 6
+
+// カナ変換テーブル
+typedef struct {
+    uint32_t shift;
+    uint32_t douji;
+    uint32_t kana[KANA_MAX_LEN];
+    void (*func)(void);
+} naginata_kanamap;
+
+static const naginata_kanamap ngdickana[] = {
+    {.shift = NONE   , .douji = B_J|B_W|B_H       , .kana = {G, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // ぎゃ (き W + 濁音 J + や H)
+    {.shift = NONE   , .douji = B_J|B_W|B_P       , .kana = {G, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // ぎゅ (き W + 濁音 J + ゆ P)
+    {.shift = NONE   , .douji = B_J|B_W|B_I       , .kana = {G, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // ぎょ (き W + 濁音 J + よ I)
+    {.shift = NONE   , .douji = B_J|B_R|B_H       , .kana = {Z, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // じゃ (し R + 濁音 J + や H)
+    {.shift = NONE   , .douji = B_J|B_R|B_P       , .kana = {Z, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // じゅ (し R + 濁音 J + ゆ P)
+    {.shift = NONE   , .douji = B_J|B_R|B_I       , .kana = {Z, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // じょ (し R + 濁音 J + よ I)
+    {.shift = NONE   , .douji = B_J|B_G|B_H       , .kana = {D, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // ぢゃ (ち G + 濁音 J + や H)
+    {.shift = NONE   , .douji = B_J|B_G|B_P       , .kana = {D, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // ぢゅ (ち G + 濁音 J + ゆ P)
+    {.shift = NONE   , .douji = B_J|B_G|B_I       , .kana = {D, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // ぢょ (ち G + 濁音 J + よ I)
+    {.shift = NONE   , .douji = B_J|B_X|B_H       , .kana = {B, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // びゃ (ひ X + 濁音 J + や H)
+    {.shift = NONE   , .douji = B_J|B_X|B_P       , .kana = {B, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // びゅ (ひ X + 濁音 J + ゆ P)
+    {.shift = NONE   , .douji = B_J|B_X|B_I       , .kana = {B, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // びょ (ひ X + 濁音 J + よ I)
+    {.shift = NONE   , .douji = B_M|B_X|B_H       , .kana = {P, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // ぴゃ (ひ X + 半濁音 M + や H)
+    {.shift = NONE   , .douji = B_M|B_X|B_P       , .kana = {P, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // ぴゅ (ひ X + 半濁音 M + ゆ P)
+    {.shift = NONE   , .douji = B_M|B_X|B_I       , .kana = {P, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // ぴょ (ひ X + 半濁音 M + よ I)
+    {.shift = NONE   , .douji = B_J|B_E|B_K       , .kana = {D, H, I, NONE, NONE, NONE}     , .func = nofunc }, // でぃ (て E + 濁音 J + い K)
+    {.shift = NONE   , .douji = B_J|B_E|B_P       , .kana = {D, H, U, NONE, NONE, NONE}     , .func = nofunc }, // でゅ (て E + 濁音 J + ゆ P)
+    {.shift = NONE   , .douji = B_J|B_D|B_L       , .kana = {D, O, X, U, NONE, NONE}        , .func = nofunc }, // どぅ (と D + 濁音 J + う L)
+    {.shift = NONE   , .douji = B_J|B_R|B_O       , .kana = {Z, Y, E, NONE, NONE, NONE}     , .func = nofunc }, // じぇ (し R + 濁音 J + え O)
+    {.shift = NONE   , .douji = B_J|B_G|B_O       , .kana = {D, Y, E, NONE, NONE, NONE}     , .func = nofunc }, // ぢぇ (ち G + 濁音 J + え O)
+    {.shift = NONE   , .douji = B_F|B_L|B_M       , .kana = {V, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ゔぁ (う L + 濁音 F + あ M)
+    {.shift = NONE   , .douji = B_F|B_L|B_K       , .kana = {V, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ゔぃ (う L + 濁音 F + い K)
+    {.shift = NONE   , .douji = B_F|B_L|B_O       , .kana = {V, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ゔぇ (う L + 濁音 F + え O)
+    {.shift = NONE   , .douji = B_F|B_L|B_U       , .kana = {V, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ゔぉ (う L + 濁音 F + お U)
+    {.shift = NONE   , .douji = B_F|B_L|B_P       , .kana = {V, U, X, Y, U, NONE}           , .func = nofunc }, // ゔゅ (う L + 濁音 F + ゆ P)
+    {.shift = NONE   , .douji = B_F|B_H|B_M       , .kana = {G, U, X, A, NONE, NONE}        , .func = nofunc }, // ぐぁ (く H + 濁音 F + あ M)
+    {.shift = NONE   , .douji = B_F|B_H|B_K       , .kana = {G, U, X, I, NONE, NONE}        , .func = nofunc }, // ぐぃ (く H + 濁音 F + い K)
+    {.shift = NONE   , .douji = B_F|B_H|B_O       , .kana = {G, U, X, E, NONE, NONE}        , .func = nofunc }, // ぐぇ (く H + 濁音 F + え O)
+    {.shift = NONE   , .douji = B_F|B_H|B_U       , .kana = {G, U, X, O, NONE, NONE}        , .func = nofunc }, // ぐぉ (く H + 濁音 F + お U)
+    {.shift = NONE   , .douji = B_W|B_J           , .kana = {G, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぎ (き W + 濁音 J)
+    {.shift = NONE   , .douji = B_E|B_J           , .kana = {D, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // で (て E + 濁音 J)
+    {.shift = NONE   , .douji = B_R|B_J           , .kana = {Z, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // じ (し R + 濁音 J)
+    {.shift = NONE   , .douji = B_A|B_J           , .kana = {Z, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぜ (せ/ろ A + 濁音 J)
+    {.shift = NONE   , .douji = B_S|B_J           , .kana = {G, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // げ (け S + 濁音 J)
+    {.shift = NONE   , .douji = B_D|B_J           , .kana = {D, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ど (と D + 濁音 J)
+    {.shift = NONE   , .douji = B_F|B_J           , .kana = {G, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // が (か F + 濁音 J)
+    {.shift = NONE   , .douji = B_G|B_J           , .kana = {D, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぢ (ち/っ G + 濁音 J)
+    {.shift = NONE   , .douji = B_Z|B_J           , .kana = {B, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぼ (ほ Z + 濁音 J)
+    {.shift = NONE   , .douji = B_X|B_J           , .kana = {B, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // び (ひ X + 濁音 J)
+    {.shift = NONE   , .douji = B_C|B_J           , .kana = {B, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ば (は C + 濁音 J)
+    {.shift = NONE   , .douji = B_V|B_J           , .kana = {G, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ご (こ V + 濁音 J)
+    {.shift = NONE   , .douji = B_B|B_J           , .kana = {Z, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぞ (そ B + 濁音 J)
+    {.shift = NONE   , .douji = B_F|B_U           , .kana = {Z, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ず (す U + 濁音 F)
+    {.shift = NONE   , .douji = B_F|B_P           , .kana = {B, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // べ (へ P + 濁音 F)
+    {.shift = NONE   , .douji = B_F|B_H           , .kana = {G, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぐ (く H + 濁音 F)
+    {.shift = NONE   , .douji = B_F|B_L           , .kana = {D, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // づ (つ/う L + 濁音 F)
+    {.shift = NONE   , .douji = B_F|B_SEMI        , .kana = {Z, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ざ (さ/ら ; + 濁音 F)
+    {.shift = NONE   , .douji = B_F|B_M           , .kana = {D, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // だ (た M + 濁音 F)
+    {.shift = NONE   , .douji = B_F|B_DOT         , .kana = {B, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぶ (ふ . + 濁音 F)
+    {.shift = NONE   , .douji = B_M|B_Z           , .kana = {P, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぽ (ほ Z + 半濁音 M)
+    {.shift = NONE   , .douji = B_M|B_X           , .kana = {P, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぴ (ひ X + 半濁音 M)
+    {.shift = NONE   , .douji = B_M|B_C           , .kana = {P, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぱ (は C + 半濁音 M)
+    {.shift = NONE   , .douji = B_V|B_P           , .kana = {P, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぺ (へ P + 半濁音 V)
+    {.shift = NONE   , .douji = B_V|B_DOT         , .kana = {P, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぷ (ふ . + 半濁音 V)
+    {.shift = NONE   , .douji = B_W|B_H           , .kana = {K, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // きゃ (き W + や H)
+    {.shift = NONE   , .douji = B_W|B_P           , .kana = {K, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // きゅ (き W + ゆ P)
+    {.shift = NONE   , .douji = B_W|B_I           , .kana = {K, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // きょ (き W + よ I)
+    {.shift = NONE   , .douji = B_R|B_H           , .kana = {S, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // しゃ (し R + や H)
+    {.shift = NONE   , .douji = B_R|B_P           , .kana = {S, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // しゅ (し R + ゆ P)
+    {.shift = NONE   , .douji = B_R|B_I           , .kana = {S, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // しょ (し R + よ I)
+    {.shift = NONE   , .douji = B_G|B_H           , .kana = {T, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // ちゃ (ち G + や H)
+    {.shift = NONE   , .douji = B_G|B_P           , .kana = {T, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // ちゅ (ち G + ゆ P)
+    {.shift = NONE   , .douji = B_G|B_I           , .kana = {T, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // ちょ (ち G + よ I)
+    {.shift = NONE   , .douji = B_D|B_H           , .kana = {N, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // にゃ (に D + や H)
+    {.shift = NONE   , .douji = B_D|B_P           , .kana = {N, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // にゅ (に D + ゆ P)
+    {.shift = NONE   , .douji = B_D|B_I           , .kana = {N, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // にょ (に D + よ I)
+    {.shift = NONE   , .douji = B_X|B_H           , .kana = {H, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // ひゃ (ひ X + や H)
+    {.shift = NONE   , .douji = B_X|B_P           , .kana = {H, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // ひゅ (ひ X + ゆ P)
+    {.shift = NONE   , .douji = B_X|B_I           , .kana = {H, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // ひょ (ひ X + よ I)
+    {.shift = NONE   , .douji = B_S|B_H           , .kana = {M, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // みゃ (み S + や H)
+    {.shift = NONE   , .douji = B_S|B_P           , .kana = {M, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // みゅ (み S + ゆ P)
+    {.shift = NONE   , .douji = B_S|B_I           , .kana = {M, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // みょ (み S + よ I)
+    {.shift = NONE   , .douji = B_E|B_H           , .kana = {R, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // りゃ (り E + や H)
+    {.shift = NONE   , .douji = B_E|B_P           , .kana = {R, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // りゅ (り E + ゆ P)
+    {.shift = NONE   , .douji = B_E|B_I           , .kana = {R, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // りょ (り E + よ I)
+    {.shift = NONE   , .douji = B_E|B_K           , .kana = {T, H, I, NONE, NONE, NONE}     , .func = nofunc }, // てぃ (て E + い K)
+    {.shift = NONE   , .douji = B_D|B_L           , .kana = {T, O, X, U, NONE, NONE}        , .func = nofunc }, // とぅ (と D + う L)
+    {.shift = NONE   , .douji = B_R|B_O           , .kana = {S, Y, E, NONE, NONE, NONE}     , .func = nofunc }, // しぇ (し R + え O)
+    {.shift = NONE   , .douji = B_G|B_O           , .kana = {T, Y, E, NONE, NONE, NONE}     , .func = nofunc }, // ちぇ (ち G + え O)
+    {.shift = NONE   , .douji = B_DOT|B_M         , .kana = {F, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ふぁ (ふ . + あ M)
+    {.shift = NONE   , .douji = B_DOT|B_K         , .kana = {F, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ふぃ (ふ . + い K)
+    {.shift = NONE   , .douji = B_DOT|B_O         , .kana = {F, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ふぇ (ふ . + え O)
+    {.shift = NONE   , .douji = B_DOT|B_U         , .kana = {F, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ふぉ (ふ . + お U)
+    {.shift = NONE   , .douji = B_DOT|B_P         , .kana = {F, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // ふゅ (ふ . + ゆ P)
+    {.shift = NONE   , .douji = B_L|B_M           , .kana = {T, S, A, NONE, NONE, NONE}     , .func = nofunc }, // つぁ (つ L + あ M)
+    {.shift = NONE   , .douji = B_L|B_K           , .kana = {W, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // うぃ (う L + い K)
+    {.shift = NONE   , .douji = B_L|B_O           , .kana = {W, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // うぇ (う L + え O)
+    {.shift = NONE   , .douji = B_L|B_U           , .kana = {U, X, O, NONE, NONE, NONE}     , .func = nofunc }, // うぉ (う L + お U)
+    {.shift = NONE   , .douji = B_K|B_O           , .kana = {I, X, E, NONE, NONE, NONE}     , .func = nofunc }, // いぇ (い K + え O)
+    {.shift = NONE   , .douji = B_H|B_M           , .kana = {K, U, X, A, NONE, NONE}        , .func = nofunc }, // くぁ (く H + あ M)
+    {.shift = NONE   , .douji = B_H|B_K           , .kana = {K, U, X, I, NONE, NONE}        , .func = nofunc }, // くぃ (く H + い K)
+    {.shift = NONE   , .douji = B_H|B_O           , .kana = {K, U, X, E, NONE, NONE}        , .func = nofunc }, // くぇ (く H + え O)
+    {.shift = NONE   , .douji = B_H|B_U           , .kana = {K, U, X, O, NONE, NONE}        , .func = nofunc }, // くぉ (く H + お U)
+    {.shift = B_SPACE, .douji = B_W               , .kana = {N, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ね
+    {.shift = B_SPACE, .douji = B_E               , .kana = {R, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // り
+    {.shift = B_SPACE, .douji = B_R               , .kana = {M, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // め
+    {.shift = B_SPACE, .douji = B_U               , .kana = {O, NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // お
+    {.shift = B_SPACE, .douji = B_I               , .kana = {Y, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // よ
+    {.shift = B_SPACE, .douji = B_O               , .kana = {E, NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // え
+    {.shift = B_SPACE, .douji = B_P               , .kana = {Y, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ゆ
+    {.shift = B_SPACE, .douji = B_A               , .kana = {S, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // せ
+    {.shift = B_SPACE, .douji = B_S               , .kana = {M, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // み
+    {.shift = B_SPACE, .douji = B_D               , .kana = {N, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // に
+    {.shift = B_SPACE, .douji = B_F               , .kana = {M, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ま
+    {.shift = B_SPACE, .douji = B_G               , .kana = {T, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ち
+    {.shift = B_SPACE, .douji = B_H               , .kana = {Y, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // や
+    {.shift = B_SPACE, .douji = B_J               , .kana = {N, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // の
+    {.shift = B_SPACE, .douji = B_K               , .kana = {M, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // も
+    {.shift = B_SPACE, .douji = B_L               , .kana = {T, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // つ
+    {.shift = B_SPACE, .douji = B_SEMI            , .kana = {S, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // さ
+    {.shift = B_SPACE, .douji = B_C               , .kana = {W, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // を
+    {.shift = B_SPACE, .douji = B_V               , .kana = {W, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // わ
+    {.shift = B_SPACE, .douji = B_B               , .kana = {Z, FSLH, NONE, NONE, NONE, NONE}, .func = nofunc }, // ・
+    {.shift = B_SPACE, .douji = B_N               , .kana = {LS(MINUS), NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // ＝
+    {.shift = B_SPACE, .douji = B_M               , .kana = {A, NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // あ
+    {.shift = B_SPACE, .douji = B_COMMA           , .kana = {M, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // む
+    {.shift = B_SPACE, .douji = B_DOT             , .kana = {N, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぬ
+    {.shift = B_SPACE, .douji = B_SLASH           , .kana = {LS(N1), NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // ！
+    {.shift = NONE   , .douji = B_W               , .kana = {K, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // き
+    {.shift = NONE   , .douji = B_E               , .kana = {T, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // て
+    {.shift = NONE   , .douji = B_R               , .kana = {S, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // し
+    {.shift = NONE   , .douji = B_U               , .kana = {S, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // す
+    {.shift = NONE   , .douji = B_I               , .kana = {R, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // る
+    {.shift = NONE   , .douji = B_O               , .kana = {R, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // れ
+    {.shift = NONE   , .douji = B_P               , .kana = {H, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // へ
+    {.shift = NONE   , .douji = B_A               , .kana = {R, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ろ
+    {.shift = NONE   , .douji = B_S               , .kana = {K, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // け
+    {.shift = NONE   , .douji = B_D               , .kana = {T, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // と
+    {.shift = NONE   , .douji = B_F               , .kana = {K, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // か
+    {.shift = NONE   , .douji = B_G               , .kana = {L, T, U, NONE, NONE, NONE}     , .func = nofunc }, // っ
+    {.shift = NONE   , .douji = B_H               , .kana = {K, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // く
+    {.shift = NONE   , .douji = B_J               , .kana = {N, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // な
+    {.shift = NONE   , .douji = B_K               , .kana = {I, NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // い
+    {.shift = NONE   , .douji = B_L               , .kana = {U, NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // う
+    {.shift = NONE   , .douji = B_SEMI            , .kana = {R, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ら
+    {.shift = NONE   , .douji = B_Z               , .kana = {H, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ほ
+    {.shift = NONE   , .douji = B_X               , .kana = {H, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ひ
+    {.shift = NONE   , .douji = B_C               , .kana = {H, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // は
+    {.shift = NONE   , .douji = B_V               , .kana = {K, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // こ
+    {.shift = NONE   , .douji = B_B               , .kana = {S, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // そ
+    {.shift = NONE   , .douji = B_N               , .kana = {MINUS, NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // ー
+    {.shift = NONE   , .douji = B_M               , .kana = {T, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // た
+    {.shift = NONE   , .douji = B_COMMA           , .kana = {N, N, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ん
+    {.shift = NONE   , .douji = B_DOT             , .kana = {H, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ふ
+    {.shift = NONE   , .douji = B_SLASH           , .kana = {LS(FSLH), NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // ？
+    // 特殊制御キー
+    {.shift = NONE    , .douji = B_SPACE        , .kana = {SPACE, NONE, NONE, NONE, NONE, NONE  }, .func = nofunc},
+    {.shift = NONE    , .douji = B_T            , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = ng_T},
+    {.shift = NONE    , .douji = B_Y            , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = ng_Y},
+    {.shift = B_SPACE , .douji = B_T            , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = ng_ST},
+    {.shift = B_SPACE , .douji = B_Y            , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = ng_SY},
+    {.shift = NONE    , .douji = B_H|B_J        , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = naginata_on},
+};
+
+// Helper function for counting matches/candidates
+static int count_kana_entries(NGList *keys, bool exact_match) {
+  if (keys->size == 0) return 0;
+  // 変換テーブルの最大同時押しは3キー。4キー以上に一致するエントリは存在しない。
+  // 連続シフト処理でリストが4キー以上に伸びる場合があるため、ここで弾く。
+  if (keys->size > 3) return 0;
+
+  int count = 0;
+  uint32_t keyset0 = 0UL, keyset1 = 0UL, keyset2 = 0UL;
+  
+  // keysetを配列にしたらバイナリサイズが増えた
+  switch (keys->size) {
+    case 1:
+      keyset0 = ng_key[keys->elements[0] - A];
+      break;
+    case 2:
+      keyset0 = ng_key[keys->elements[0] - A];
+      keyset1 = ng_key[keys->elements[1] - A];
+      break;
+    default:
+      keyset0 = ng_key[keys->elements[0] - A];
+      keyset1 = ng_key[keys->elements[1] - A];
+      keyset2 = ng_key[keys->elements[2] - A];
+      break;
+  }
+
+  for (int i = 0; i < sizeof ngdickana / sizeof ngdickana[0]; i++) {
+    bool matches = false;
+
+    switch (keys->size) {
+      case 1:
+        if (exact_match) {
+          matches = (ngdickana[i].shift == keyset0) || 
+                   (ngdickana[i].shift == 0UL && ngdickana[i].douji == keyset0);
+        } else {
+          matches = ((ngdickana[i].shift & keyset0) == keyset0) ||
+                   (ngdickana[i].shift == 0UL && (ngdickana[i].douji & keyset0) == keyset0);
+        }
+        break;
+      case 2:
+        if (exact_match) {
+          matches = (ngdickana[i].shift == (keyset0 | keyset1)) ||
+                   (ngdickana[i].shift == keyset0 && ngdickana[i].douji == keyset1) ||
+                   (ngdickana[i].shift == 0UL && ngdickana[i].douji == (keyset0 | keyset1));
+        } else {
+          matches = (ngdickana[i].shift == (keyset0 | keyset1)) ||
+                   (ngdickana[i].shift == keyset0 && (ngdickana[i].douji & keyset1) == keyset1) ||
+                   (ngdickana[i].shift == 0UL && (ngdickana[i].douji & (keyset0 | keyset1)) == (keyset0 | keyset1));
+          // しぇ、ちぇ、など2キーで確定してはいけない
+          if (matches && (ngdickana[i].shift | ngdickana[i].douji) != (keyset0 | keyset1)) {
+            count = 2;
+          }
+        }
+        break;
+      default:
+        if (exact_match) {
+          matches = (ngdickana[i].shift == (keyset0 | keyset1) && ngdickana[i].douji == keyset2) ||
+                   (ngdickana[i].shift == keyset0 && ngdickana[i].douji == (keyset1 | keyset2)) ||
+                   (ngdickana[i].shift == 0UL && ngdickana[i].douji == (keyset0 | keyset1 | keyset2));
+        } else {
+          matches = (ngdickana[i].shift == (keyset0 | keyset1) && (ngdickana[i].douji & keyset2) == keyset2) ||
+                   (ngdickana[i].shift == keyset0 && (ngdickana[i].douji & (keyset1 | keyset2)) == (keyset1 | keyset2)) ||
+                   (ngdickana[i].shift == 0UL && (ngdickana[i].douji & (keyset0 | keyset1 | keyset2)) == (keyset0 | keyset1 | keyset2));
+        }
+        break;
+    }
+
+    if (matches) {
+      count++;
+      if (count > 1) break;
+    }
+  }
+
+  return count;
+}
+
+int number_of_matches(NGList *keys) {
+  return count_kana_entries(keys, true);
+}
+
+int number_of_candidates(NGList *keys) {
+  return count_kana_entries(keys, false);
+}
+
+// キー入力を文字に変換して出力する
+void ng_type(NGList *keys) {
+    LOG_DBG(">NAGINATA NG_TYPE");
+
+    if (keys->size == 0)
+        return;
+
+    int64_t ts = naginata_get_timestamp();
+
+    if (keys->size == 1 && keys->elements[0] == ENTER) {
+        LOG_DBG(" NAGINATA type keycode 0x%02X", ENTER);
+        raise_zmk_keycode_state_changed_from_encoded(ENTER, true, ts);
+        raise_zmk_keycode_state_changed_from_encoded(ENTER, false, ts);
+        return;
+    }
+
+    uint32_t keyset = 0UL;
+    for (int i = 0; i < keys->size; i++) {
+        keyset |= ng_key[keys->elements[i] - A];
+    }
+
+    for (int i = 0; i < sizeof ngdickana / sizeof ngdickana[0]; i++) {
+        if ((ngdickana[i].shift | ngdickana[i].douji) == keyset) {
+            if (ngdickana[i].kana[0] != NONE) {
+                for (int k = 0; k < KANA_MAX_LEN; k++) {
+                    if (ngdickana[i].kana[k] == NONE)
+                        break;
+                    LOG_DBG(" NAGINATA type keycode 0x%02X", ngdickana[i].kana[k]);
+                    raise_zmk_keycode_state_changed_from_encoded(ngdickana[i].kana[k], true,
+                                                                 ts);
+                    raise_zmk_keycode_state_changed_from_encoded(ngdickana[i].kana[k], false,
+                                                                 ts);
+                }
+            } else {
+                ngdickana[i].func();
+            }
+            LOG_DBG("<NAGINATA NG_TYPE");
+            return;
+        }
+    }
+
+    // 1キーで一致しなかった場合、これ以上分割できない。
+    // ここで分割再帰すると同じ1キーを無限に再帰してスタックを溢れさせるため打ち切る。
+    if (keys->size <= 1) {
+        LOG_DBG("<NAGINATA NG_TYPE (no match, single key)");
+        return;
+    }
+
+    // JIみたいにJIを含む同時押しはたくさんあるが、JIのみの同時押しがないとき
+    // 最後の１キーを別に分けて変換する
+    NGList a, b;
+    initializeList(&a);
+    initializeList(&b);
+    for (int i = 0; i < keys->size - 1; i++) {
+        addToList(&a, keys->elements[i]);
+    }
+    addToList(&b, keys->elements[keys->size - 1]);
+    ng_type(&a);
+    ng_type(&b);
+
+    LOG_DBG("<NAGINATA NG_TYPE");
+}
+
+// nginputに入力を積む。満杯なら最古の入力を確定して空きを作ってから追加する。
+// (戻り値を無視して黙ってキーを捨てるのを防ぐ)
+static void push_input(NGList *e) {
+    if (!addToListArray(&nginput, e)) {
+        ng_type(&(nginput.elements[0]));
+        removeFromListArrayAt(&nginput, 0);
+        addToListArray(&nginput, e);
+    }
+}
+
+// 薙刀式の入力処理
+bool naginata_press(struct zmk_behavior_binding *binding, struct zmk_behavior_binding_event event) {
+    LOG_DBG(">NAGINATA PRESS");
+
+    uint32_t keycode = binding->param1;
+
+    switch (keycode) {
+    case A ... Z:
+    case SPACE:
+    case ENTER:
+    case DOT:
+    case COMMA:
+    case SLASH:
+    case SEMI:
+        n_pressed_keys++;
+        pressed_keys |= ng_key[keycode - A]; // キーの重ね合わせ
+
+        if (keycode == SPACE || keycode == ENTER) {
+            NGList a;
+            initializeList(&a);
+            addToList(&a, keycode);
+            push_input(&a);
+        } else {
+            NGList a;
+            NGList b;
+            if (nginput.size > 0) {
+                copyList(&(nginput.elements[nginput.size - 1]), &a);
+                copyList(&a, &b);
+                addToList(&b, keycode);
+            }
+
+            // 前のキーとの同時押しの可能性があるなら前に足す
+            // 同じキー連打を除外
+            if (nginput.size > 0 && a.elements[a.size - 1] != keycode &&
+                number_of_candidates(&b) > 0) {
+                removeFromListArrayAt(&nginput, nginput.size - 1);
+                addToListArray(&nginput, &b);
+                // 前のキーと同時押しはない
+            } else {
+                // 連続シフトではない
+                NGList e;
+                initializeList(&e);
+                addToList(&e, keycode);
+                push_input(&e);
+            }
+        }
+
+        // 連続シフト
+        static const uint32_t rs[10][2] = {{D, F},     {C, V}, {J, K}, {M, COMMA}, {SPACE, 0},
+                                     {ENTER, 0}, {F, 0}, {V, 0}, {J, 0},     {M, 0}};
+
+        uint32_t keyset = 0UL;
+        for (int i = 0; i < nginput.elements[nginput.size - 1].size; i++) {
+            keyset |= ng_key[nginput.elements[nginput.size - 1].elements[i] - A];
+        }
+        for (int i = 0; i < 10; i++) {
+            NGList rskc;
+            initializeList(&rskc);
+            addToList(&rskc, rs[i][0]);
+            if (rs[i][1] > 0) {
+                addToList(&rskc, rs[i][1]);
+            }
+
+            int c = includeList(&rskc, keycode);
+            uint32_t brs = 0UL;
+            for (int j = 0; j < rskc.size; j++) {
+                brs |= ng_key[rskc.elements[j] - A];
+            }
+
+            NGList l = nginput.elements[nginput.size - 1];
+            bool overflow = false;
+            for (int j = 0; j < l.size; j++) {
+                if (!addToList(&rskc, l.elements[j])) {
+                    overflow = true;
+                    break;
+                }
+            }
+            if (overflow) {
+                continue;
+            }
+
+            if (c < 0 && ((brs & pressed_keys) == brs) && (keyset & brs) != brs && number_of_matches(&rskc) > 0) {
+                nginput.elements[nginput.size - 1] = rskc;
+                break;
+            }
+        }
+
+        if (nginput.size > 1 || number_of_candidates(&(nginput.elements[0])) == 1) {
+            ng_type(&(nginput.elements[0]));
+            removeFromListArrayAt(&nginput, 0);
+        }
+        break;
+    }
+
+    LOG_DBG("<NAGINATA PRESS");
+
+    return true;
+}
+
+bool naginata_release(struct zmk_behavior_binding *binding,
+                      struct zmk_behavior_binding_event event) {
+    LOG_DBG(">NAGINATA RELEASE");
+
+    uint32_t keycode = binding->param1;
+
+    switch (keycode) {
+    case A ... Z:
+    case SPACE:
+    case ENTER:
+    case DOT:
+    case COMMA:
+    case SLASH:
+    case SEMI:
+        if (n_pressed_keys > 0)
+            n_pressed_keys--;
+        if (n_pressed_keys == 0)
+            pressed_keys = 0UL;
+
+        pressed_keys &= ~ng_key[keycode - A]; // キーの重ね合わせ
+
+        if (pressed_keys == 0UL) {
+            while (nginput.size > 0) {
+                ng_type(&(nginput.elements[0]));
+                removeFromListArrayAt(&nginput, 0);
+            }
+        } else {
+            if (nginput.size > 0 && number_of_candidates(&(nginput.elements[0])) == 1) {
+                ng_type(&(nginput.elements[0]));
+                removeFromListArrayAt(&nginput, 0);
+            }
+        }
+        break;
+    }
+
+    LOG_DBG("<NAGINATA RELEASE");
+
+    return true;
+}
+
+// 薙刀式
+
+static int behavior_naginata_init(const struct device *dev) {
+    LOG_DBG("NAGINATA INIT");
+
+    initializeListArray(&nginput);
+    pressed_keys = 0UL;
+    n_pressed_keys = 0;
+    special_key.state = NG_SPECIAL_IDLE;
+    k_work_init_delayable(&special_key.work, special_key_work_handler);
+
+#if defined(CONFIG_NAGINATA_DEFAULT_OS_WINDOWS)
+    naginata_config.os = NG_WINDOWS;
+#elif defined(CONFIG_NAGINATA_DEFAULT_OS_LINUX)
+    naginata_config.os = NG_LINUX;
+#else
+    naginata_config.os = NG_MACOS;
+#endif
+
+#if IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
+    k_work_init_delayable(&naginata_save_work, naginata_save_work_handler);
+#endif
+    return 0;
+};
+
+static bool thumb_dot_held = false;
+static bool thumb_dot_used_as_shift = false;
+static bool thumb_enter_held = false;
+static bool thumb_enter_used_as_shift = false;
+// Row 2 L6 / R1 cursor keys: remember which key was pressed so the matching key is released
+// (index 0 = NG_L6_R2 left/up, index 1 = NG_R1_R2 right/down).
+static uint32_t arrow_held_code[2] = {0, 0};
+// Thumb L6 (NG_THUMB_BS): tap = BackSpace, hold = center-shift (shares the thumb_dot_* state),
+// tap then press-and-hold within NG_BS_QUICK_TAP_MS = BackSpace held (key repeat).
+static int64_t thumb_bs_last_tap_ts = -100000; // time of the last emitted tap (ms, -100000 = none)
+static bool thumb_bs_quick_held = false;       // true while BackSpace is held in quick-tap mode
+static int64_t thumb_bs_press_ts = 0;          // press time of the current (normal) press
+
+static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
+                                     struct zmk_behavior_binding_event event) {
+    LOG_DBG("position %d keycode 0x%02X", event.position, binding->param1);
+
+    // Row 2 R6 key (plain = slash "／" / shift = colon "：")
+    if (binding->param1 == NG_R6_R2) {
+        naginata_set_timestamp(event.timestamp);
+        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_enter_held) thumb_enter_used_as_shift = true;
+        if (special_key.state == NG_SPECIAL_PENDING) {
+            k_work_cancel_delayable(&special_key.work);
+            special_key.state = NG_SPECIAL_HELD;
+            raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
+        }
+        if (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held) {
+            // JIS colon key is SQT (0x34)
+            raise_zmk_keycode_state_changed_from_encoded(SQT, true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(SQT, false, event.timestamp);
+        } else {
+            // Numpad KP_SLASH outputs "/" without becoming "・" in Japanese IME
+            raise_zmk_keycode_state_changed_from_encoded(KP_SLASH, true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(KP_SLASH, false, event.timestamp);
+        }
+        return ZMK_BEHAVIOR_OPAQUE;
+    }
+
+    // Thumb L5 key (plain = comma "、" / center-shift held = period "。")
+    // Used as the tap binding of lt_thumb_comma_ng (hold = momentary layer, tap = this key).
+    if (binding->param1 == NG_THUMB_COMMA) {
+        naginata_set_timestamp(event.timestamp);
+        // Using this key while a center-shift key is held counts as "used as shift",
+        // so releasing that thumb key does not emit a stray ENTER / DOT.
+        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_enter_held) thumb_enter_used_as_shift = true;
+        if (special_key.state == NG_SPECIAL_PENDING) {
+            k_work_cancel_delayable(&special_key.work);
+            special_key.state = NG_SPECIAL_HELD;
+            raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
+        }
+        if (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held) {
+            // 。 (Mozc: DOT)
+            raise_zmk_keycode_state_changed_from_encoded(DOT, true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(DOT, false, event.timestamp);
+        } else {
+            // 、 (Mozc: COMMA)
+            raise_zmk_keycode_state_changed_from_encoded(COMMA, true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(COMMA, false, event.timestamp);
+        }
+        return ZMK_BEHAVIOR_OPAQUE;
+    }
+
+    // Row 2 L6 / R1 cursor keys (plain = left / right, center-shift held = up / down).
+    // Pressed on key-down and released on key-up so the OS key repeat works while held.
+    if (binding->param1 == NG_L6_R2 || binding->param1 == NG_R1_R2) {
+        naginata_set_timestamp(event.timestamp);
+        // Using this key while a center-shift key is held counts as "used as shift",
+        // so releasing that thumb key does not emit a stray ENTER / DOT.
+        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_enter_held) thumb_enter_used_as_shift = true;
+        if (special_key.state == NG_SPECIAL_PENDING) {
+            k_work_cancel_delayable(&special_key.work);
+            special_key.state = NG_SPECIAL_HELD;
+            raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
+        }
+        bool shifted = (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held);
+        int idx = (binding->param1 == NG_L6_R2) ? 0 : 1;
+        uint32_t code;
+        if (idx == 0) {
+            code = shifted ? UP_ARROW : LEFT_ARROW;
+        } else {
+            code = shifted ? DOWN_ARROW : RIGHT_ARROW;
+        }
+        if (arrow_held_code[idx] != 0) {
+            // Defensive: release a stale key before pressing a new one
+            raise_zmk_keycode_state_changed_from_encoded(arrow_held_code[idx], false, event.timestamp);
+        }
+        arrow_held_code[idx] = code;
+        raise_zmk_keycode_state_changed_from_encoded(code, true, event.timestamp);
+        return ZMK_BEHAVIOR_OPAQUE;
+    }
+
+    // Thumb L6 key: tap = BackSpace / hold = center-shift / tap-then-hold = BackSpace held.
+    if (binding->param1 == NG_THUMB_BS) {
+        naginata_set_timestamp(event.timestamp);
+        if (event.timestamp - thumb_bs_last_tap_ts < NG_BS_QUICK_TAP_MS) {
+            // Quick tap: pressed again right after a tap -> behave as a plain BackSpace key.
+            if (thumb_enter_held) thumb_enter_used_as_shift = true;
+            if (special_key.state == NG_SPECIAL_PENDING) {
+                k_work_cancel_delayable(&special_key.work);
+                special_key.state = NG_SPECIAL_HELD;
+                raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
+            }
+            thumb_bs_quick_held = true;
+            thumb_bs_last_tap_ts = event.timestamp; // keep chaining while tapping quickly
+            raise_zmk_keycode_state_changed_from_encoded(BSPC, true, event.timestamp);
+            return ZMK_BEHAVIOR_OPAQUE;
+        }
+        // Normal press: center-shift becomes active immediately (same as NG_THUMB_DOT).
+        thumb_bs_press_ts = event.timestamp;
+        thumb_dot_held = true;
+        thumb_dot_used_as_shift = false;
+        pressed_keys |= B_SPACE;
+        return ZMK_BEHAVIOR_OPAQUE;
+    }
+
+    // Thumb center-shift keys (R1 = ENTER / shift; NG_THUMB_DOT on L6 is currently unused in the keymap)
+    if (binding->param1 == NG_THUMB_DOT) {
+        thumb_dot_held = true;
+        thumb_dot_used_as_shift = false;
+        pressed_keys |= B_SPACE;
+        return ZMK_BEHAVIOR_OPAQUE;
+    } else if (binding->param1 == NG_THUMB_ENTER) {
+        thumb_enter_held = true;
+        thumb_enter_used_as_shift = false;
+        pressed_keys |= B_SPACE;
+        return ZMK_BEHAVIOR_OPAQUE;
+    } else {
+        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_enter_held) thumb_enter_used_as_shift = true;
+    }
+
+    // Special key handling (L1/R6 3-function hold-tap)
+    switch (binding->param1) {
+        case NG_L1_R3:
+            special_key.keycode = NG_L1_R3;
+            special_key.mod_code = LCTRL;
+            special_key.tap_code = LS(N8);
+            special_key.shift_tap_code = LS(COMMA);
+            special_key.state = NG_SPECIAL_PENDING;
+            naginata_set_timestamp(event.timestamp);
+            k_work_reschedule(&special_key.work, K_MSEC(200));
+            return ZMK_BEHAVIOR_OPAQUE;
+        case NG_L1_R4:
+            special_key.keycode = NG_L1_R4;
+            special_key.mod_code = LSHFT;
+            special_key.tap_code = RBKT;
+            special_key.shift_tap_code = LS(RBKT);
+            special_key.state = NG_SPECIAL_PENDING;
+            naginata_set_timestamp(event.timestamp);
+            k_work_reschedule(&special_key.work, K_MSEC(200));
+            return ZMK_BEHAVIOR_OPAQUE;
+        case NG_R6_R3:
+            special_key.keycode = NG_R6_R3;
+            special_key.mod_code = RCTRL;
+            special_key.tap_code = LS(N9);
+            special_key.shift_tap_code = LS(DOT);
+            special_key.state = NG_SPECIAL_PENDING;
+            naginata_set_timestamp(event.timestamp);
+            k_work_reschedule(&special_key.work, K_MSEC(200));
+            return ZMK_BEHAVIOR_OPAQUE;
+        case NG_R6_R4:
+            special_key.keycode = NG_R6_R4;
+            special_key.mod_code = RSHFT;
+            special_key.tap_code = BSLH;
+            special_key.shift_tap_code = LS(BSLH);
+            special_key.state = NG_SPECIAL_PENDING;
+            naginata_set_timestamp(event.timestamp);
+            k_work_reschedule(&special_key.work, K_MSEC(200));
+            return ZMK_BEHAVIOR_OPAQUE;
+        default:
+            // If another key is pressed while special key is pending, resolve to hold immediately
+            if (special_key.state == NG_SPECIAL_PENDING) {
+                k_work_cancel_delayable(&special_key.work);
+                special_key.state = NG_SPECIAL_HELD;
+                raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
+            }
+            break;
+    }
+
+    // F15が押されたらnaginata_config.os=NG_WINDOWS
+    {
+#if IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
+        uint8_t saved_os = naginata_config.os;
+        bool saved_tategaki = naginata_config.tategaki;
+#endif
+        switch (binding->param1) {
+            case F15:
+                naginata_config.os = NG_WINDOWS;
+                break;
+            case F16:
+                naginata_config.os = NG_MACOS;
+                break;
+            case F17:
+                naginata_config.os = NG_LINUX;
+                break;
+            case F18:
+                naginata_config.tategaki = true;
+                break;
+            case F19:
+                naginata_config.tategaki = false;
+                break;
+        }
+        switch (binding->param1) {
+            case F15 ... F19:
+#if IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
+                if (naginata_config.os != saved_os || naginata_config.tategaki != saved_tategaki) {
+                    // Debounce saving to flash to reduce wear
+                    k_work_reschedule(&naginata_save_work, K_MSEC(CONFIG_ZMK_SETTINGS_SAVE_DEBOUNCE));
+                }
+#endif
+                return ZMK_BEHAVIOR_OPAQUE;
+        }
+    }
+
+    naginata_set_timestamp(event.timestamp);
+    naginata_press(binding, event);
+
+    return ZMK_BEHAVIOR_OPAQUE;
+}
+
+static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
+                                      struct zmk_behavior_binding_event event) {
+    LOG_DBG("position %d keycode 0x%02X", event.position, binding->param1);
+
+    // Special key handling (L1/R6 3-function hold-tap)
+    switch (binding->param1) {
+        case NG_L6_R2:
+        case NG_R1_R2: {
+            naginata_set_timestamp(event.timestamp);
+            int idx = (binding->param1 == NG_L6_R2) ? 0 : 1;
+            if (arrow_held_code[idx] != 0) {
+                raise_zmk_keycode_state_changed_from_encoded(arrow_held_code[idx], false, event.timestamp);
+                arrow_held_code[idx] = 0;
+            }
+            return ZMK_BEHAVIOR_OPAQUE;
+        }
+        case NG_THUMB_BS:
+            naginata_set_timestamp(event.timestamp);
+            if (thumb_bs_quick_held) {
+                // Quick-tap mode: just release the BackSpace that was pressed
+                thumb_bs_quick_held = false;
+                raise_zmk_keycode_state_changed_from_encoded(BSPC, false, event.timestamp);
+                return ZMK_BEHAVIOR_OPAQUE;
+            }
+            thumb_dot_held = false;
+            if (!thumb_enter_held) {
+                pressed_keys &= ~B_SPACE;
+            }
+            if (!thumb_dot_used_as_shift && (event.timestamp - thumb_bs_press_ts) < NG_BS_TAP_MS) {
+                // Short press not used as center-shift -> it was a tap: emit BackSpace and remember the time
+                raise_zmk_keycode_state_changed_from_encoded(BSPC, true, event.timestamp);
+                raise_zmk_keycode_state_changed_from_encoded(BSPC, false, event.timestamp);
+                thumb_bs_last_tap_ts = event.timestamp;
+            }
+            return ZMK_BEHAVIOR_OPAQUE;
+        case NG_THUMB_DOT:
+            naginata_set_timestamp(event.timestamp);
+            thumb_dot_held = false;
+            if (!thumb_enter_held) {
+                pressed_keys &= ~B_SPACE;
+            }
+            if (!thumb_dot_used_as_shift) {
+                raise_zmk_keycode_state_changed_from_encoded(DOT, true, event.timestamp);
+                raise_zmk_keycode_state_changed_from_encoded(DOT, false, event.timestamp);
+            }
+            return ZMK_BEHAVIOR_OPAQUE;
+        case NG_THUMB_ENTER:
+            naginata_set_timestamp(event.timestamp);
+            thumb_enter_held = false;
+            if (!thumb_dot_held) {
+                pressed_keys &= ~B_SPACE;
+            }
+            if (!thumb_enter_used_as_shift) {
+                raise_zmk_keycode_state_changed_from_encoded(ENTER, true, event.timestamp);
+                raise_zmk_keycode_state_changed_from_encoded(ENTER, false, event.timestamp);
+            }
+            return ZMK_BEHAVIOR_OPAQUE;
+        case NG_L1_R3:
+        case NG_L1_R4:
+        case NG_R6_R3:
+        case NG_R6_R4:
+            naginata_set_timestamp(event.timestamp);
+            if (special_key.state == NG_SPECIAL_HELD) {
+                raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, false, event.timestamp);
+                special_key.state = NG_SPECIAL_IDLE;
+            } else if (special_key.state == NG_SPECIAL_PENDING) {
+                k_work_cancel_delayable(&special_key.work);
+                special_key.state = NG_SPECIAL_IDLE;
+                bool is_shifted = (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held);
+                if (is_shifted) {
+                    if (special_key.keycode == NG_L1_R4) {
+                        // 『 in Mozc is z + [ (Z, RBKT)
+                        raise_zmk_keycode_state_changed_from_encoded(Z, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(Z, false, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(RBKT, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(RBKT, false, event.timestamp);
+                    } else if (special_key.keycode == NG_R6_R4) {
+                        // 』 in Mozc is z + ] (Z, BSLH)
+                        raise_zmk_keycode_state_changed_from_encoded(Z, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(Z, false, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(BSLH, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(BSLH, false, event.timestamp);
+                    } else {
+                        raise_zmk_keycode_state_changed_from_encoded(special_key.shift_tap_code, true, event.timestamp);
+                        raise_zmk_keycode_state_changed_from_encoded(special_key.shift_tap_code, false, event.timestamp);
+                    }
+                } else {
+                    raise_zmk_keycode_state_changed_from_encoded(special_key.tap_code, true, event.timestamp);
+                    raise_zmk_keycode_state_changed_from_encoded(special_key.tap_code, false, event.timestamp);
+                }
+            }
+            return ZMK_BEHAVIOR_OPAQUE;
+    }
+
+    naginata_set_timestamp(event.timestamp);
+    naginata_release(binding, event);
+
+    return ZMK_BEHAVIOR_OPAQUE;
+}
+
+static const struct behavior_driver_api behavior_naginata_driver_api = {
+    .binding_pressed = on_keymap_binding_pressed, .binding_released = on_keymap_binding_released};
+
+#define KP_INST(n)                                                                                 \
+    BEHAVIOR_DT_INST_DEFINE(n, behavior_naginata_init, NULL, NULL, NULL, POST_KERNEL,              \
+                            CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &behavior_naginata_driver_api);
+
+DT_INST_FOREACH_STATUS_OKAY(KP_INST)
