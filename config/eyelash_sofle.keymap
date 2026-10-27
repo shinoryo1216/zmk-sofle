@@ -449,7 +449,7 @@
         layer_0_base {
             bindings = <
 &kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp UP_ARROW   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp LG(SPACE)   
-&kp TAB   &kp Q   &kp W   &kp E   &kp R   &kp T   &kp DOWN_ARROW   &kp Y   &kp U   &kp I   &kp O   &kp P   &kp LBKT   
+&kp TAB   &kp Q   &kp W   &kp E   &kp R   &kp T   &kp DOWN_ARROW   &kp Y   &kp U   &kp I   &kp O   &kp P   &kp MINUS   
 &mt_bracket LCTRL LS(N8)   &kp A   &kp S   &kp D   &hml LSHFT F   &kp G   &kp LEFT_ARROW   &kp H   &hmr RSHFT J   &kp K   &kp L   &kp SQT   &mt_bracket RCTRL LS(N9)   
 &mt_bracket LSHFT RBKT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &kp LEFT_ARROW     &kp RIGHT_ARROW    &kp LS(FSLH)     &mt_bracket RSHFT BSLH
 &tog 10   &kp LALT   &lt 5 PSCRN   &lt_thumb_to_ng 3 0   &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC   &td_joystick_click   &lt_thumb 2 ENTER   &lt_thumb_space 4 SPACE   &lt_thumb_to_ng 3 0   &lt 5 DEL   &lt 5 ESC   
@@ -463,9 +463,9 @@
         layer_1_naginata {
             bindings = <
 &kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp UP_ARROW   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp LG(SPACE)   
-&kp TAB   &ng Q   &ng W   &ng E   &ng R   &ng NG_L6_R2   &kp DOWN_ARROW   &ng NG_R1_R2   &ng U   &ng I   &ng O   &ng P   &ng NG_R6_R2   
+&kp TAB   &ng Q   &ng W   &ng E   &ng R   &ng NG_L6_R2   &kp DOWN_ARROW   &ng NG_R1_R2   &ng U   &ng I   &ng O   &ng P   &ng N   
 &ng NG_L1_R3   &ng A      &ng S         &ng D         &ng F         &ng G        &kp LEFT_ARROW   &ng H      &ng J         &ng K         &ng L      &ng SEMI    &ng NG_R6_R3
-&ng NG_L1_R4   &ng Z      &ng X         &ng C         &ng V         &ng B        &kp RIGHT_ARROW  &ng N      &ng M         &ng COMMA     &ng DOT    &ng FSLH    &ng NG_R6_R4
+&ng NG_L1_R4   &ng Z   &ng X   &ng C   &ng V   &ng B   &kp RIGHT_ARROW   &ng NG_R6_R2   &ng M   &ng COMMA   &ng DOT   &ng FSLH   &ng NG_R6_R4   
 &tog 10   &kp LALT   &lt 5 PSCRN   &lt_thumb_to_qwerty 3 0   &lt_thumb_comma_ng 4 NG_THUMB_COMMA   &ng NG_THUMB_BS   &td_joystick_click   &ng NG_THUMB_ENTER   &lt_thumb_space 4 SPACE   &lt_thumb_to_qwerty 3 0   &lt 5 DEL   &lt 5 ESC   
             >;
 
@@ -477,7 +477,7 @@
         layer_2_symbol {
             bindings = <
 &kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp LC(C)   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &none   
-&kp TAB   &none   &none   &kp LS(MINUS)   &kp INT1   &none   &kp LC(V)   &none   &kp LS(LBKT)   &none   &none   &none   &none   
+&kp TAB   &none   &none   &kp LS(MINUS)   &kp INT1   &none   &kp LC(V)   &none   &kp LS(LBKT)   &none   &none   &none   &kp LBKT   
 &kp LS(COMMA)   &kp LS(SQT)   &kp LS(SEMI)   &kp MINUS   &kp FSLH   &kp INT3   &kp LC(Z)   &kp LS(N6)   &kp LS(N7)   &kp LS(EQUAL)   &kp LS(INT3)   &kp SEMI   &kp LS(DOT)   
 &kp LS(RBKT)   &none   &kp EQUAL   &kp LS(INT1)   &kp LS(N5)   &kp LS(N4)   &kp LC(LS(Z))   &kp LS(N3)   &kp LS(N2)   &kp UP_ARROW   &kp DOWN_ARROW   &kp LS(N1)   &kp LS(BSLH)   
 &tog 10  &kp LALT         &lt 5 PSCRN     &lt_thumb 3 BSPC       &kp DOT        &kp BSPC        &kp LC(A)        &lt_thumb 2 ENTER      &lt_thumb_space 4 SPACE      &lt_thumb 3 BSPC  &lt 5 DEL  &lt 5 ESC
