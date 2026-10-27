@@ -26,7 +26,7 @@ layers:
   - I
   - O
   - P
-  - {t: '[', s: '{'}
+  - {t: '-', s: _}
   - {t: Sft+8, h: '$$mdi:apple-keyboard-control$$', s: Sft+*}
   - A
   - S
@@ -91,7 +91,7 @@ layers:
   - '&ng I'
   - '&ng O'
   - '&ng P'
-  - '&ng NG_R6_R2'
+  - '&ng N'
   - '&ng NG_L1_R3'
   - '&ng A'
   - '&ng S'
@@ -112,7 +112,7 @@ layers:
   - '&ng V'
   - '&ng B'
   - $$mdi:arrow-right-bold$$
-  - '&ng N'
+  - '&ng NG_R6_R2'
   - '&ng M'
   - '&ng COMMA'
   - '&ng DOT'
@@ -156,7 +156,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '[', s: '{'}
   - {t: 'Sft+,', s: Sft+<}
   - {t: Sft+', s: Sft+"}
   - {t: Sft+;, s: 'Sft+:'}
