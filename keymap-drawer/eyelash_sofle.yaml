@@ -982,11 +982,8 @@ combos:
 - p: [7, 8]
   k: '&macro_to_qwerty'
   l: [L1 NAGINATA]
-- p: [2, 3]
-  k: LANG1
-  l: [L0 BASE]
-- p: [9, 10]
-  k: LANG2
+- p: [5, 7]
+  k: {t: '`', s: '~'}
   l: [L0 BASE]
 - p: [47, 48]
   k: '&mkp MB4'
