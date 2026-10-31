@@ -287,24 +287,18 @@
             layers = <1>;
         };
 
-        /* ---- QWERTY(L0)のまま IME だけ切り替えるコンボ（Layer 0 の素の状態でのみ有効）----
-           薙刀式(L1)では無効：薙刀式は常に日本語入力でなければならないため。
+        /* ---- QWERTY(L0)のまま IME を切り替えるコンボ（Layer 0 の素の状態でのみ有効）----
+           5+6 ＝ 半角/全角(GRAVE) ＝ IME のトグル。レイヤーは変わらない。
+           薙刀式(L1)では無効：薙刀式は常に日本語入力でなければならないため、L1 から IME を切れてはいけない。
            layers = <0> は「最上位の有効レイヤーが0」のときだけ有効（L3等を重ねている間も無効）。
-           左＝日本語(IMEオン LANG1)、右＝英語(IMEオフ LANG2)。レイヤーは変わらない。
-           require-prior-idle-ms：直前150ms以内に他のキーを打っていたらコンボにしない（数字の早打ち対策） */
-        combo_ime_on_qwerty {
-            timeout-ms = <50>;
+           fcitx5 の Toggle に Zenkaku_Hankaku が残っていることが前提（tools/fcitx5_setup.py は残す）。
+           require-prior-idle-ms：直前150ms以内に他のキーを打っていたらコンボにしない（数字の早打ち対策）。
+           左右の手をまたぐので timeout は少し長め。位置 5=N5、7=N6（間の6は上矢印）。 */
+        combo_ime_toggle_qwerty {
+            timeout-ms = <60>;
             require-prior-idle-ms = <150>;
-            key-positions = <2 3>;
-            bindings = <&kp LANG1>;
-            layers = <0>;
-        };
-
-        combo_ime_off_qwerty {
-            timeout-ms = <50>;
-            require-prior-idle-ms = <150>;
-            key-positions = <9 10>;
-            bindings = <&kp LANG2>;
+            key-positions = <5 7>;
+            bindings = <&kp GRAVE>;
             layers = <0>;
         };
 

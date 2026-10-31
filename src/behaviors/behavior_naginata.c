@@ -378,6 +378,16 @@ int number_of_candidates(NGList *keys) {
 }
 
 // キー入力を文字に変換して出力する
+// 3機能キーの Shift を保持している間も、かなは Shift なしで出力する。
+// Shift を押したままローマ字（r, o）を送ると、Mozc が大文字の直接入力（RO）と解釈するため。
+// 出力の間だけ Shift を離し、出力後に押し直す。Ctrl はショートカットとして意味があるので対象外。
+// 注意：Shift の押し直しで、他のキーを挟まない Shift 単独の押下・離しが生じる。
+//       fcitx5 の AltTriggerKeys（既定 Shift_L）が有効だと IME が切り替わるので、tools/fcitx5_setup.py で空にする。
+static bool ng_shift_held(void) {
+    return special_key.state == NG_SPECIAL_HELD &&
+           (special_key.mod_code == LSHFT || special_key.mod_code == RSHFT);
+}
+
 void ng_type(NGList *keys) {
     LOG_DBG(">NAGINATA NG_TYPE");
 
@@ -401,6 +411,10 @@ void ng_type(NGList *keys) {
     for (int i = 0; i < sizeof ngdickana / sizeof ngdickana[0]; i++) {
         if ((ngdickana[i].shift | ngdickana[i].douji) == keyset) {
             if (ngdickana[i].kana[0] != NONE) {
+                bool shift_suppressed = ng_shift_held();
+                if (shift_suppressed) {
+                    raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, false, ts);
+                }
                 for (int k = 0; k < KANA_MAX_LEN; k++) {
                     if (ngdickana[i].kana[k] == NONE)
                         break;
@@ -409,6 +423,9 @@ void ng_type(NGList *keys) {
                                                                  ts);
                     raise_zmk_keycode_state_changed_from_encoded(ngdickana[i].kana[k], false,
                                                                  ts);
+                }
+                if (shift_suppressed) {
+                    raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, ts);
                 }
             } else {
                 ngdickana[i].func();
