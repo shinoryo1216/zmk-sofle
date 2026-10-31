@@ -473,9 +473,10 @@
         };
 
         // Layer 3: Cursor
+        // 位置5=LANG1(IMEオン) / 位置7=LANG2(IMEオフ)：QWERTY(L0)のまま日本語入力に切り替える／戻すときに、親指L4/R3 を長押ししたまま押す。レイヤーは変わらない
         layer_3_cursor {
             bindings = <
-&kp ESC  &none    &none      &none      &none      &none      &none     &none      &none           &none           &none           &none    &none
+&kp ESC  &none    &none      &none      &none      &kp LANG1      &none     &kp LANG2      &none           &none           &none           &none    &none
 &kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &none   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &kp LA(LEFT)   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &kp LA(RIGHT)  &none      &none           &none           &none           &none    &kp RSHFT
