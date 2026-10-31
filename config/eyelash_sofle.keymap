@@ -287,6 +287,27 @@
             layers = <1>;
         };
 
+        /* ---- QWERTY(L0)のまま IME だけ切り替えるコンボ（Layer 0 の素の状態でのみ有効）----
+           薙刀式(L1)では無効：薙刀式は常に日本語入力でなければならないため。
+           layers = <0> は「最上位の有効レイヤーが0」のときだけ有効（L3等を重ねている間も無効）。
+           左＝日本語(IMEオン LANG1)、右＝英語(IMEオフ LANG2)。レイヤーは変わらない。
+           require-prior-idle-ms：直前150ms以内に他のキーを打っていたらコンボにしない（数字の早打ち対策） */
+        combo_ime_on_qwerty {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <150>;
+            key-positions = <2 3>;
+            bindings = <&kp LANG1>;
+            layers = <0>;
+        };
+
+        combo_ime_off_qwerty {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <150>;
+            key-positions = <9 10>;
+            bindings = <&kp LANG2>;
+            layers = <0>;
+        };
+
         /* ---- ウィンドウ管理コンボ（Layer 4=WINDOW, Layer 3=CURSOR） ---- */
         combo_l4_mb4_mcomma {
             timeout-ms = <50>;
@@ -473,10 +494,9 @@
         };
 
         // Layer 3: Cursor
-        // 位置5=LANG1(IMEオン) / 位置7=LANG2(IMEオフ)：QWERTY(L0)のまま日本語入力に切り替える／戻すときに、親指L4/R3 を長押ししたまま押す。レイヤーは変わらない
         layer_3_cursor {
             bindings = <
-&kp ESC  &none    &none      &none      &none      &kp LANG1      &none     &kp LANG2      &none           &none           &none           &none    &none
+&kp ESC  &none    &none      &none      &none      &none      &none     &none      &none           &none           &none           &none    &none
 &kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &none   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &kp LA(LEFT)   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &kp LA(RIGHT)  &none      &none           &none           &none           &none    &kp RSHFT
