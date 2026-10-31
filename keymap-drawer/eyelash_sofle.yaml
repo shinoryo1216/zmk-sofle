@@ -201,9 +201,9 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - LANG1
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - LANG2
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -982,6 +982,12 @@ combos:
 - p: [7, 8]
   k: '&macro_to_qwerty'
   l: [L1 NAGINATA]
+- p: [2, 3]
+  k: LANG1
+  l: [L0 BASE]
+- p: [9, 10]
+  k: LANG2
+  l: [L0 BASE]
 - p: [47, 48]
   k: '&mkp MB4'
   l: [L4 WINDOW]
