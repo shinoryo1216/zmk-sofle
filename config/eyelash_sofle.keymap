@@ -105,7 +105,7 @@
             bindings = <&mo>, <&kp>;
         };
 
-        // 親指L4/R3（QWERTY L0）：タップ＝日本語入力へ切替（半角/全角 ＋ Layer 1(薙刀式)へ）、長押し＝Layer 3（カーソル）
+        // 親指L4/R3（QWERTY L0）：タップ＝日本語入力へ切替（かな LANG1 = IMEオン ＋ Layer 1(薙刀式)へ）、長押し＝Layer 3（カーソル）
         // 使い方: &lt_thumb_to_ng 3 0 （第2引数はダミー。タップ側はマクロで引数なし）
         lt_thumb_to_ng: lt_thumb_to_ng {
             compatible = "zmk,behavior-hold-tap";
@@ -113,17 +113,17 @@
             flavor = "balanced";
             tapping-term-ms = <280>;
             quick-tap-ms = <0>;
-            bindings = <&mo>, <&macro_to_ng_winlin>;
+            bindings = <&mo>, <&macro_to_ng>;
         };
 
-        // 親指L4/R3（薙刀式 L1）：タップ＝英語入力へ切替（半角/全角 ＋ Layer 0(QWERTY)へ）、長押し＝Layer 3（カーソル）
+        // 親指L4/R3（薙刀式 L1）：タップ＝英語入力へ切替（英数 LANG2 = IMEオフ ＋ Layer 0(QWERTY)へ）、長押し＝Layer 3（カーソル）
         lt_thumb_to_qwerty: lt_thumb_to_qwerty {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
             tapping-term-ms = <280>;
             quick-tap-ms = <0>;
-            bindings = <&mo>, <&macro_to_qwerty_winlin>;
+            bindings = <&mo>, <&macro_to_qwerty>;
         };
 
         lt_thumb_comma: lt_thumb_comma {
@@ -243,62 +243,47 @@
     };
 
     macros {
-        // 英語(QWERTY, L0) ⇄ 日本語(薙刀式, L1) 切替マクロ：Windows/Linux用（半角/全角 GRAVE）
-        macro_to_ng_winlin: macro_to_ng_winlin {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            wait-ms = <15>;
-            tap-ms = <15>;
-            bindings = <&macro_tap &kp GRAVE>, <&macro_tap &to 1>;
-            label = "MACRO_TO_NG_WINLIN";
-        };
-
-        macro_to_qwerty_winlin: macro_to_qwerty_winlin {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            wait-ms = <15>;
-            tap-ms = <15>;
-            bindings = <&macro_tap &kp GRAVE>, <&macro_tap &to 0>;
-            label = "MACRO_TO_QWERTY_WINLIN";
-        };
-
-        // 英語(QWERTY, L0) ⇄ 日本語(薙刀式, L1) 切替マクロ：iPadOS/macOS用（LANG1/LANG2）
-        macro_to_ng_ipad: macro_to_ng_ipad {
+        // 英語(QWERTY, L0) ⇄ 日本語(薙刀式, L1) 切替マクロ（全環境共通）。
+        // 半角/全角(GRAVE)のトグルではなく、明示的な IME オン(LANG1)／オフ(LANG2) を送る。
+        // トグルだとレイヤーと IME の状態がずれたときに「ろ」が「ro」になるため。
+        // Mozc では LANG1 = ON、LANG2 = OFF（どの入力状態でも有効）。
+        // fcitx5 では、Activate/Deactivate キーの設定が必要（HANDOVER.md §8）。
+        macro_to_ng: macro_to_ng {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <15>;
             tap-ms = <15>;
             bindings = <&macro_tap &kp LANG1>, <&macro_tap &to 1>;
-            label = "MACRO_TO_NG_IPAD";
+            label = "MACRO_TO_NG";
         };
 
-        macro_to_qwerty_ipad: macro_to_qwerty_ipad {
+        macro_to_qwerty: macro_to_qwerty {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <15>;
             tap-ms = <15>;
             bindings = <&macro_tap &kp LANG2>, <&macro_tap &to 0>;
-            label = "MACRO_TO_QWERTY_IPAD";
+            label = "MACRO_TO_QWERTY";
         };
     };
 
     combos {
         compatible = "zmk,combos";
 
-        /* ---- 言語切替コンボ（iPadOS/macOS用のみ）：英語(QWERTY L0) ⇄ 日本語(薙刀式 L1) ----
-           Windows/Linux用は親指L4/R3のタップ（lt_thumb_to_ng / lt_thumb_to_qwerty）に移動済み */
-        // iPadOS/macOS用: 4+5 / 6+7 (LANG1/LANG2 + レイヤー切替)
-        combo_qwerty_to_ng_ipad {
+        /* ---- 言語切替コンボ：英語(QWERTY L0) ⇄ 日本語(薙刀式 L1) ----
+           親指L4/R3のタップ（lt_thumb_to_ng / lt_thumb_to_qwerty）と同じ動作 */
+        // 4+5 / 6+7 (LANG1/LANG2 + レイヤー切替)
+        combo_qwerty_to_ng {
             timeout-ms = <50>;
             key-positions = <4 5>;
-            bindings = <&macro_to_ng_ipad>;
+            bindings = <&macro_to_ng>;
             layers = <0>;
         };
 
-        combo_ng_to_qwerty_ipad {
+        combo_ng_to_qwerty {
             timeout-ms = <50>;
             key-positions = <7 8>;
-            bindings = <&macro_to_qwerty_ipad>;
+            bindings = <&macro_to_qwerty>;
             layers = <1>;
         };
 
@@ -494,7 +479,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &none   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &kp LA(LEFT)   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &kp LA(RIGHT)  &none      &none           &none           &none           &none    &kp RSHFT
-&tog 10         &kp LALT           &lt 5 PSCRN    &lt_thumb 3 BSPC     &lt_thumb_comma 4 COMMA   &kp BSPC        &mkp MCLK        &lt_thumb 2 ENTER        &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC     &lt 5 DEL      &lt 5 ESC
+&tog 10         &kp LALT           &lt 5 PSCRN    &lt_thumb 3 BSPC     &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC        &mkp MCLK        &lt_thumb 2 ENTER        &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC     &lt 5 DEL      &lt 5 ESC
             >;
 
             display-name = "L3 CURSOR";
@@ -508,7 +493,7 @@
 &kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &none   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
 &kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &kp LC(LS(TAB))   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
 &kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &kp LC(TAB)  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
-&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &kp BSPC &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC      &lt 5 DEL         &lt 5 ESC
+&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC      &lt 5 DEL         &lt 5 ESC
             >;
 
             display-name = "L4 WINDOW";
@@ -522,7 +507,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
-&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &kp BSPC &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC      &lt 5 DEL         &lt 5 ESC
+&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC      &lt 5 DEL         &lt 5 ESC
             >;
 
             display-name = "L5 MOUSE";
@@ -536,7 +521,7 @@
 &kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
 &kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
 &kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
-&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &kp BSPC &mkp MCLK &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE &lt_thumb 3 BSPC &lt 5 DEL &lt 5 ESC
+&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC &mkp MCLK &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE &lt_thumb 3 BSPC &lt 5 DEL &lt 5 ESC
             >;
  
             display-name = "L6 FKEYS";
@@ -550,7 +535,7 @@
 &bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
 &none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
 &none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
-&tog 10  &kp LALT      &lt 5 PSCRN   &lt_thumb 3 BSPC    &lt_thumb_comma 4 COMMA   &kp BSPC   &mkp MCLK     &lt_thumb 2 ENTER   &lt_thumb_space 4 SPACE   &lt_thumb 3 BSPC    &lt 5 DEL     &lt 5 ESC
+&tog 10  &kp LALT      &lt 5 PSCRN   &lt_thumb 3 BSPC    &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC   &mkp MCLK     &lt_thumb 2 ENTER   &lt_thumb_space 4 SPACE   &lt_thumb 3 BSPC    &lt 5 DEL     &lt 5 ESC
             >;
 
             display-name = "L7 BLUETOOTH";

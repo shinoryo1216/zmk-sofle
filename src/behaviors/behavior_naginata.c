@@ -7,7 +7,6 @@
 #define DT_DRV_COMPAT zmk_behavior_naginata
 
 #include <zephyr/device.h>
-#include <zephyr/settings/settings.h>
 #include <drivers/behavior.h>
 #include <zephyr/logging/log.h>
 
@@ -68,41 +67,11 @@ static NGListArray nginput;
 static uint32_t pressed_keys = 0UL; // 押しているキーのビットをたてる
 static int8_t n_pressed_keys = 0;   // 押しているキーの数
 
-extern user_config_t naginata_config;
-
-#if IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
-static void naginata_save_work_handler(struct k_work *work) {
-    settings_save_one("naginata/state", &naginata_config, sizeof(naginata_config));
-    LOG_DBG("Saved Naginata state: %d, %d", naginata_config.os, naginata_config.tategaki);
-}
-
-static struct k_work_delayable naginata_save_work;
-
-static int naginata_settings_load_cb(const char *name, size_t len, settings_read_cb read_cb, void *cb_arg) {
-    const char *next;
-    if (settings_name_steq(name, "state", &next) && !next) {
-        if (len != sizeof(naginata_config)) {
-            return -EINVAL;
-        }
-
-        int rc = read_cb(cb_arg, &naginata_config, sizeof(naginata_config));
-        if (rc >= 0) {
-            LOG_INF("Loaded Naginata state: %d, %d", naginata_config.os, naginata_config.tategaki);
-        }
-        return MIN(rc, 0);
-    }
-    return -ENOENT;
-}
-
-SETTINGS_STATIC_HANDLER_DEFINE(naginata, "naginata", NULL, naginata_settings_load_cb, NULL, NULL);
-#endif // IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
-
 #ifndef NG_L1_R3
 #define NG_L1_R3 0x01
 #define NG_L1_R4 0x02
 #define NG_R6_R3 0x03
 #define NG_R6_R4 0x04
-#define NG_THUMB_DOT 0x05
 #define NG_THUMB_ENTER 0x06
 #define NG_R6_R2 0x07
 #define NG_THUMB_COMMA 0x08
@@ -312,11 +281,16 @@ static const naginata_kanamap ngdickana[] = {
     {.shift = NONE   , .douji = B_SLASH           , .kana = {LS(FSLH), NONE, NONE, NONE, NONE, NONE}, .func = nofunc }, // ？
     // 特殊制御キー
     {.shift = NONE    , .douji = B_SPACE        , .kana = {SPACE, NONE, NONE, NONE, NONE, NONE  }, .func = nofunc},
-    {.shift = NONE    , .douji = B_T            , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = ng_T},
-    {.shift = NONE    , .douji = B_Y            , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = ng_Y},
-    {.shift = B_SPACE , .douji = B_T            , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = ng_ST},
-    {.shift = B_SPACE , .douji = B_Y            , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = ng_SY},
-    {.shift = NONE    , .douji = B_H|B_J        , .kana = {NONE, NONE, NONE, NONE, NONE, NONE   }, .func = naginata_on},
+    // ---- 小書き（Q = 小書き修飾 + 親のかなのキー）。ユーザー配列(system3_naginata_keymap.ods)の位置に連動 ----
+    {.shift = NONE   , .douji = B_Q|B_H           , .kana = {X, Y, A, NONE, NONE, NONE}     , .func = nofunc }, // ゃ (Q + や H)
+    {.shift = NONE   , .douji = B_Q|B_P           , .kana = {X, Y, U, NONE, NONE, NONE}     , .func = nofunc }, // ゅ (Q + ゆ P)
+    {.shift = NONE   , .douji = B_Q|B_I           , .kana = {X, Y, O, NONE, NONE, NONE}     , .func = nofunc }, // ょ (Q + よ I)
+    {.shift = NONE   , .douji = B_Q|B_M           , .kana = {X, A, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぁ (Q + あ M)
+    {.shift = NONE   , .douji = B_Q|B_K           , .kana = {X, I, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぃ (Q + い K)
+    {.shift = NONE   , .douji = B_Q|B_L           , .kana = {X, U, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぅ (Q + う L)
+    {.shift = NONE   , .douji = B_Q|B_O           , .kana = {X, E, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぇ (Q + え O)
+    {.shift = NONE   , .douji = B_Q|B_U           , .kana = {X, O, NONE, NONE, NONE, NONE}  , .func = nofunc }, // ぉ (Q + お U)
+    {.shift = NONE   , .douji = B_Q|B_V           , .kana = {X, W, A, NONE, NONE, NONE}     , .func = nofunc }, // ゎ (Q + わ V)
 };
 
 // Helper function for counting matches/candidates
@@ -477,6 +451,10 @@ static void push_input(NGList *e) {
 }
 
 // 薙刀式の入力処理
+// Thumb center-shift keys currently held (declared here because naginata_release() looks at them)
+static bool thumb_bs_held = false;
+static bool thumb_enter_held = false;
+
 bool naginata_press(struct zmk_behavior_binding *binding, struct zmk_behavior_binding_event event) {
     LOG_DBG(">NAGINATA PRESS");
 
@@ -606,6 +584,25 @@ bool naginata_release(struct zmk_behavior_binding *binding,
                 ng_type(&(nginput.elements[0]));
                 removeFromListArrayAt(&nginput, 0);
             }
+            // While a thumb shift key is held, pressed_keys always contains B_SPACE, so the
+            // "everything released" flush above never runs. Output the leading chords whose keys
+            // (other than the shift) have all been released: they can no longer combine with
+            // later key presses (a chord needs a moment where both keys are down).
+            if (thumb_bs_held || thumb_enter_held) {
+                while (nginput.size > 0) {
+                    uint32_t ks = 0UL;
+                    for (int i = 0; i < nginput.elements[0].size; i++) {
+                        ks |= ng_key[nginput.elements[0].elements[i] - A];
+                    }
+                    ks &= ~B_SPACE;
+                    if (ks != 0UL && (ks & pressed_keys) == 0UL) {
+                        ng_type(&(nginput.elements[0]));
+                        removeFromListArrayAt(&nginput, 0);
+                    } else {
+                        break;
+                    }
+                }
+            }
         }
         break;
     }
@@ -625,33 +622,44 @@ static int behavior_naginata_init(const struct device *dev) {
     n_pressed_keys = 0;
     special_key.state = NG_SPECIAL_IDLE;
     k_work_init_delayable(&special_key.work, special_key_work_handler);
-
-#if defined(CONFIG_NAGINATA_DEFAULT_OS_WINDOWS)
-    naginata_config.os = NG_WINDOWS;
-#elif defined(CONFIG_NAGINATA_DEFAULT_OS_LINUX)
-    naginata_config.os = NG_LINUX;
-#else
-    naginata_config.os = NG_MACOS;
-#endif
-
-#if IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
-    k_work_init_delayable(&naginata_save_work, naginata_save_work_handler);
-#endif
     return 0;
 };
 
-static bool thumb_dot_held = false;
-static bool thumb_dot_used_as_shift = false;
-static bool thumb_enter_held = false;
+static bool thumb_bs_used_as_shift = false;
 static bool thumb_enter_used_as_shift = false;
 // Row 2 L6 / R1 cursor keys: remember which key was pressed so the matching key is released
 // (index 0 = NG_L6_R2 left/up, index 1 = NG_R1_R2 right/down).
 static uint32_t arrow_held_code[2] = {0, 0};
-// Thumb L6 (NG_THUMB_BS): tap = BackSpace, hold = center-shift (shares the thumb_dot_* state),
+// Thumb L6 (NG_THUMB_BS): tap = BackSpace, hold = center-shift,
 // tap then press-and-hold within NG_BS_QUICK_TAP_MS = BackSpace held (key repeat).
 static int64_t thumb_bs_last_tap_ts = -100000; // time of the last emitted tap (ms, -100000 = none)
 static bool thumb_bs_quick_held = false;       // true while BackSpace is held in quick-tap mode
 static int64_t thumb_bs_press_ts = 0;          // press time of the current (normal) press
+
+// Thumb center-shift keys (NG_THUMB_BS / NG_THUMB_ENTER) must be counted in
+// n_pressed_keys. naginata_release() clears pressed_keys when n_pressed_keys reaches 0, which
+// used to wipe B_SPACE after the first kana and broke the continuous shift (held shift key).
+static void thumb_shift_down(void) {
+    if (n_pressed_keys < 100)
+        n_pressed_keys++;
+    pressed_keys |= B_SPACE;
+}
+
+static void thumb_shift_up(bool other_thumb_held) {
+    if (n_pressed_keys > 0)
+        n_pressed_keys--;
+    if (!other_thumb_held) {
+        pressed_keys &= ~B_SPACE;
+    }
+    // Same as naginata_release(): when nothing is held any more, flush the pending input
+    if (pressed_keys == 0UL) {
+        n_pressed_keys = 0;
+        while (nginput.size > 0) {
+            ng_type(&(nginput.elements[0]));
+            removeFromListArrayAt(&nginput, 0);
+        }
+    }
+}
 
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
@@ -660,14 +668,14 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
     // Row 2 R6 key (plain = slash "／" / shift = colon "：")
     if (binding->param1 == NG_R6_R2) {
         naginata_set_timestamp(event.timestamp);
-        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_bs_held) thumb_bs_used_as_shift = true;
         if (thumb_enter_held) thumb_enter_used_as_shift = true;
         if (special_key.state == NG_SPECIAL_PENDING) {
             k_work_cancel_delayable(&special_key.work);
             special_key.state = NG_SPECIAL_HELD;
             raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
         }
-        if (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held) {
+        if (pressed_keys & B_SPACE || thumb_bs_held || thumb_enter_held) {
             // JIS colon key is SQT (0x34)
             raise_zmk_keycode_state_changed_from_encoded(SQT, true, event.timestamp);
             raise_zmk_keycode_state_changed_from_encoded(SQT, false, event.timestamp);
@@ -685,14 +693,14 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
         naginata_set_timestamp(event.timestamp);
         // Using this key while a center-shift key is held counts as "used as shift",
         // so releasing that thumb key does not emit a stray ENTER / DOT.
-        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_bs_held) thumb_bs_used_as_shift = true;
         if (thumb_enter_held) thumb_enter_used_as_shift = true;
         if (special_key.state == NG_SPECIAL_PENDING) {
             k_work_cancel_delayable(&special_key.work);
             special_key.state = NG_SPECIAL_HELD;
             raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
         }
-        if (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held) {
+        if (pressed_keys & B_SPACE || thumb_bs_held || thumb_enter_held) {
             // 。 (Mozc: DOT)
             raise_zmk_keycode_state_changed_from_encoded(DOT, true, event.timestamp);
             raise_zmk_keycode_state_changed_from_encoded(DOT, false, event.timestamp);
@@ -710,14 +718,14 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
         naginata_set_timestamp(event.timestamp);
         // Using this key while a center-shift key is held counts as "used as shift",
         // so releasing that thumb key does not emit a stray ENTER / DOT.
-        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_bs_held) thumb_bs_used_as_shift = true;
         if (thumb_enter_held) thumb_enter_used_as_shift = true;
         if (special_key.state == NG_SPECIAL_PENDING) {
             k_work_cancel_delayable(&special_key.work);
             special_key.state = NG_SPECIAL_HELD;
             raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
         }
-        bool shifted = (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held);
+        bool shifted = (pressed_keys & B_SPACE || thumb_bs_held || thumb_enter_held);
         int idx = (binding->param1 == NG_L6_R2) ? 0 : 1;
         uint32_t code;
         if (idx == 0) {
@@ -750,27 +758,22 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
             raise_zmk_keycode_state_changed_from_encoded(BSPC, true, event.timestamp);
             return ZMK_BEHAVIOR_OPAQUE;
         }
-        // Normal press: center-shift becomes active immediately (same as NG_THUMB_DOT).
+        // Normal press: center-shift becomes active immediately (same as NG_THUMB_ENTER).
         thumb_bs_press_ts = event.timestamp;
-        thumb_dot_held = true;
-        thumb_dot_used_as_shift = false;
-        pressed_keys |= B_SPACE;
+        thumb_bs_held = true;
+        thumb_bs_used_as_shift = false;
+        thumb_shift_down();
         return ZMK_BEHAVIOR_OPAQUE;
     }
 
-    // Thumb center-shift keys (R1 = ENTER / shift; NG_THUMB_DOT on L6 is currently unused in the keymap)
-    if (binding->param1 == NG_THUMB_DOT) {
-        thumb_dot_held = true;
-        thumb_dot_used_as_shift = false;
-        pressed_keys |= B_SPACE;
-        return ZMK_BEHAVIOR_OPAQUE;
-    } else if (binding->param1 == NG_THUMB_ENTER) {
+    // Thumb center-shift key (R1 = ENTER / shift)
+    if (binding->param1 == NG_THUMB_ENTER) {
         thumb_enter_held = true;
         thumb_enter_used_as_shift = false;
-        pressed_keys |= B_SPACE;
+        thumb_shift_down();
         return ZMK_BEHAVIOR_OPAQUE;
     } else {
-        if (thumb_dot_held) thumb_dot_used_as_shift = true;
+        if (thumb_bs_held) thumb_bs_used_as_shift = true;
         if (thumb_enter_held) thumb_enter_used_as_shift = true;
     }
 
@@ -822,41 +825,6 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
             break;
     }
 
-    // F15が押されたらnaginata_config.os=NG_WINDOWS
-    {
-#if IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
-        uint8_t saved_os = naginata_config.os;
-        bool saved_tategaki = naginata_config.tategaki;
-#endif
-        switch (binding->param1) {
-            case F15:
-                naginata_config.os = NG_WINDOWS;
-                break;
-            case F16:
-                naginata_config.os = NG_MACOS;
-                break;
-            case F17:
-                naginata_config.os = NG_LINUX;
-                break;
-            case F18:
-                naginata_config.tategaki = true;
-                break;
-            case F19:
-                naginata_config.tategaki = false;
-                break;
-        }
-        switch (binding->param1) {
-            case F15 ... F19:
-#if IS_ENABLED(CONFIG_NAGINATA_PERSISTENT_STATE)
-                if (naginata_config.os != saved_os || naginata_config.tategaki != saved_tategaki) {
-                    // Debounce saving to flash to reduce wear
-                    k_work_reschedule(&naginata_save_work, K_MSEC(CONFIG_ZMK_SETTINGS_SAVE_DEBOUNCE));
-                }
-#endif
-                return ZMK_BEHAVIOR_OPAQUE;
-        }
-    }
-
     naginata_set_timestamp(event.timestamp);
     naginata_press(binding, event);
 
@@ -887,34 +855,19 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
                 raise_zmk_keycode_state_changed_from_encoded(BSPC, false, event.timestamp);
                 return ZMK_BEHAVIOR_OPAQUE;
             }
-            thumb_dot_held = false;
-            if (!thumb_enter_held) {
-                pressed_keys &= ~B_SPACE;
-            }
-            if (!thumb_dot_used_as_shift && (event.timestamp - thumb_bs_press_ts) < NG_BS_TAP_MS) {
+            thumb_bs_held = false;
+            thumb_shift_up(thumb_enter_held);
+            if (!thumb_bs_used_as_shift && (event.timestamp - thumb_bs_press_ts) < NG_BS_TAP_MS) {
                 // Short press not used as center-shift -> it was a tap: emit BackSpace and remember the time
                 raise_zmk_keycode_state_changed_from_encoded(BSPC, true, event.timestamp);
                 raise_zmk_keycode_state_changed_from_encoded(BSPC, false, event.timestamp);
                 thumb_bs_last_tap_ts = event.timestamp;
             }
             return ZMK_BEHAVIOR_OPAQUE;
-        case NG_THUMB_DOT:
-            naginata_set_timestamp(event.timestamp);
-            thumb_dot_held = false;
-            if (!thumb_enter_held) {
-                pressed_keys &= ~B_SPACE;
-            }
-            if (!thumb_dot_used_as_shift) {
-                raise_zmk_keycode_state_changed_from_encoded(DOT, true, event.timestamp);
-                raise_zmk_keycode_state_changed_from_encoded(DOT, false, event.timestamp);
-            }
-            return ZMK_BEHAVIOR_OPAQUE;
         case NG_THUMB_ENTER:
             naginata_set_timestamp(event.timestamp);
             thumb_enter_held = false;
-            if (!thumb_dot_held) {
-                pressed_keys &= ~B_SPACE;
-            }
+            thumb_shift_up(thumb_bs_held);
             if (!thumb_enter_used_as_shift) {
                 raise_zmk_keycode_state_changed_from_encoded(ENTER, true, event.timestamp);
                 raise_zmk_keycode_state_changed_from_encoded(ENTER, false, event.timestamp);
@@ -931,7 +884,7 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
             } else if (special_key.state == NG_SPECIAL_PENDING) {
                 k_work_cancel_delayable(&special_key.work);
                 special_key.state = NG_SPECIAL_IDLE;
-                bool is_shifted = (pressed_keys & B_SPACE || thumb_dot_held || thumb_enter_held);
+                bool is_shifted = (pressed_keys & B_SPACE || thumb_bs_held || thumb_enter_held);
                 if (is_shifted) {
                     if (special_key.keycode == NG_L1_R4) {
                         // 『 in Mozc is z + [ (Z, RBKT)
