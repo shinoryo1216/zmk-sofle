@@ -11,3 +11,9 @@ config ZMK_BEHAVIOR_VELOCITY_MOUSE_MOVE
 config NAGINATA
     bool "Enable Naginata"
     default y
+
+config NAGINATA_CHORD_WINDOW_MS
+    int "Naginata simultaneous-press window (ms). 0 = wait until the key is released"
+    default 50
+    range 0 500
+    depends on NAGINATA

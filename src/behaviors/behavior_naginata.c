@@ -467,6 +467,28 @@ static void push_input(NGList *e) {
     }
 }
 
+// 同時押しの判定時間（ms）。押してからこの時間、次のキーが押されなければ、キーを離すのを待たずに
+// 保留中のかなを出力する（応答の改善）。0 なら従来どおり、離す（または次のキーが押される）まで待つ。
+// 判定時間より遅れて重ねた同時押し（濁音・拗音・外来音）は、別々のかなとして出力される。
+#ifdef CONFIG_NAGINATA_CHORD_WINDOW_MS
+#define NG_CHORD_WINDOW_MS CONFIG_NAGINATA_CHORD_WINDOW_MS
+#else
+#define NG_CHORD_WINDOW_MS 50
+#endif
+
+#if NG_CHORD_WINDOW_MS > 0
+static struct k_work_delayable chord_work;
+
+// 判定時間が過ぎた：キーがまだ押されていても、保留中のかなを出力する。
+// 出力済みの保留は消えるので、その後キーを離しても二重には出力されない。
+static void chord_work_handler(struct k_work *work) {
+    while (nginput.size > 0) {
+        ng_type(&(nginput.elements[0]));
+        removeFromListArrayAt(&nginput, 0);
+    }
+}
+#endif
+
 // 薙刀式の入力処理
 // Thumb center-shift keys currently held (declared here because naginata_release() looks at them)
 static bool thumb_bs_held = false;
@@ -562,6 +584,11 @@ bool naginata_press(struct zmk_behavior_binding *binding, struct zmk_behavior_bi
             ng_type(&(nginput.elements[0]));
             removeFromListArrayAt(&nginput, 0);
         }
+#if NG_CHORD_WINDOW_MS > 0
+        if (nginput.size > 0) {
+            k_work_reschedule(&chord_work, K_MSEC(NG_CHORD_WINDOW_MS)); // 最後の押下から数える
+        }
+#endif
         break;
     }
 
@@ -639,6 +666,9 @@ static int behavior_naginata_init(const struct device *dev) {
     n_pressed_keys = 0;
     special_key.state = NG_SPECIAL_IDLE;
     k_work_init_delayable(&special_key.work, special_key_work_handler);
+#if NG_CHORD_WINDOW_MS > 0
+    k_work_init_delayable(&chord_work, chord_work_handler);
+#endif
     return 0;
 };
 
