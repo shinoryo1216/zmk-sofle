@@ -362,10 +362,10 @@ rect.held, rect.combo.held {
 <text x="0" y="-4" class="key tap">0</text>
 <text x="0" y="-24" class="key shifted">)</text>
 </g>
-<g transform="translate(896, 56)" class="key keypos-12">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
-<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<g transform="translate(896, 56)" class="key backspace keypos-12">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key backspace side"/>
+<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key backspace"/>
+<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key backspace tap glyph mdi:backspace"/>
 </g>
 <g transform="translate(28, 112)" class="key keypos-13">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
@@ -614,7 +614,7 @@ rect.held, rect.combo.held {
 <g transform="translate(389, 294) rotate(30.0)" class="key keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:backspace"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
@@ -626,14 +626,14 @@ rect.held, rect.combo.held {
 <g transform="translate(535, 294) rotate(-30.0)" class="key keypos-59">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
 <g transform="translate(610, 283) rotate(-30.0)" class="key keypos-60">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L4-WINDOW">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L4 WINDOW</tspan></text>
 </a></g>
@@ -654,7 +654,7 @@ rect.held, rect.combo.held {
 <g transform="translate(784, 259)" class="key keypos-63">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-esc"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L5-MOUSE">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 75%">L5 MOUSE</tspan></text>
 </a></g>
@@ -780,10 +780,10 @@ rect.held, rect.combo.held {
 <text x="0" y="-4" class="key tap">0</text>
 <text x="0" y="-24" class="key shifted">)</text>
 </g>
-<g transform="translate(896, 56)" class="key keypos-12">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
-<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<g transform="translate(896, 56)" class="key backspace keypos-12">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key backspace side"/>
+<rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key backspace"/>
+<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key backspace tap glyph mdi:backspace"/>
 </g>
 <g transform="translate(28, 112)" class="key keypos-13">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
@@ -1109,7 +1109,7 @@ rect.held, rect.combo.held {
 <g transform="translate(610, 283) rotate(-30.0)" class="key keypos-60">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L4-WINDOW">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L4 WINDOW</tspan></text>
 </a></g>
@@ -1130,7 +1130,7 @@ rect.held, rect.combo.held {
 <g transform="translate(784, 259)" class="key keypos-63">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-esc"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L5-MOUSE">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 75%">L5 MOUSE</tspan></text>
 </a></g>
@@ -1500,7 +1500,7 @@ rect.held, rect.combo.held {
 <g transform="translate(252, 259)" class="key keypos-55">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -1513,8 +1513,10 @@ rect.held, rect.combo.held {
 <g transform="translate(389, 294) rotate(30.0)" class="key held keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:backspace"/>
-</g>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:keyboard-space"/>
+<a href="#L2-SYMBOL">
+<text x="0" y="24" class="key held hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
+</a></g>
 <g transform="translate(462, 91)" class="key keypos-58">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
@@ -1523,21 +1525,21 @@ rect.held, rect.combo.held {
 <g transform="translate(535, 294) rotate(-30.0)" class="key held alternate keypos-59">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
 <g transform="translate(610, 283) rotate(-30.0)" class="key keypos-60">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L4-WINDOW">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L4 WINDOW</tspan></text>
 </a></g>
 <g transform="translate(672, 259)" class="key keypos-61">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -1551,7 +1553,7 @@ rect.held, rect.combo.held {
 <g transform="translate(784, 259)" class="key keypos-63">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-esc"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L5-MOUSE">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 75%">L5 MOUSE</tspan></text>
 </a></g>
@@ -1888,7 +1890,7 @@ rect.held, rect.combo.held {
 <g transform="translate(252, 259)" class="key held keypos-55">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key held tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key held hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -1903,7 +1905,7 @@ rect.held, rect.combo.held {
 <g transform="translate(389, 294) rotate(30.0)" class="key held alternate keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:backspace"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
@@ -1915,21 +1917,21 @@ rect.held, rect.combo.held {
 <g transform="translate(535, 294) rotate(-30.0)" class="key held alternate keypos-59">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
 <g transform="translate(610, 283) rotate(-30.0)" class="key keypos-60">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-space"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L4-WINDOW">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L4 WINDOW</tspan></text>
 </a></g>
 <g transform="translate(672, 259)" class="key held alternate keypos-61">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key held alternate tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -1943,7 +1945,7 @@ rect.held, rect.combo.held {
 <g transform="translate(784, 259)" class="key keypos-63">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-esc"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L5-MOUSE">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 75%">L5 MOUSE</tspan></text>
 </a></g>
@@ -2316,7 +2318,7 @@ rect.held, rect.combo.held {
 <g transform="translate(252, 259)" class="key held alternate keypos-55">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key held alternate tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -2331,7 +2333,7 @@ rect.held, rect.combo.held {
 <g transform="translate(389, 294) rotate(30.0)" class="key held alternate keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:backspace"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
@@ -2343,21 +2345,21 @@ rect.held, rect.combo.held {
 <g transform="translate(535, 294) rotate(-30.0)" class="key held alternate keypos-59">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
 <g transform="translate(610, 283) rotate(-30.0)" class="key held alternate keypos-60">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
 <a href="#L4-WINDOW">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L4 WINDOW</tspan></text>
 </a></g>
 <g transform="translate(672, 259)" class="key held alternate keypos-61">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key held alternate tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -2371,7 +2373,7 @@ rect.held, rect.combo.held {
 <g transform="translate(784, 259)" class="key keypos-63">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-esc"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L5-MOUSE">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 75%">L5 MOUSE</tspan></text>
 </a></g>
@@ -2774,7 +2776,7 @@ rect.held, rect.combo.held {
 <g transform="translate(252, 259)" class="key held alternate keypos-55">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key held alternate tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -2789,7 +2791,7 @@ rect.held, rect.combo.held {
 <g transform="translate(389, 294) rotate(30.0)" class="key held alternate keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:backspace"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
@@ -2801,21 +2803,21 @@ rect.held, rect.combo.held {
 <g transform="translate(535, 294) rotate(-30.0)" class="key held alternate keypos-59">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
 <g transform="translate(610, 283) rotate(-30.0)" class="key held alternate keypos-60">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
 <a href="#L4-WINDOW">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L4 WINDOW</tspan></text>
 </a></g>
 <g transform="translate(672, 259)" class="key held alternate keypos-61">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key held alternate tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -2829,7 +2831,7 @@ rect.held, rect.combo.held {
 <g transform="translate(784, 259)" class="key held alternate keypos-63">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-esc"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
 <a href="#L5-MOUSE">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 75%">L5 MOUSE</tspan></text>
 </a></g>
@@ -3186,7 +3188,7 @@ rect.held, rect.combo.held {
 <g transform="translate(252, 259)" class="key keypos-55">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -3201,7 +3203,7 @@ rect.held, rect.combo.held {
 <g transform="translate(389, 294) rotate(30.0)" class="key held keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:backspace"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
@@ -3213,21 +3215,21 @@ rect.held, rect.combo.held {
 <g transform="translate(535, 294) rotate(-30.0)" class="key held alternate keypos-59">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
 <g transform="translate(610, 283) rotate(-30.0)" class="key held alternate keypos-60">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
 <a href="#L4-WINDOW">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L4 WINDOW</tspan></text>
 </a></g>
 <g transform="translate(672, 259)" class="key keypos-61">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -3241,7 +3243,7 @@ rect.held, rect.combo.held {
 <g transform="translate(784, 259)" class="key keypos-63">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-esc"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:keyboard-return"/>
 <a href="#L5-MOUSE">
 <text x="0" y="24" class="key hold layer-activator"><tspan style="font-size: 75%">L5 MOUSE</tspan></text>
 </a></g>
@@ -3580,7 +3582,7 @@ rect.held, rect.combo.held {
 <g transform="translate(252, 259)" class="key held keypos-55">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key held tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key held hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -3595,7 +3597,7 @@ rect.held, rect.combo.held {
 <g transform="translate(389, 294) rotate(30.0)" class="key held keypos-57">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:backspace"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
@@ -3607,21 +3609,21 @@ rect.held, rect.combo.held {
 <g transform="translate(535, 294) rotate(-30.0)" class="key held alternate keypos-59">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
+<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
 <a href="#L2-SYMBOL">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L2 SYMBOL</tspan></text>
 </a></g>
 <g transform="translate(610, 283) rotate(-30.0)" class="key held alternate keypos-60">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-space" xlink:href="#mdi:keyboard-space" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-space"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
 <a href="#L4-WINDOW">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L4 WINDOW</tspan></text>
 </a></g>
 <g transform="translate(672, 259)" class="key held alternate keypos-61">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:backspace" xlink:href="#mdi:backspace" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:backspace"/>
+<text x="0" y="-4" class="key held alternate tap"><tspan style="font-size: 60%">&amp;macro_to…</tspan></text>
 <a href="#L3-CURSOR">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 67%">L3 CURSOR</tspan></text>
 </a></g>
@@ -3635,7 +3637,7 @@ rect.held, rect.combo.held {
 <g transform="translate(784, 259)" class="key held alternate keypos-63">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key held alternate"/>
-<use href="#mdi:keyboard-esc" xlink:href="#mdi:keyboard-esc" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-esc"/>
+<use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:keyboard-return"/>
 <a href="#L5-MOUSE">
 <text x="0" y="24" class="key held alternate hold layer-activator"><tspan style="font-size: 75%">L5 MOUSE</tspan></text>
 </a></g>

@@ -13,7 +13,7 @@ layers:
   - {t: '8', s: '*'}
   - {t: '9', s: (}
   - {t: '0', s: )}
-  - Gui+$$mdi:keyboard-space$$
+  - {t: '$$mdi:backspace$$', type: backspace}
   - $$mdi:keyboard-tab$$
   - Q
   - W
@@ -58,13 +58,13 @@ layers:
   - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
   - {t: '&macro_to_ng', h: L3 CURSOR}
   - {t: ',', h: L4 WINDOW, s: <}
-  - {t: '$$mdi:backspace$$', h: L2 SYMBOL}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL}
   - '&td_joystick_click'
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL}
-  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL}
+  - {t: '$$mdi:keyboard-return$$', h: L4 WINDOW}
   - {t: '&macro_to_ng', h: L3 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L5 MOUSE}
   L1 NAGINATA:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
@@ -78,7 +78,7 @@ layers:
   - {t: '8', s: '*'}
   - {t: '9', s: (}
   - {t: '0', s: )}
-  - Gui+$$mdi:keyboard-space$$
+  - {t: '$$mdi:backspace$$', type: backspace}
   - $$mdi:keyboard-tab$$
   - '&ng Q'
   - '&ng W'
@@ -126,10 +126,10 @@ layers:
   - '&ng NG_THUMB_BS'
   - '&td_joystick_click'
   - '&ng NG_THUMB_ENTER'
-  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW}
+  - {t: '$$mdi:keyboard-return$$', h: L4 WINDOW}
   - {t: '&macro_to_qwerty', h: L3 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L5 MOUSE}
   L2 SYMBOL:
   - $$mdi:keyboard-esc$$
   - {t: '1', s: '!'}
@@ -186,15 +186,15 @@ layers:
   - {t: L10 ENCODER MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR}
+  - {t: '&macro_to_ng', h: L3 CURSOR}
   - {t: ., s: '>'}
-  - {t: '$$mdi:backspace$$', type: held}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held}
   - Ctl+A
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L4 WINDOW}
+  - {t: '&macro_to_ng', h: L3 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L5 MOUSE}
   L3 CURSOR:
   - $$mdi:keyboard-esc$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -251,15 +251,15 @@ layers:
   - {t: L10 ENCODER MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held}
+  - {t: '&macro_to_ng', h: L3 CURSOR, type: held}
   - {t: ',', h: L4 WINDOW, s: <}
-  - {t: '$$mdi:backspace$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L4 WINDOW}
+  - {t: '&macro_to_ng', h: L3 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L5 MOUSE}
   L4 WINDOW:
   - {t: Gui+/, s: 'Gui+?'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -316,15 +316,15 @@ layers:
   - {t: L10 ENCODER MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '&macro_to_ng', h: L3 CURSOR, type: held alternate}
   - {t: ',', h: L4 WINDOW, s: <, type: held}
-  - {t: '$$mdi:backspace$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L4 WINDOW, type: held alternate}
+  - {t: '&macro_to_ng', h: L3 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L5 MOUSE}
   L5 MOUSE:
   - $$mdi:keyboard-esc$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -381,15 +381,15 @@ layers:
   - {t: L10 ENCODER MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L5 MOUSE, type: held}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '&macro_to_ng', h: L3 CURSOR, type: held alternate}
   - {t: ',', h: L4 WINDOW, s: <, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L4 WINDOW, type: held alternate}
+  - {t: '&macro_to_ng', h: L3 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE, type: held alternate}
-  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L5 MOUSE, type: held alternate}
   L6 FKEYS:
   - $$mdi:keyboard-esc$$
   - F1
@@ -446,15 +446,15 @@ layers:
   - {t: L10 ENCODER MARKER, h: toggle}
   - $$mdi:apple-keyboard-option$$
   - {t: '$$mdi:printer-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR}
+  - {t: '&macro_to_ng', h: L3 CURSOR}
   - {t: ',', h: L4 WINDOW, s: <, type: held}
-  - {t: '$$mdi:backspace$$', h: L2 SYMBOL, type: held}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L4 WINDOW, type: held alternate}
+  - {t: '&macro_to_ng', h: L3 CURSOR}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE}
-  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE}
+  - {t: '$$mdi:keyboard-return$$', h: L5 MOUSE}
   L7 BLUETOOTH:
   - $$mdi:bluetooth-off$$
   - {h: '1', s: '$$mdi:bluetooth-connect$$'}
@@ -511,15 +511,15 @@ layers:
   - {t: L10 ENCODER MARKER, h: toggle}
   - {t: '$$mdi:apple-keyboard-option$$', type: held}
   - {t: '$$mdi:printer-outline$$', h: L5 MOUSE, type: held}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held}
+  - {t: '&macro_to_ng', h: L3 CURSOR, type: held}
   - {t: ',', h: L4 WINDOW, s: <, type: held}
-  - {t: '$$mdi:backspace$$', h: L2 SYMBOL, type: held}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held}
   - $$mdi:mouse-scroll-wheel$$
-  - {t: '$$mdi:keyboard-return$$', h: L2 SYMBOL, type: held alternate}
-  - {t: '$$mdi:keyboard-space$$', h: L4 WINDOW, type: held alternate}
-  - {t: '$$mdi:backspace$$', h: L3 CURSOR, type: held alternate}
+  - {t: '$$mdi:keyboard-space$$', h: L2 SYMBOL, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L4 WINDOW, type: held alternate}
+  - {t: '&macro_to_ng', h: L3 CURSOR, type: held alternate}
   - {t: '$$mdi:backspace-reverse-outline$$', h: L5 MOUSE, type: held alternate}
-  - {t: '$$mdi:keyboard-esc$$', h: L5 MOUSE, type: held alternate}
+  - {t: '$$mdi:keyboard-return$$', h: L5 MOUSE, type: held alternate}
   L8 ENCODER LR:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
