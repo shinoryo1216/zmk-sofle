@@ -50,15 +50,6 @@
 
 / {
     behaviors {
-        lt_thumb: lt_thumb {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            flavor = "balanced";
-            tapping-term-ms = <280>;
-            quick-tap-ms = <200>;
-            bindings = <&mo>, <&kp>;
-        };
-
         // Home row mods
         hml: home_row_mod_left {
             compatible = "zmk,behavior-hold-tap";
@@ -84,23 +75,50 @@
             hold-trigger-on-release;
         };
 
+        // 親指R2（全レイヤー）：タップ＝Enter、長押し＝Layer 4（ウィンドウ）。
+        // （名前の「space」は旧仕様＝Space の名残。2026-11 にタップを Enter に変更。hold-preferred の挙動は位置に付く）
+        // quick-tap-ms：タップ直後(250ms以内)に押し直して保持すると Enter が押しっぱなしになる（親指L6と同じ。2026-11-10 に 200→250）。
         lt_thumb_space: lt_thumb_space {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "hold-preferred";
             tapping-term-ms = <280>;
-            quick-tap-ms = <200>;
+            quick-tap-ms = <250>;
             bindings = <&mo>, <&kp>;
         };
 
-        // 親指L6（QWERTY L0）：タップ＝BackSpace、長押し＝Layer 2（記号）。
-        // quick-tap-ms：タップ直後(この時間内)に押し直して保持すると BackSpace が押しっぱなしになる（連続削除）。
-        // 値を大きくすると連続削除に入りやすいが、タップ直後の「長押しでL2」が効きにくくなる。
+        // 親指L6（QWERTY L0、L3〜L7）：タップ＝Space、長押し＝Layer 2（記号）。
+        // （名前の「bs」は旧仕様＝BackSpace の名残。2026-11 にタップを Space に変更。BackSpace は 1段目R6）
+        // quick-tap-ms：タップ直後(この時間内)に押し直して保持すると Space が押しっぱなしになる（キーリピート）。
+        // 値を大きくするとリピートに入りやすいが、タップ直後の「長押しでL2」が効きにくくなる。
         lt_thumb_bs: lt_thumb_bs {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
             tapping-term-ms = <280>;
+            quick-tap-ms = <250>;
+            bindings = <&mo>, <&kp>;
+        };
+
+        // 親指R1（QWERTY L0 と L2〜L7。L1 は &ng NG_THUMB_ENTER）：タップ＝Space、長押し＝Layer 2（記号）。
+        // 親指L6（lt_thumb_bs）と同じ設定（balanced・280ms・quick-tap 250ms）。タップ直後に押し直して保持すると Space が押しっぱなしになる。
+        lt_thumb_r1: lt_thumb_r1 {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <250>;
+            bindings = <&mo>, <&kp>;
+        };
+
+        // 親指R4（Del）・R5（Enter）（全レイヤー）：タップ＝そのキー、長押し＝Layer 5（マウス）。
+        // 従来の &lt（tap-preferred・200ms）と同じ設定で、quick-tap だけ 175→250ms。タップ直後に押し直して保持するとキーが押しっぱなしになる。
+        // 共有の &lt は PSCRN（親指L3）も使うので、値を変えずに別定義にした。
+        lt_thumb_r45: lt_thumb_r45 {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
             quick-tap-ms = <250>;
             bindings = <&mo>, <&kp>;
         };
@@ -448,11 +466,11 @@
         // Layer 0: QWERTY Base（英語入力）
         layer_0_base {
             bindings = <
-&kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp UP_ARROW   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp LG(SPACE)   
+&kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp UP_ARROW   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp BSPC   
 &kp TAB   &kp Q   &kp W   &kp E   &kp R   &kp T   &kp DOWN_ARROW   &kp Y   &kp U   &kp I   &kp O   &kp P   &kp MINUS   
 &mt_bracket LCTRL LS(N8)   &kp A   &kp S   &kp D   &hml LSHFT F   &kp G   &kp LEFT_ARROW   &kp H   &hmr RSHFT J   &kp K   &kp L   &kp SQT   &mt_bracket RCTRL LS(N9)   
 &mt_bracket LSHFT RBKT   &kp Z      &kp X         &kp C         &kp V         &kp B        &kp RIGHT_ARROW  &kp N      &kp M         &kp LEFT_ARROW     &kp RIGHT_ARROW    &kp LS(FSLH)     &mt_bracket RSHFT BSLH
-&tog 10   &kp LALT   &lt 5 PSCRN   &lt_thumb_to_ng 3 0   &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC   &td_joystick_click   &lt_thumb 2 ENTER   &lt_thumb_space 4 SPACE   &lt_thumb_to_ng 3 0   &lt 5 DEL   &lt 5 ESC   
+&tog 10   &kp LALT   &lt 5 PSCRN   &lt_thumb_to_ng 3 0   &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 SPACE   &td_joystick_click   &lt_thumb_r1 2 SPACE   &lt_thumb_space 4 ENTER   &lt_thumb_to_ng 3 0   &lt_thumb_r45 5 DEL   &lt_thumb_r45 5 ENTER   
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -462,11 +480,11 @@
         // Layer 1: 薙刀式 かなBase（日本語入力）
         layer_1_naginata {
             bindings = <
-&kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp UP_ARROW   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp LG(SPACE)   
+&kp ESC   &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp UP_ARROW   &kp N6   &kp N7   &kp N8   &kp N9   &kp N0   &kp BSPC   
 &kp TAB   &ng Q   &ng W   &ng E   &ng R   &ng NG_L6_R2   &kp DOWN_ARROW   &ng NG_R1_R2   &ng U   &ng I   &ng O   &ng P   &ng N   
 &ng NG_L1_R3   &ng A      &ng S         &ng D         &ng F         &ng G        &kp LEFT_ARROW   &ng H      &ng J         &ng K         &ng L      &ng SEMI    &ng NG_R6_R3
 &ng NG_L1_R4   &ng Z   &ng X   &ng C   &ng V   &ng B   &kp RIGHT_ARROW   &ng NG_R6_R2   &ng M   &ng COMMA   &ng DOT   &ng FSLH   &ng NG_R6_R4   
-&tog 10   &kp LALT   &lt 5 PSCRN   &lt_thumb_to_qwerty 3 0   &lt_thumb_comma_ng 4 NG_THUMB_COMMA   &ng NG_THUMB_BS   &td_joystick_click   &ng NG_THUMB_ENTER   &lt_thumb_space 4 SPACE   &lt_thumb_to_qwerty 3 0   &lt 5 DEL   &lt 5 ESC   
+&tog 10   &kp LALT   &lt 5 PSCRN   &lt_thumb_to_qwerty 3 0   &lt_thumb_comma_ng 4 NG_THUMB_COMMA   &ng NG_THUMB_BS   &td_joystick_click   &ng NG_THUMB_ENTER   &lt_thumb_space 4 ENTER   &lt_thumb_to_qwerty 3 0   &lt_thumb_r45 5 DEL   &lt_thumb_r45 5 ENTER   
             >;
 
             sensor-bindings = <&rsr_cursor_ud &rsr_trans>;
@@ -480,7 +498,7 @@
 &kp TAB   &none   &none   &kp LS(MINUS)   &kp INT1   &none   &kp LC(V)   &none   &kp LS(LBKT)   &none   &none   &none   &kp LBKT   
 &kp LS(COMMA)   &kp LS(SQT)   &kp LS(SEMI)   &kp MINUS   &kp FSLH   &kp INT3   &kp LC(Z)   &kp LS(N6)   &kp LS(N7)   &kp LS(EQUAL)   &kp LS(INT3)   &kp SEMI   &kp LS(DOT)   
 &kp LS(RBKT)   &none   &kp EQUAL   &kp LS(INT1)   &kp LS(N5)   &kp LS(N4)   &kp LC(LS(Z))   &kp LS(N3)   &kp LS(N2)   &kp UP_ARROW   &kp DOWN_ARROW   &kp LS(N1)   &kp LS(BSLH)   
-&tog 10  &kp LALT         &lt 5 PSCRN     &lt_thumb 3 BSPC       &kp DOT        &kp BSPC        &kp LC(A)        &lt_thumb 2 ENTER      &lt_thumb_space 4 SPACE      &lt_thumb 3 BSPC  &lt 5 DEL  &lt 5 ESC
+&tog 10  &kp LALT         &lt 5 PSCRN     &lt_thumb_to_ng 3 0       &kp DOT        &lt_thumb_bs 2 SPACE        &kp LC(A)        &lt_thumb_r1 2 SPACE      &lt_thumb_space 4 ENTER      &lt_thumb_to_ng 3 0  &lt_thumb_r45 5 DEL  &lt_thumb_r45 5 ENTER
             >;
 
             sensor-bindings = <&rsr_undo_redo &rsr_trans>;
@@ -494,7 +512,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &kp UP_ARROW &kp PG_DN  &kp END   &none   &kp END   &kp PG_DN       &kp UP_ARROW    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &none      &kp LA(LEFT)   &none      &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &kp LA(RIGHT)  &none      &none           &none           &none           &none    &kp RSHFT
-&tog 10         &kp LALT           &lt 5 PSCRN    &lt_thumb 3 BSPC     &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC        &mkp MCLK        &lt_thumb 2 ENTER        &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC     &lt 5 DEL      &lt 5 ESC
+&tog 10         &kp LALT           &lt 5 PSCRN    &lt_thumb_to_ng 3 0     &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 SPACE        &mkp MCLK        &lt_thumb_r1 2 SPACE        &lt_thumb_space 4 ENTER    &lt_thumb_to_ng 3 0     &lt_thumb_r45 5 DEL      &lt_thumb_r45 5 ENTER
             >;
 
             display-name = "L3 CURSOR";
@@ -508,7 +526,7 @@
 &kp LG(LS(COMMA))  &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))      &none   &kp LG(LS(K))      &kp LG(COMMA)  &kp LG(UP)     &kp LG(DOT)    &kp LG(LS(J))  &kp LG(LS(COMMA))
 &kp LG(LS(DOT))    &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)          &kp LC(LS(TAB))   &kp LG(K)          &kp LG(LEFT)   &kp LG(DOWN)   &kp LG(RIGHT)  &kp LG(J)      &kp LG(LS(DOT))
 &kp LG(M)          &kp LG(R)          &kp LG(B)      &kp LG(ENTER)  &kp LG(E)      &kp LG(SPACE)      &kp LC(TAB)  &kp LG(SPACE)      &kp LG(E)      &kp LG(ENTER)  &kp LG(B)      &kp LG(R)      &kp LG(M)
-&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC      &lt 5 DEL         &lt 5 ESC
+&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb_to_ng 3 0 &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 SPACE &mkp MCLK      &lt_thumb_r1 2 SPACE &lt_thumb_space 4 ENTER    &lt_thumb_to_ng 3 0      &lt_thumb_r45 5 DEL         &lt_thumb_r45 5 ENTER
             >;
 
             display-name = "L4 WINDOW";
@@ -522,7 +540,7 @@
 &kp TAB  &kp HOME  &kp PG_UP  &mmv MOVE_UP &kp PG_DN  &kp END   &mmv MOVE_DOWN   &kp END   &kp PG_DN       &mmv MOVE_UP    &kp PG_UP       &kp HOME  &none
 &kp LCTRL &none   &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none      &mmv MOVE_LEFT   &none      &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none    &none
 &kp LSHFT &none   &none      &none      &none      &none      &mmv MOVE_RIGHT  &none      &none           &none           &none           &none    &none
-&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC &mkp MCLK      &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE    &lt_thumb 3 BSPC      &lt 5 DEL         &lt 5 ESC
+&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb_to_ng 3 0 &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 SPACE &mkp MCLK      &lt_thumb_r1 2 SPACE &lt_thumb_space 4 ENTER    &lt_thumb_to_ng 3 0      &lt_thumb_r45 5 DEL         &lt_thumb_r45 5 ENTER
             >;
 
             display-name = "L5 MOUSE";
@@ -536,7 +554,7 @@
 &kp TAB  &kp F11 &kp F12 &none   &none   &none     &kp DOWN_ARROW &none   &none   &none   &none   &none   &none
 &kp LCTRL &none  &none   &none   &none   &none     &kp LEFT_ARROW &none   &none   &none   &none   &none   &none
 &kp LSHFT &none  &none   &none   &none   &none     &kp RIGHT_ARROW &none  &none   &none   &none   &none   &none
-&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb 3 BSPC &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC &mkp MCLK &lt_thumb 2 ENTER &lt_thumb_space 4 SPACE &lt_thumb 3 BSPC &lt 5 DEL &lt 5 ESC
+&tog 10 &kp LALT &lt 5 PSCRN &lt_thumb_to_ng 3 0 &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 SPACE &mkp MCLK &lt_thumb_r1 2 SPACE &lt_thumb_space 4 ENTER &lt_thumb_to_ng 3 0 &lt_thumb_r45 5 DEL &lt_thumb_r45 5 ENTER
             >;
  
             display-name = "L6 FKEYS";
@@ -550,7 +568,7 @@
 &bootloader &none         &none         &none         &none         &none         &kp DOWN_ARROW &none         &none         &none         &none         &none         &bootloader
 &none       &none         &none         &none         &none         &none         &kp LEFT_ARROW &none         &none         &none         &none         &none         &none
 &none       &none         &none         &none         &none         &none         &kp RIGHT_ARROW &none        &none         &none         &none         &none         &none
-&tog 10  &kp LALT      &lt 5 PSCRN   &lt_thumb 3 BSPC    &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 BSPC   &mkp MCLK     &lt_thumb 2 ENTER   &lt_thumb_space 4 SPACE   &lt_thumb 3 BSPC    &lt 5 DEL     &lt 5 ESC
+&tog 10  &kp LALT      &lt 5 PSCRN   &lt_thumb_to_ng 3 0    &lt_thumb_comma 4 COMMA   &lt_thumb_bs 2 SPACE   &mkp MCLK     &lt_thumb_r1 2 SPACE   &lt_thumb_space 4 ENTER   &lt_thumb_to_ng 3 0    &lt_thumb_r45 5 DEL     &lt_thumb_r45 5 ENTER
             >;
 
             display-name = "L7 BLUETOOTH";

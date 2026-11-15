@@ -80,11 +80,11 @@ static int8_t n_pressed_keys = 0;   // 押しているキーの数
 #define NG_THUMB_BS 0x0B
 #endif
 
-// Thumb L6 (NG_THUMB_BS): a re-press within this time after a tap becomes BackSpace held (key repeat).
+// Thumb L6 (NG_THUMB_BS) and R1 (NG_THUMB_ENTER): a re-press within this time after a tap becomes Space held (key repeat).
 #ifndef NG_BS_QUICK_TAP_MS
 #define NG_BS_QUICK_TAP_MS 250
 #endif
-// Thumb L6 (NG_THUMB_BS): released within this time without being used as center-shift = tap (BackSpace).
+// Thumb L6 (NG_THUMB_BS): released within this time without being used as center-shift = tap (Space).
 // Held longer without other keys = nothing (same as the QWERTY layer, where a long hold only enters Layer 2).
 #ifndef NG_BS_TAP_MS
 #define NG_BS_TAP_MS 280
@@ -677,10 +677,13 @@ static bool thumb_enter_used_as_shift = false;
 // Row 2 L6 / R1 cursor keys: remember which key was pressed so the matching key is released
 // (index 0 = NG_L6_R2 left/up, index 1 = NG_R1_R2 right/down).
 static uint32_t arrow_held_code[2] = {0, 0};
-// Thumb L6 (NG_THUMB_BS): tap = BackSpace, hold = center-shift,
-// tap then press-and-hold within NG_BS_QUICK_TAP_MS = BackSpace held (key repeat).
+// Thumb L6 (NG_THUMB_BS): tap = Space, hold = center-shift,
+// tap then press-and-hold within NG_BS_QUICK_TAP_MS = Space held (key repeat).
 static int64_t thumb_bs_last_tap_ts = -100000; // time of the last emitted tap (ms, -100000 = none)
-static bool thumb_bs_quick_held = false;       // true while BackSpace is held in quick-tap mode
+static bool thumb_bs_quick_held = false;       // true while Space is held in quick-tap mode
+// Thumb R1 (NG_THUMB_ENTER): same quick-tap handling as thumb L6 (re-press within NG_BS_QUICK_TAP_MS after a tap = Space held).
+static int64_t thumb_enter_last_tap_ts = -100000; // time of the last emitted R1 tap (ms, -100000 = none)
+static bool thumb_enter_quick_held = false;       // true while Space is held in R1 quick-tap mode
 static int64_t thumb_bs_press_ts = 0;          // press time of the current (normal) press
 
 // Thumb center-shift keys (NG_THUMB_BS / NG_THUMB_ENTER) must be counted in
@@ -789,11 +792,12 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
         return ZMK_BEHAVIOR_OPAQUE;
     }
 
-    // Thumb L6 key: tap = BackSpace / hold = center-shift / tap-then-hold = BackSpace held.
+    // Thumb L6 key: tap = Space / hold = center-shift / tap-then-hold = Space held.
+    // (The NG_THUMB_BS name is a leftover of the old BackSpace role; the tap was changed to Space in 2026-11.)
     if (binding->param1 == NG_THUMB_BS) {
         naginata_set_timestamp(event.timestamp);
         if (event.timestamp - thumb_bs_last_tap_ts < NG_BS_QUICK_TAP_MS) {
-            // Quick tap: pressed again right after a tap -> behave as a plain BackSpace key.
+            // Quick tap: pressed again right after a tap -> behave as a plain Space key.
             if (thumb_enter_held) thumb_enter_used_as_shift = true;
             if (special_key.state == NG_SPECIAL_PENDING) {
                 k_work_cancel_delayable(&special_key.work);
@@ -802,7 +806,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
             }
             thumb_bs_quick_held = true;
             thumb_bs_last_tap_ts = event.timestamp; // keep chaining while tapping quickly
-            raise_zmk_keycode_state_changed_from_encoded(BSPC, true, event.timestamp);
+            raise_zmk_keycode_state_changed_from_encoded(SPACE, true, event.timestamp);
             return ZMK_BEHAVIOR_OPAQUE;
         }
         // Normal press: center-shift becomes active immediately (same as NG_THUMB_ENTER).
@@ -813,8 +817,23 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
         return ZMK_BEHAVIOR_OPAQUE;
     }
 
-    // Thumb center-shift key (R1 = ENTER / shift)
+    // Thumb center-shift key (R1: tap = Space / hold = center-shift / tap-then-hold = Space held).
+    // (NG_THUMB_ENTER / thumb_enter_* are leftover names of the old Enter role; the tap was changed to Space in 2026-11.)
     if (binding->param1 == NG_THUMB_ENTER) {
+        naginata_set_timestamp(event.timestamp);
+        if (event.timestamp - thumb_enter_last_tap_ts < NG_BS_QUICK_TAP_MS) {
+            // Quick tap: pressed again right after a tap -> behave as a plain Space key (same as thumb L6).
+            if (thumb_bs_held) thumb_bs_used_as_shift = true;
+            if (special_key.state == NG_SPECIAL_PENDING) {
+                k_work_cancel_delayable(&special_key.work);
+                special_key.state = NG_SPECIAL_HELD;
+                raise_zmk_keycode_state_changed_from_encoded(special_key.mod_code, true, event.timestamp);
+            }
+            thumb_enter_quick_held = true;
+            thumb_enter_last_tap_ts = event.timestamp; // keep chaining while tapping quickly
+            raise_zmk_keycode_state_changed_from_encoded(SPACE, true, event.timestamp);
+            return ZMK_BEHAVIOR_OPAQUE;
+        }
         thumb_enter_held = true;
         thumb_enter_used_as_shift = false;
         thumb_shift_down();
@@ -897,27 +916,34 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
         case NG_THUMB_BS:
             naginata_set_timestamp(event.timestamp);
             if (thumb_bs_quick_held) {
-                // Quick-tap mode: just release the BackSpace that was pressed
+                // Quick-tap mode: just release the Space that was pressed
                 thumb_bs_quick_held = false;
-                raise_zmk_keycode_state_changed_from_encoded(BSPC, false, event.timestamp);
+                raise_zmk_keycode_state_changed_from_encoded(SPACE, false, event.timestamp);
                 return ZMK_BEHAVIOR_OPAQUE;
             }
             thumb_bs_held = false;
             thumb_shift_up(thumb_enter_held);
             if (!thumb_bs_used_as_shift && (event.timestamp - thumb_bs_press_ts) < NG_BS_TAP_MS) {
-                // Short press not used as center-shift -> it was a tap: emit BackSpace and remember the time
-                raise_zmk_keycode_state_changed_from_encoded(BSPC, true, event.timestamp);
-                raise_zmk_keycode_state_changed_from_encoded(BSPC, false, event.timestamp);
+                // Short press not used as center-shift -> it was a tap: emit Space and remember the time
+                raise_zmk_keycode_state_changed_from_encoded(SPACE, true, event.timestamp);
+                raise_zmk_keycode_state_changed_from_encoded(SPACE, false, event.timestamp);
                 thumb_bs_last_tap_ts = event.timestamp;
             }
             return ZMK_BEHAVIOR_OPAQUE;
         case NG_THUMB_ENTER:
             naginata_set_timestamp(event.timestamp);
+            if (thumb_enter_quick_held) {
+                // Quick-tap mode: just release the Space that was pressed
+                thumb_enter_quick_held = false;
+                raise_zmk_keycode_state_changed_from_encoded(SPACE, false, event.timestamp);
+                return ZMK_BEHAVIOR_OPAQUE;
+            }
             thumb_enter_held = false;
             thumb_shift_up(thumb_bs_held);
             if (!thumb_enter_used_as_shift) {
-                raise_zmk_keycode_state_changed_from_encoded(ENTER, true, event.timestamp);
-                raise_zmk_keycode_state_changed_from_encoded(ENTER, false, event.timestamp);
+                raise_zmk_keycode_state_changed_from_encoded(SPACE, true, event.timestamp);
+                raise_zmk_keycode_state_changed_from_encoded(SPACE, false, event.timestamp);
+                thumb_enter_last_tap_ts = event.timestamp;
             }
             return ZMK_BEHAVIOR_OPAQUE;
         case NG_L1_R3:
